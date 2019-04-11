@@ -1,11 +1,12 @@
-# 🍇 image2D - Drawing Two-Dimensional Pictures Using ECMAScript
-
-> 项目研发阶段，敬请期待，也欢迎加入！
+# 🍇 image2D
+使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.
 
 ****
 ### 作者:心叶
 ### 邮箱:yelloxing@gmail.com
 ****
+
+- 项目研发阶段，敬请期待，也欢迎加入！
 
 ### 免责声明
 ------
