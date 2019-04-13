@@ -1,6 +1,6 @@
 import { NAMESPACE, REGEXP } from './config';
 import { HTML } from './type';
-import { isNode } from './tool';
+import { isNode } from './type';
 
 /**
  * 把一段字符串变成结点

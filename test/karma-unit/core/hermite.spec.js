@@ -1,4 +1,4 @@
-import { hermite } from '../../src/export';
+import hermite from '../../../src/core/Hermite';
 
 describe('Hermite插值法', function () {
 

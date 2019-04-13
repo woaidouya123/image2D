@@ -1,6 +1,6 @@
-import toNode from '../../src/core/to-node';
-import { NAMESPACE } from '../../src/core/config';
-import { HTML, SVG } from '../../src/core/type';
+import toNode from '../../../src/core/to-node';
+import { NAMESPACE } from '../../../src/core/config';
+import { HTML, SVG } from '../../../src/core/type';
 
 describe('字符串转为结点', function () {
 

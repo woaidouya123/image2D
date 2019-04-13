@@ -1,4 +1,4 @@
-import { initConfig } from '../tool';
+import { initConfig } from './config';
 
 /**
  * Hermite三次插值

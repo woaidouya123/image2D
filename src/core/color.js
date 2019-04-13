@@ -1,4 +1,4 @@
-import { getStyle } from './tool';
+import getStyle from './get-style';
 import { REGEXP } from './config';
 
 /**
