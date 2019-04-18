@@ -1,10 +1,3 @@
-// painter对象
-export const PAINTER = Symbol();
-
-// 标签类型
-export const SVG = Symbol();
-export const HTML = Symbol();
-
 /**
  * 判断传入的是不是结点
  * @param {Any} param
