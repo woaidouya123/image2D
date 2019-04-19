@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Apr 19 2019 21:55:35 GMT+0800 (GMT+08:00)
+    * Date:Fri Apr 19 2019 22:20:30 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -378,12 +378,121 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return matrix4Obj;
     }
 
+    //当前正在运动的动画的tick函数堆栈
+    var $timers = [];
+    //唯一定时器的定时间隔
+    var $interval = 13;
+    //指定了动画时长duration默认值
+    var $speeds = 400;
+    //定时器ID
+    var $timerId = null;
+
+    /**
+     * 动画轮播
+     * @param {function} doback 轮询函数，有一个形参deep，0-1，表示执行进度
+     * @param {number} duration 动画时长，可选
+     * @param {function} callback 动画结束回调，可选，有一个形参deep，0-1，表示执行进度
+     *
+     * @returns {function} 返回一个函数，调用该函数，可以提前结束动画
+     */
+    function animation(doback, duration, callback) {
+
+        var clock = {
+            //把tick函数推入堆栈
+            "timer": function timer(tick, duration, callback) {
+                if (!tick) {
+                    throw new Error('tick is required!');
+                }
+                duration = duration || $speeds;
+                var id = new Date().valueOf() + "_" + (Math.random() * 1000).toFixed(0);
+                $timers.push({
+                    "id": id,
+                    "createTime": new Date(),
+                    "tick": tick,
+                    "duration": duration,
+                    "callback": callback
+                });
+                clock.start();
+                return id;
+            },
+
+            //开启唯一的定时器timerId
+            "start": function start() {
+                if (!$timerId) {
+                    $timerId = window.setInterval(clock.tick, $interval);
+                }
+            },
+
+            //被定时器调用，遍历timers堆栈
+            "tick": function tick() {
+                var createTime = void 0,
+                    flag = void 0,
+                    tick = void 0,
+                    callback = void 0,
+                    timer = void 0,
+                    duration = void 0,
+                    passTime = void 0,
+                    timers = $timers;
+                $timers = [];
+                $timers.length = 0;
+                for (flag = 0; flag < timers.length; flag++) {
+                    //初始化数据
+                    timer = timers[flag];
+                    createTime = timer.createTime;
+                    tick = timer.tick;
+                    duration = timer.duration;
+                    callback = timer.callback;
+
+                    //执行
+                    passTime = (+new Date() - createTime) / duration;
+                    passTime = passTime > 1 ? 1 : passTime;
+                    tick(passTime);
+                    if (passTime < 1 && timer.id) {
+                        //动画没有结束再添加
+                        $timers.push(timer);
+                    } else if (callback) {
+                        callback(passTime);
+                    }
+                }
+                if ($timers.length <= 0) {
+                    clock.stop();
+                }
+            },
+
+            //停止定时器，重置timerId=null
+            "stop": function stop() {
+                if ($timerId) {
+                    window.clearInterval($timerId);
+                    $timerId = null;
+                }
+            }
+        };
+
+        var id = clock.timer(function (deep) {
+            //其中deep为0-1，表示改变的程度
+            doback(deep);
+        }, duration, callback);
+
+        // 返回一个函数
+        // 用于在动画结束前结束动画
+        return function () {
+            var i = void 0;
+            for (i in $timers) {
+                if ($timers[i].id == id) {
+                    $timers[i].id = undefined;
+                    return;
+                }
+            }
+        };
+    }
+
     /**
      * 挂载方法
      * -------------------
      */
     image2D.treeLayout = tree;
     image2D.Matrix4 = Matrix4;
+    image2D.animation = animation;
 
     var
     // 保存之前的image2D，防止直接覆盖
