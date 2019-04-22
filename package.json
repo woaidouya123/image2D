@@ -1,7 +1,7 @@
 {
   "name": "image2d",
   "status": "alpha",
-  "version": "0.0.0",
+  "version": "0.0.1-next",
   "description": "🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.",
   "main": "src/export.js",
   "scripts": {
