@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Apr 19 2019 22:20:30 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 22 2019 09:49:13 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -487,12 +487,208 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     /**
-     * 挂载方法
+     * 返回渲染后的CSS样式值
+     * @param {DOM} dom 目标结点
+     * @param {String} name 属性名称（可选）
+     * @return {String}
+     */
+    function getStyle(dom, name) {
+
+        // 获取结点的全部样式
+        var allStyle = document.defaultView && document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(dom, null) : dom.currentStyle;
+
+        // 如果没有指定属性名称，返回全部样式
+        return typeof name === 'string' ? allStyle.getPropertyValue(name) : allStyle;
+    }
+
+    /**
+     * 初始化配置文件
+     * @param {Json} init 默认值
+     * @param {Json} data
+     * @return {Json}
+     */
+    var initConfig = function initConfig(init, data) {
+        for (var key in data) {
+            try {
+                init[key] = data[key];
+            } catch (e) {
+                throw new Error("Illegal property value！");
+            }
+        }return init;
+    };
+
+    // 空格、标志符
+    var REGEXP = {
+
+        // http://www.w3.org/TR/css3-selectors/#whitespace
+        "whitespace": "[\\x20\\t\\r\\n\\f]",
+
+        // http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
+        "identifier": "(?:\\\\.|[\\w-]|[^\0-\\xa0])+"
+    };
+
+    /**
+     * 把颜色统一转变成rgba(x,x,x,x)格式
+     * @param {String} oral_color
+     * @return {Array} 返回数字数组[r,g,b,a]
+     */
+    var formatColor = function formatColor(oral_color) {
+        var head = document.getElementsByTagName('head')[0];
+        head.style.color = oral_color;
+        var color = getStyle(head, 'color').replace(/^rgba?\(([^)]+)\)$/, '$1').split(new RegExp('\\,' + REGEXP.whitespace));
+        return [+color[0], +color[1], +color[2], color[3] == undefined ? 1 : +color[3]];
+    };
+
+    /**
+     * Hermite三次插值
+     * @param {Json} config 可选
+     */
+    function hermite(config) {
+
+        config = initConfig({
+            // 张弛系数
+            "u": 0.5
+        }, config);
+
+        var MR = void 0,
+            a = void 0,
+            b = void 0;
+
+        /**
+         * 根据x值返回y值
+         * @param {Number} x
+         */
+        var hermite = function hermite(x) {
+            if (MR) {
+                var sx = (x - a) / (b - a),
+                    sx2 = sx * sx,
+                    sx3 = sx * sx2;
+                var sResult = sx3 * MR[0] + sx2 * MR[1] + sx * MR[2] + MR[3];
+                return sResult * (b - a);
+            } else throw new Error('You shoud first set the position!');
+        };
+
+        /**
+         * 设置点的位置
+         * @param {Number} x1 左边点的位置
+         * @param {Number} y1
+         * @param {Number} x2 右边点的位置
+         * @param {Number} y2
+         * @param {Number} s1 二个点的斜率
+         * @param {Number} s2
+         */
+        hermite.setP = function (x1, y1, x2, y2, s1, s2) {
+            if (x1 < x2) {
+                // 记录原始尺寸
+                a = x1;b = x2;
+                var p3 = config.u * s1,
+                    p4 = config.u * s2;
+                // 缩放到[0,1]定义域
+                y1 /= x2 - x1;
+                y2 /= x2 - x1;
+                // MR是提前计算好的多项式通解矩阵
+                // 为了加速计算
+                // 如上面说的
+                // 统一在[0,1]上计算后再通过缩放和移动恢复
+                // 避免了动态求解矩阵的麻烦
+                MR = [2 * y1 - 2 * y2 + p3 + p4, 3 * y2 - 3 * y1 - 2 * p3 - p4, p3, y1];
+            } else throw new Error('The point position should be increamented!');
+            return hermite;
+        };
+
+        return hermite;
+    }
+
+    /**
+     * Cardinal三次插值
+     * ----------------------------
+     * Hermite拟合的计算是，确定二个点和二个点的斜率
+     * 用一个y=ax(3)+bx(2)+cx+d的三次多项式来求解
+     * 而Cardinal是建立在此基础上
+     * 给定需要拟合的二个点和第一个点的前一个点+最后一个点的后一个点
+     * 第一个点的斜率由第一个点的前一个点和第二个点的斜率确定
+     * 第二个点的斜率由第一个点和第二个点的后一个点的斜率确定
+     */
+
+    function cardinal(config) {
+
+        config = initConfig({
+            // 该参数用于调整曲线走势，默认数值t=0，分水岭t=-1，|t-(-1)|的值越大，曲线走势调整的越严重
+            "t": 0
+        }, config);
+
+        var HS = void 0,
+            i = void 0;
+
+        // 根据x值返回y值
+        var cardinal = function cardinal(x) {
+
+            if (HS) {
+                i = -1;
+                // 寻找记录x实在位置的区间
+                // 这里就是寻找对应的拟合函数
+                while (i + 1 < HS.x.length && (x > HS.x[i + 1] || i == -1 && x >= HS.x[i + 1])) {
+                    i += 1;
+                }
+                if (i == -1 || i >= HS.h.length) throw new Error('Coordinate crossing!');
+                return HS.h[i](x);
+            } else {
+                throw new Error('You shoud first set the position!');
+            }
+        };
+
+        // 设置张弛系数【应该在点的位置设置前设置】
+        cardinal.setT = function (t) {
+
+            if (typeof t === 'number') {
+                config.t = t;
+            } else {
+                throw new Error('Expecting a figure!');
+            }
+            return cardinal;
+        };
+
+        // 设置点的位置
+        // 参数格式：[[x,y],[x,y],...]
+        // 至少二个点
+        cardinal.setP = function (points) {
+
+            HS = {
+                "x": [],
+                "h": []
+            };
+            var flag = void 0,
+                slope = (points[1][1] - points[0][1]) / (points[1][0] - points[0][0]),
+                temp = void 0;
+            HS.x[0] = points[0][0];
+            for (flag = 1; flag < points.length; flag++) {
+                if (points[flag][0] <= points[flag - 1][0]) throw new Error('The point position should be increamented!');
+                HS.x[flag] = points[flag][0];
+                // 求点斜率
+                temp = flag < points.length - 1 ? (points[flag + 1][1] - points[flag - 1][1]) / (points[flag + 1][0] - points[flag - 1][0]) : (points[flag][1] - points[flag - 1][1]) / (points[flag][0] - points[flag - 1][0]);
+                // 求解二个点直接的拟合方程
+                // 第一个点的前一个点直接取第一个点
+                // 最后一个点的后一个点直接取最后一个点
+                HS.h[flag - 1] = hermite({
+                    "u": (1 - config.t) * 0.5
+                }).setP(points[flag - 1][0], points[flag - 1][1], points[flag][0], points[flag][1], slope, temp);
+                slope = temp;
+            }
+            return cardinal;
+        };
+
+        return cardinal;
+    }
+
+    /**
+     * 挂载静态方法
      * -------------------
      */
     image2D.treeLayout = tree;
     image2D.Matrix4 = Matrix4;
     image2D.animation = animation;
+    image2D.formatColor = formatColor;
+    image2D.cardinal = cardinal;
 
     var
     // 保存之前的image2D，防止直接覆盖
