@@ -4,5 +4,4 @@ export default {
         format: 'iife',
         file: './build/image2D.new.js'
     }
-
 }

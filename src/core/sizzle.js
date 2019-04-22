@@ -2,11 +2,17 @@ import { isNode } from './type';
 import { REGEXP } from './config';
 import toNode from './to-node';
 
+/**
+ * 在指定上下文查找结点
+ * @param {string|dom|array|function|image2D} selector 选择器，必输
+ * @param {dom} context 查找上下文，必输
+ * 特别注意：id选择器或者传入的是维护的结点，查找上下文会被忽略
+ */
 export default function (selector, context) {
 
     // 如果是字符串
     if (typeof selector === 'string') {
-        selector = selector.trim().replace(/[\n\f\r]/g, '');
+        selector = selector.trim().replace(new RegExp(REGEXP.blank, 'g'), '');
 
         // 如果以'<'开头表示是字符串模板
         if (/^</.test(selector)) {

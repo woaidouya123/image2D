@@ -23,12 +23,18 @@ export const NAMESPACE = {
     "xmlns": "http://www.w3.org/2000/xmlns/"
 };
 
-// 空格、标志符
+// 正则表达式
 export const REGEXP = {
 
-    // http://www.w3.org/TR/css3-selectors/#whitespace
+    // 空白字符:http://www.w3.org/TR/css3-selectors/#whitespace
     "whitespace": "[\\x20\\t\\r\\n\\f]",
 
-    // http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
+    // 空格外的空白字符
+    "blank": "[\\n\\f\\r]",
+
+    // 标志符:http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
     "identifier": "(?:\\\\.|[\\w-]|[^\0-\\xa0])+"
 };
+
+// 记录需要使用xlink命名空间常见的xml属性
+export const XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];

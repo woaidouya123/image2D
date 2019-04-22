@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 22 2019 12:01:38 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 22 2019 15:12:11 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -48,27 +48,129 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }return init;
     };
 
-    // 空格、标志符
+    // 命名空间路径
+    var NAMESPACE = {
+        "svg": "http://www.w3.org/2000/svg",
+        "xhtml": "http://www.w3.org/1999/xhtml",
+        "xlink": "http://www.w3.org/1999/xlink",
+        "xml": "http://www.w3.org/XML/1998/namespace",
+        "xmlns": "http://www.w3.org/2000/xmlns/"
+    };
+
+    // 正则表达式
     var REGEXP = {
 
-        // http://www.w3.org/TR/css3-selectors/#whitespace
+        // 空白字符:http://www.w3.org/TR/css3-selectors/#whitespace
         "whitespace": "[\\x20\\t\\r\\n\\f]",
 
-        // http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
+        // 空格外的空白字符
+        "blank": "[\\n\\f\\r]",
+
+        // 标志符:http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
         "identifier": "(?:\\\\.|[\\w-]|[^\0-\\xa0])+"
     };
 
-    function toNode(template) {}
+    // 记录需要使用xlink命名空间常见的xml属性
+    var XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];
 
+    /**
+     * 设置svg字符串
+     * @param {dom} target
+     * @param {string} svgstring
+     */
+    var setSVG = function setSVG(target, svgstring) {
+        if ('innerHTML' in SVGElement.prototype === false || 'innerHTML' in SVGSVGElement.prototype === false) {
+            var frame = document.createElement("div");
+            frame.innerHTML = svgstring;
+            var toSvgNode = function toSvgNode(htmlNode) {
+                var svgNode = document.createElementNS(NAMESPACE.svg, htmlNode.tagName.toLowerCase());
+                var attrs = htmlNode.attributes,
+                    i = void 0;
+                for (i = 0; attrs && i < attrs.length; i++) {
+                    if (XLINK_ATTRIBUTE.indexOf(attrs[i].nodeName) >= 0) {
+                        // 针对特殊的svg属性，追加命名空间
+                        svgNode.setAttributeNS(NAMESPACE.xlink, 'xlink:' + attrs[i].nodeName, htmlNode.getAttribute(attrs[i].nodeName));
+                    } else {
+                        svgNode.setAttribute(attrs[i].nodeName, htmlNode.getAttribute(attrs[i].nodeName));
+                    }
+                }
+                return svgNode;
+            };
+            var rslNode = toSvgNode(frame.firstChild);
+            (function toSVG(pnode, svgPnode) {
+                var node = pnode.firstChild;
+                if (node && node.nodeType == 3) {
+                    svgPnode.textContent = pnode.innerText;
+                    return;
+                }
+                while (node) {
+                    var svgNode = toSvgNode(node);
+                    svgPnode.appendChild(svgNode);
+                    if (node.firstChild) toSVG(node, svgNode);
+                    node = node.nextSibling;
+                }
+            })(frame.firstChild, rslNode);
+            target.appendChild(rslNode);
+        } else {
+            // 如果当前浏览器提供了svg类型结点的innerHTML,我们还是使用浏览器提供的
+            target.innerHTML = svgstring;
+        }
+    };
+
+    // 变成指定类型的结点
+    // type可以取：
+    // 1.'HTML'，html结点
+    // 2.'SVG'，svg结点(默认值)
+    var toNode = function toNode(template, type) {
+        var frame = void 0,
+            childNodes = void 0;
+        if (type === 'HTML') {
+            frame = document.createElement("div");
+            frame.innerHTML = template;
+        } else {
+            frame = document.createElementNS(NAMESPACE.svg, 'svg');
+            // 部分浏览器svg元素没有innerHTML
+            setSVG(frame, template);
+        }
+        childNodes = frame.childNodes;
+        for (var i = 0; i < childNodes.length; i++) {
+            if (isNode(childNodes[i])) return childNodes[i];
+        }
+    };
+
+    /**
+     * 变成结点
+     * @param {string} template
+     * @return {dom} 返回结点
+     */
+    function toNode$1(template) {
+
+        // 把传递元素类型和标记进行统一处理
+        if (new RegExp("^" + REGEXP.identifier + "$").test(template)) template = "<" + template + "></" + template + ">";
+
+        var node = toNode(template, 'SVG');
+        if (!node || /[A-Z]/.test(node.tagName) || node.tagName === 'canvas') {
+            node = toNode(template, 'HTML');
+        }
+
+        return node;
+    }
+
+    /**
+     * 在指定上下文查找结点
+     * @param {string|dom|array|function|image2D} selector 选择器，必输
+     * @param {dom} context 查找上下文，必输
+     * 特别注意：id选择器或者传入的是维护的结点，查找上下文会被忽略
+     */
     function sizzle(selector, context) {
 
         // 如果是字符串
         if (typeof selector === 'string') {
-            selector = selector.trim().replace(/[\n\f\r]/g, '');
+            selector = selector.trim().replace(new RegExp(REGEXP.blank, 'g'), '');
 
             // 如果以'<'开头表示是字符串模板
             if (/^</.test(selector)) {
-                return [toNode(selector)];
+                return [toNode$1(selector)];
             }
 
             // *表示查找全部
