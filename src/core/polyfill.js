@@ -1,4 +1,5 @@
 import { NAMESPACE, XLINK_ATTRIBUTE } from './config';
+import { isText } from './type';
 
 /**
  * 设置svg字符串
@@ -25,7 +26,7 @@ export let setSVG = function (target, svgstring) {
         let rslNode = toSvgNode(frame.firstChild);
         (function toSVG(pnode, svgPnode) {
             let node = pnode.firstChild;
-            if (node && node.nodeType == 3) {
+            if (isText(node)) {
                 svgPnode.textContent = pnode.innerText;
                 return;
             }

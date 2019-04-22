@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 22 2019 15:12:11 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 22 2019 15:19:47 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -30,6 +30,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     var isNode = function isNode(param) {
         return param && (param.nodeType === 1 || param.nodeType === 9 || param.nodeType === 11);
+    };
+
+    /**
+     * 判断传入的元素是不是文本
+     * @param {Any} param
+     * @return {Boolean} true:文本，false:不是文本
+     */
+    var isText = function isText(param) {
+        return param && param.nodeType === 3;
     };
 
     /**
@@ -79,42 +88,42 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param {string} svgstring
      */
     var setSVG = function setSVG(target, svgstring) {
-        if ('innerHTML' in SVGElement.prototype === false || 'innerHTML' in SVGSVGElement.prototype === false) {
-            var frame = document.createElement("div");
-            frame.innerHTML = svgstring;
-            var toSvgNode = function toSvgNode(htmlNode) {
-                var svgNode = document.createElementNS(NAMESPACE.svg, htmlNode.tagName.toLowerCase());
-                var attrs = htmlNode.attributes,
-                    i = void 0;
-                for (i = 0; attrs && i < attrs.length; i++) {
-                    if (XLINK_ATTRIBUTE.indexOf(attrs[i].nodeName) >= 0) {
-                        // 针对特殊的svg属性，追加命名空间
-                        svgNode.setAttributeNS(NAMESPACE.xlink, 'xlink:' + attrs[i].nodeName, htmlNode.getAttribute(attrs[i].nodeName));
-                    } else {
-                        svgNode.setAttribute(attrs[i].nodeName, htmlNode.getAttribute(attrs[i].nodeName));
-                    }
+        // if ('innerHTML' in SVGElement.prototype === false || 'innerHTML' in SVGSVGElement.prototype === false) {
+        var frame = document.createElement("div");
+        frame.innerHTML = svgstring;
+        var toSvgNode = function toSvgNode(htmlNode) {
+            var svgNode = document.createElementNS(NAMESPACE.svg, htmlNode.tagName.toLowerCase());
+            var attrs = htmlNode.attributes,
+                i = void 0;
+            for (i = 0; attrs && i < attrs.length; i++) {
+                if (XLINK_ATTRIBUTE.indexOf(attrs[i].nodeName) >= 0) {
+                    // 针对特殊的svg属性，追加命名空间
+                    svgNode.setAttributeNS(NAMESPACE.xlink, 'xlink:' + attrs[i].nodeName, htmlNode.getAttribute(attrs[i].nodeName));
+                } else {
+                    svgNode.setAttribute(attrs[i].nodeName, htmlNode.getAttribute(attrs[i].nodeName));
                 }
-                return svgNode;
-            };
-            var rslNode = toSvgNode(frame.firstChild);
-            (function toSVG(pnode, svgPnode) {
-                var node = pnode.firstChild;
-                if (node && node.nodeType == 3) {
-                    svgPnode.textContent = pnode.innerText;
-                    return;
-                }
-                while (node) {
-                    var svgNode = toSvgNode(node);
-                    svgPnode.appendChild(svgNode);
-                    if (node.firstChild) toSVG(node, svgNode);
-                    node = node.nextSibling;
-                }
-            })(frame.firstChild, rslNode);
-            target.appendChild(rslNode);
-        } else {
-            // 如果当前浏览器提供了svg类型结点的innerHTML,我们还是使用浏览器提供的
-            target.innerHTML = svgstring;
-        }
+            }
+            return svgNode;
+        };
+        var rslNode = toSvgNode(frame.firstChild);
+        (function toSVG(pnode, svgPnode) {
+            var node = pnode.firstChild;
+            if (isText(node)) {
+                svgPnode.textContent = pnode.innerText;
+                return;
+            }
+            while (node) {
+                var svgNode = toSvgNode(node);
+                svgPnode.appendChild(svgNode);
+                if (node.firstChild) toSVG(node, svgNode);
+                node = node.nextSibling;
+            }
+        })(frame.firstChild, rslNode);
+        target.appendChild(rslNode);
+        // } else {
+        // 如果当前浏览器提供了svg类型结点的innerHTML,我们还是使用浏览器提供的
+        // target.innerHTML = svgstring;
+        // }
     };
 
     // 变成指定类型的结点
