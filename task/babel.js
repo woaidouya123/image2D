@@ -4,7 +4,7 @@ let babel = require('babel-core');
 let file = require('fs');
 
 module.exports = function (cuf, options) {
-    cuf.print.log(options.entry + " → " + options.output);
+    cuf.print.warn(options.entry + " → " + options.output);
 
     // 使用babel方法转义
     babel.transformFile(options.entry, {}, function (err, result) {
@@ -13,7 +13,7 @@ module.exports = function (cuf, options) {
             cuf.file.writeAppend(options.output, result.code);
             if (options.delete_temp) {
                 file.unlinkSync(options.entry);
-                cuf.print.warn("delete " + options.entry + "\n");
+                cuf.print.error("delete " + options.entry + "\n");
             }
         } else {
             cuf.print.error("\n>> babel转义失败！\n");
