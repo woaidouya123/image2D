@@ -3,6 +3,7 @@
 let babel = require('babel-core');
 let file = require('fs');
 
+// babel转义
 module.exports = function (cuf, options) {
     cuf.print.warn(options.entry + " → " + options.output);
 

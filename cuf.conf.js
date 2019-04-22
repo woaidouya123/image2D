@@ -11,7 +11,7 @@ module.exports = function (cuf) {
     *
     * author `+ pkg.author + `
     *
-    * version `+ pkg.version + `
+    * version `+ pkg.version + `(` + pkg.status + `)
     *
     * build Thu Apr 11 2019
     *
@@ -48,10 +48,23 @@ module.exports = function (cuf) {
                     "output": "./build/image2D.js"
                 }
             }
+        },
+
+        // JS代码压缩
+        "uglify": {
+            "plug": "./task/uglify.js",
+            "task": {
+                "target": {
+                    "banner": banner,
+                    "entry": "./build/image2D.js",
+                    "output": "./build/image2D.min.js"
+                }
+            }
         }
     });
 
     cuf.register("explain", ["explain:target"]);
-    cuf.register("build", ["babel:target"]);
+    cuf.register("build-babel", ["babel:target"]);
+    cuf.register("build-ugligy", ["uglify:target"]);
 
 };

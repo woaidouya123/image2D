@@ -1,14 +1,15 @@
 {
   "name": "image2d",
-  "version": "0.0.0-beta",
+  "status": "alpha",
+  "version": "0.0.0",
   "description": "🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.",
   "main": "src/export.js",
   "scripts": {
     "start": "npm install && cuf explain --config cuf.conf.js",
     "unit": "karma start",
-    "cuf-build": "cuf build --config cuf.conf.js",
-    "uglify": "uglifyjs ./build/image2D.js -m -o ./build/image2D.min.js",
-    "build": "rollup -c rollup.config.js && npm run cuf-build && npm run uglify"
+    "babel": "cuf build-babel --config cuf.conf.js",
+    "ugligy": "cuf build-ugligy --config cuf.conf.js",
+    "build": "rollup -c rollup.config.js && npm run babel && npm run ugligy"
   },
   "keywords": [
     "image",
