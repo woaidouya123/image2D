@@ -12,25 +12,155 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 22 2019 09:49:13 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 22 2019 12:01:38 GMT+0800 (GMT+08:00)
     */
 
-'use strict';
+"use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function () {
     'use strict';
 
-    var image2D = function image2D(nodes) {
-        return new image2D.prototype.init(nodes);
+    /**
+     * 判断传入的是不是结点
+     * @param {Any} param
+     * @return {Boolean} true:结点，false:不是结点
+     */
+
+    var isNode = function isNode(param) {
+        return param && (param.nodeType === 1 || param.nodeType === 9 || param.nodeType === 11);
     };
 
-    image2D.prototype.init = function (nodes) {
-        for (var flag = 0; flag < nodes.length; flag++) {
+    /**
+     * 初始化配置文件
+     * @param {Json} init 默认值
+     * @param {Json} data
+     * @return {Json}
+     */
+    var initConfig = function initConfig(init, data) {
+        for (var key in data) {
+            try {
+                init[key] = data[key];
+            } catch (e) {
+                throw new Error("Illegal property value！");
+            }
+        }return init;
+    };
+
+    // 空格、标志符
+    var REGEXP = {
+
+        // http://www.w3.org/TR/css3-selectors/#whitespace
+        "whitespace": "[\\x20\\t\\r\\n\\f]",
+
+        // http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
+        "identifier": "(?:\\\\.|[\\w-]|[^\0-\\xa0])+"
+    };
+
+    function toNode(template) {}
+
+    function sizzle(selector, context) {
+
+        // 如果是字符串
+        if (typeof selector === 'string') {
+            selector = selector.trim().replace(/[\n\f\r]/g, '');
+
+            // 如果以'<'开头表示是字符串模板
+            if (/^</.test(selector)) {
+                return [toNode(selector)];
+            }
+
+            // *表示查找全部
+            else if (selector === '*') {
+                    return context.getElementsByTagName('*');
+                }
+
+            var id = selector.match(new RegExp('#' + REGEXP.identifier, 'g'));
+            // ID选择器
+            // 此选择器会忽略上下文
+            if (id) {
+                return document.getElementById(id[0].replace('#', ''));
+            }
+
+            var cls = selector.match(new RegExp('\\.' + REGEXP.identifier, 'g')),
+                tag = selector.match(new RegExp('^' + REGEXP.identifier));
+
+            // 结点和class混合选择器
+            if (tag || cls) {
+                var allNodes = document.getElementsByTagName(tag ? tag[0] : "*"),
+                    temp = [];
+                for (var i = 0; i < allNodes.length; i++) {
+                    var clazz = " " + allNodes[i].getAttribute('class') + " ",
+                        flag = true;
+                    for (var j = 0; cls && j < cls.length; j++) {
+                        if (!clazz.match(" " + cls[j].replace('.', '') + " ")) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) temp.push(allNodes[i]);
+                }
+                return temp;
+            }
+
+            // 未知情况，报错
+            else {
+                    throw new Error('Unsupported selector：' + selector);
+                }
+        }
+
+        // 如果是结点
+        else if (isNode(selector)) {
+                return [selector];
+            }
+
+            // 如果是数组
+            // 数组中的内容如果不是结点会直接被忽略
+            else if (selector && (selector.constructor === Array || selector.constructor === HTMLCollection || selector.constructor === NodeList)) {
+                    var _temp = [];
+                    for (var _i = 0; _i < selector.length; _i++) {
+                        if (isNode(selector[_i])) _temp.push(selector[_i]);
+                    }
+                    return _temp;
+                }
+
+                // 如果是image2D对象
+                else if (selector && selector.__constructor__ === 'image2D') {
+                        return selector;
+                    }
+
+                    // 如果是函数
+                    else if (typeof selector === 'function') {
+                            var _allNodes = context.getElementsByTagName('*'),
+                                _temp2 = [];
+                            for (var _i2 = 0; _i2 < _allNodes.length; _i2++) {
+                                // 如果选择器函数返回true，表示当前面对的结点被接受
+                                if (selector(_allNodes[_i2])) _temp2.push(_allNodes[_i2]);
+                            }
+                            return _temp2;
+                        }
+
+                        // 未知情况，报错
+                        else {
+                                throw new Error('Unsupported selector：' + selector);
+                            }
+    }
+
+    var image2D = function image2D(selector, context) {
+        return new image2D.prototype.init(selector, context);
+    };
+
+    image2D.prototype.init = function (selector, context) {
+        this.context = context = context || document;
+        var nodes = sizzle(selector, context),
+            flag = void 0;
+        for (flag = 0; flag < nodes.length; flag++) {
             this[flag] = nodes[flag];
         }
+        this.selector = selector;
         this.length = nodes.length;
+        this.__constructor__ = 'image2D';
         return this;
     };
 
@@ -48,7 +178,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             source = target;
             target = this;
         }
-        if ((typeof target === 'undefined' ? 'undefined' : _typeof(target)) !== "object" && typeof target !== 'function') {
+        if ((typeof target === "undefined" ? "undefined" : _typeof(target)) !== "object" && typeof target !== 'function') {
             //如果目标不是对象或函数，则初始化为空对象
             target = {};
         }
@@ -500,32 +630,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 如果没有指定属性名称，返回全部样式
         return typeof name === 'string' ? allStyle.getPropertyValue(name) : allStyle;
     }
-
-    /**
-     * 初始化配置文件
-     * @param {Json} init 默认值
-     * @param {Json} data
-     * @return {Json}
-     */
-    var initConfig = function initConfig(init, data) {
-        for (var key in data) {
-            try {
-                init[key] = data[key];
-            } catch (e) {
-                throw new Error("Illegal property value！");
-            }
-        }return init;
-    };
-
-    // 空格、标志符
-    var REGEXP = {
-
-        // http://www.w3.org/TR/css3-selectors/#whitespace
-        "whitespace": "[\\x20\\t\\r\\n\\f]",
-
-        // http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
-        "identifier": "(?:\\\\.|[\\w-]|[^\0-\\xa0])+"
-    };
 
     /**
      * 把颜色统一转变成rgba(x,x,x,x)格式

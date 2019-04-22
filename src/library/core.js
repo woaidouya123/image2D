@@ -1,12 +1,18 @@
-let image2D = function (nodes) {
-    return new image2D.prototype.init(nodes);
+import sizzle from '../core/sizzle';
+
+let image2D = function (selector, context) {
+    return new image2D.prototype.init(selector, context);
 };
 
-image2D.prototype.init = function (nodes) {
-    for (let flag = 0; flag < nodes.length; flag++) {
+image2D.prototype.init = function (selector, context) {
+    this.context = context = context || document;
+    let nodes = sizzle(selector, context), flag;
+    for (flag = 0; flag < nodes.length; flag++) {
         this[flag] = nodes[flag];
     }
+    this.selector = selector;
     this.length = nodes.length;
+    this.__constructor__ = 'image2D';
     return this;
 };
 
