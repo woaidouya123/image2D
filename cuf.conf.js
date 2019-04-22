@@ -11,7 +11,7 @@ module.exports = function (cuf) {
     *
     * author `+ pkg.author + `
     *
-    * version `+ pkg.version + `(` + pkg.status + `)
+    * version `+ pkg.version + `
     *
     * build Thu Apr 11 2019
     *
