@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Apr 23 2019 15:53:13 GMT+0800 (GMT+08:00)
+    * Date:Tue Apr 23 2019 17:11:54 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1013,14 +1013,61 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // 用于把一组数据绑定到一组结点或返回一组结点数据
     // 可以传递函数对数据处理
-    var data = function data(datas, calcback) {};
+    var data = function data(datas, calcback) {
+
+        // 获取数据
+        if (arguments.length <= 0) {
+            var _temp3 = [];
+            for (var _i3 = 0; _i3 < this.length; _i3++) {
+                _temp3[_i3] = this[_i3].__data__;
+            }return _temp3;
+        }
+
+        // 设置数据
+        var temp = [],
+            i = void 0;
+        for (i = 0; i < this.length && i < datas.length; i++) {
+            this[i].__data__ = typeof calcback === 'function' ? calcback(datas[i], i) : datas[i];
+            temp.push(this[i]);
+        }
+        var newImage2D = image2D(temp);
+
+        // 记录需要去平衡的数据
+        newImage2D.__enter__ = [];
+        for (; i < datas.length; i++) {
+            newImage2D.__enter__.push(typeof calcback === 'function' ? calcback(datas[i], i) : datas[i]);
+        } // 记录需要去平衡的结点
+        newImage2D.__exit__ = [];
+        for (; i < this.length; i++) {
+            newImage2D.__exit__.push(this[i]);
+        }return newImage2D;
+    };
 
     // 把过滤出来多于结点的数据部分变成结点返回
     // 需要传递一个字符串来标明新创建元素是什么
-    var enter = function enter(template) {};
+    var enter = function enter(template) {
+
+        if (!this.__enter__ || this.__enter__.constructor !== Array) throw new Error('Not a data node object to be balanced!');
+
+        var temp = [];
+        for (var i = 0; i < this.__enter__.length; i++) {
+            temp[i] = toNode$1(template);
+            temp[i].__data__ = this.__enter__[i];
+        }
+
+        delete this.__enter__;
+        return image2D(temp);
+    };
 
     // 把过滤出来多于数据的结点部分返回
-    var exit = function exit() {};
+    var exit = function exit() {
+
+        if (!this.__exit__ || this.__exit__.constructor !== Array) throw new Error('Not a data node object to be balanced!');
+
+        var exitImage2D = image2D(this.__exit__);
+        delete this.__exit__;
+        return exitImage2D;
+    };
 
     // 在维护的结点上轮询执行传入的方法
     // doback(data,index,image2D)
