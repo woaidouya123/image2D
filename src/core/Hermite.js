@@ -56,7 +56,7 @@ export default function (config) {
                 p3,
                 y1
             ];
-        } else throw new Error('The point position should be increamented!');
+        } else throw new Error('The point x-position should be increamented!');
         return hermite;
     };
 

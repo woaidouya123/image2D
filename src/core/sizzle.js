@@ -57,7 +57,7 @@ export default function (selector, context) {
 
         // 未知情况，报错
         else {
-            throw new Error('Unsupported selector：' + selector);
+            throw new Error('Unsupported selector:' + selector);
         }
 
     }
@@ -94,6 +94,6 @@ export default function (selector, context) {
 
     // 未知情况，报错
     else {
-        throw new Error('Unsupported selector：' + selector);
+        throw new Error('Unknown selector:' + selector);
     }
 };

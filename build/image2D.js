@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Apr 23 2019 11:55:42 GMT+0800 (GMT+08:00)
+    * Date:Tue Apr 23 2019 15:15:47 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -220,7 +220,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 未知情况，报错
             else {
-                    throw new Error('Unsupported selector：' + selector);
+                    throw new Error('Unsupported selector:' + selector);
                 }
         }
 
@@ -257,7 +257,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
                         // 未知情况，报错
                         else {
-                                throw new Error('Unsupported selector：' + selector);
+                                throw new Error('Unknown selector:' + selector);
                             }
     }
 
@@ -810,7 +810,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 // 统一在[0,1]上计算后再通过缩放和移动恢复
                 // 避免了动态求解矩阵的麻烦
                 MR = [2 * y1 - 2 * y2 + p3 + p4, 3 * y2 - 3 * y1 - 2 * p3 - p4, p3, y1];
-            } else throw new Error('The point position should be increamented!');
+            } else throw new Error('The point x-position should be increamented!');
             return hermite;
         };
 
@@ -909,6 +909,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             for (var i = 0; i < this.length; i++) {
                 nodes[0].appendChild(this[i]);
             }
+        } else {
+            throw new Error('Target empty!');
         }
         return this;
     };
@@ -924,9 +926,74 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             for (var i = 0; i < this.length; i++) {
                 nodes[0].insertBefore(this[i], nodes[0].childNodes[0]);
             }
+        } else {
+            throw new Error('Target empty!');
         }
         return this;
     };
+
+    /**
+     * 设置或获取样式
+     * @arguments(key):获取指定样式
+     * @arguments(key,value):设置指定样式
+     * @arguments():获取全部样式
+     * @arguments(json):设置大量样式
+     */
+    function style() {
+
+        // 获取样式
+        if (arguments.length <= 1 && (arguments.length <= 0 || _typeof(arguments[0]) !== 'object')) {
+            if (this.length <= 0) throw new Error('Target empty!');
+            return getStyle(this[0], arguments[0]);
+        }
+
+        // 设置样式
+        for (var i = 0; i < this.length; i++) {
+            if (arguments.length === 1) {
+                for (var key in arguments[0]) {
+                    this[i].style[key] = arguments[0][key];
+                }
+            } else this[i].style[arguments[0]] = arguments[1];
+        }
+
+        return this;
+    }
+
+    var setAttribute = function setAttribute(dom, attr, val) {
+        if (/[a-z]/.test(dom.tagName) && XLINK_ATTRIBUTE.indexOf(attr) >= 0) {
+            // 如果是xml元素
+            // 针对xlink使用特殊方法赋值
+            dom.setAttributeNS(NAMESPACE.xlink, 'xlink:' + attr, val);
+        } else dom.setAttribute(attr, val);
+    };
+
+    /**
+     * 设置或获取属性
+     * @arguments(attr):获取属性
+     * @arguments(attr,value):设置指定属性值
+     * @arguments(json):设置大量属性
+     */
+    function attribute() {
+
+        // 获取属性值
+        if (arguments.length === 1 && _typeof(arguments[0]) !== 'object') {
+            if (this.length <= 0) throw new Error('Target empty!');
+            return this[0].getAttribute(arguments[0]);
+        }
+
+        // 设置属性值
+        else if (arguments.length > 0) {
+                for (var i = 0; i < this.length; i++) {
+                    if (arguments.length === 1) {
+                        for (var key in arguments[0]) {
+                            setAttribute(this[i], key, arguments[0][key]);
+                        }
+                    } else setAttribute(this[i], arguments[0], arguments[1]);
+                }
+            }
+
+        return this;
+    }
 
     image2D.extend({
         "treeLayout": tree,
@@ -937,7 +1004,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     });
     image2D.prototype.extend({
         "appendTo": appendTo,
-        "prependTo": prependTo
+        "prependTo": prependTo,
+        "css": style,
+        "attr": attribute
     });
 
     var

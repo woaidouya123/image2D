@@ -10,6 +10,8 @@ export let appendTo = function (target, context) {
     if (nodes.length > 0) {
         for (let i = 0; i < this.length; i++)
             nodes[0].appendChild(this[i]);
+    } else {
+        throw new Error('Target empty!');
     }
     return this;
 };
@@ -24,6 +26,8 @@ export let prependTo = function (target, context) {
     if (nodes.length > 0) {
         for (let i = 0; i < this.length; i++)
             nodes[0].insertBefore(this[i], nodes[0].childNodes[0]);
+    } else {
+        throw new Error('Target empty!');
     }
     return this;
 };

@@ -22,9 +22,13 @@ image2D.extend({
  * -------------------
  */
 import { appendTo, prependTo } from './library/xhtml/dom';
+import style from './library/xhtml/style';
+import attribute from './library/xhtml/attribute';
 image2D.prototype.extend({
     "appendTo": appendTo,
-    "prependTo": prependTo
+    "prependTo": prependTo,
+    "css": style,
+    "attr": attribute
 });
 
 // 导出接口
