@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Apr 23 2019 17:11:54 GMT+0800 (GMT+08:00)
+    * Date:Tue Apr 23 2019 17:45:39 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -645,7 +645,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             //把tick函数推入堆栈
             "timer": function timer(tick, duration, callback) {
                 if (!tick) {
-                    throw new Error('tick is required!');
+                    throw new Error('Tick is required!');
                 }
                 duration = duration || $speeds;
                 var id = new Date().valueOf() + "_" + (Math.random() * 1000).toFixed(0);
@@ -932,6 +932,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return this;
     };
 
+    // 删除当前维护的结点
+    var remove = function remove() {
+        for (var i = 0; i < this.length; i++) {
+            this[i].parentNode.removeChild(this[i]);
+        }return this;
+    };
+
     /**
      * 设置或获取样式
      * @arguments(key):获取指定样式
@@ -1078,6 +1085,39 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }return this;
     };
 
+    /**
+     * 绑定事件
+     * @param {string} eventType
+     * @param {function} callback
+     */
+    var bind = function bind(eventType, callback) {
+
+        if (window.attachEvent) {
+            for (var flag = 0; flag < this.length; flag++) {
+                this[flag].attachEvent("on" + eventType, callback);
+            } // 后绑定的先执行
+        } else {
+            for (var _flag2 = 0; _flag2 < this.length; _flag2++) {
+                this[_flag2].addEventListener(eventType, callback, false);
+            } // 捕获
+        }
+
+        return this;
+    };
+
+    /**
+     * 获取鼠标相对特定元素左上角位置
+     * @param {Event} event
+     */
+    var position = function position(event) {
+        var bounding = this[0].getBoundingClientRect();
+        if (!event || !event.clientX) throw new Error('Event is necessary!');
+        return {
+            "x": event.clientX - bounding.left,
+            "y": event.clientY - bounding.top
+        };
+    };
+
     image2D.extend({
 
         // 布局
@@ -1096,13 +1136,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     image2D.prototype.extend({
 
         // 结点操作
-        appendTo: appendTo, prependTo: prependTo,
+        appendTo: appendTo, prependTo: prependTo, remove: remove,
 
         // 结点属性或样式操作
         css: style, attr: attribute,
 
         // 结点和数据绑定
-        datum: datum, data: data, enter: enter, exit: exit, loop: loop
+        datum: datum, data: data, enter: enter, exit: exit, loop: loop,
+
+        // 结点事件
+        bind: bind, position: position
 
     });
 

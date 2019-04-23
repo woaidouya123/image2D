@@ -31,3 +31,10 @@ export let prependTo = function (target, context) {
     }
     return this;
 };
+
+// 删除当前维护的结点
+export let remove = function () {
+    for (let i = 0; i < this.length; i++)
+        this[i].parentNode.removeChild(this[i]);
+    return this;
+};

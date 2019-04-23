@@ -21,7 +21,7 @@ export default function (doback, duration, callback) {
         //把tick函数推入堆栈
         "timer": function (tick, duration, callback) {
             if (!tick) {
-                throw new Error('tick is required!');
+                throw new Error('Tick is required!');
             }
             duration = duration || $speeds;
             let id = new Date().valueOf() + "_" + (Math.random() * 1000).toFixed(0);

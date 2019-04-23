@@ -29,20 +29,24 @@ image2D.extend({
  * 挂载对象方法
  * -------------------
  */
-import { appendTo, prependTo } from './library/xhtml/dom';
+import { appendTo, prependTo, remove } from './library/xhtml/dom';
 import style from './library/xhtml/style';
 import attribute from './library/xhtml/attribute';
 import { datum, data, enter, exit, loop } from './library/xhtml/data';
+import { bind, position } from './library/xhtml/event';
 image2D.prototype.extend({
 
     // 结点操作
-    appendTo, prependTo,
+    appendTo, prependTo, remove,
 
     // 结点属性或样式操作
     css: style, attr: attribute,
 
     // 结点和数据绑定
-    datum, data, enter, exit, loop
+    datum, data, enter, exit, loop,
+
+    // 结点事件
+    bind, position
 
 });
 
