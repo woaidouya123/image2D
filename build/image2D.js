@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Apr 23 2019 15:15:47 GMT+0800 (GMT+08:00)
+    * Date:Tue Apr 23 2019 15:53:13 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -995,18 +995,68 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return this;
     }
 
+    // 用于把数据绑定到一组结点或返回第一个结点数据
+    // 可以传递函数对数据处理
+    var datum = function datum(data, calcback) {
+
+        // 获取数据
+        if (arguments.length <= 0) {
+            if (this.length <= 0) throw new Error('Target empty!');
+            return this[0].__data__;
+        }
+
+        // 设置数据
+        for (var i = 0; i < this.length; i++) {
+            this[i].__data__ = typeof calcback === 'function' ? calcback(data, i) : data;
+        }return this;
+    };
+
+    // 用于把一组数据绑定到一组结点或返回一组结点数据
+    // 可以传递函数对数据处理
+    var data = function data(datas, calcback) {};
+
+    // 把过滤出来多于结点的数据部分变成结点返回
+    // 需要传递一个字符串来标明新创建元素是什么
+    var enter = function enter(template) {};
+
+    // 把过滤出来多于数据的结点部分返回
+    var exit = function exit() {};
+
+    // 在维护的结点上轮询执行传入的方法
+    // doback(data,index,image2D)
+    var loop = function loop(doback) {
+
+        for (var i = 0; i < this.length; i++) {
+            doback(this[i].__data__, i, image2D(this[i]));
+        }return this;
+    };
+
     image2D.extend({
-        "treeLayout": tree,
-        "Matrix4": Matrix4,
-        "animation": animation,
-        "formatColor": formatColor,
-        "cardinal": cardinal
+
+        // 布局
+        treeLayout: tree,
+
+        // 矩阵变换
+        Matrix4: Matrix4,
+
+        // 工具类
+        animation: animation, formatColor: formatColor,
+
+        // 插值方法
+        cardinal: cardinal
+
     });
     image2D.prototype.extend({
-        "appendTo": appendTo,
-        "prependTo": prependTo,
-        "css": style,
-        "attr": attribute
+
+        // 结点操作
+        appendTo: appendTo, prependTo: prependTo,
+
+        // 结点属性或样式操作
+        css: style, attr: attribute,
+
+        // 结点和数据绑定
+        datum: datum, data: data, enter: enter, exit: exit, loop: loop
+
     });
 
     var

@@ -44,7 +44,7 @@ module.exports = function (cuf) {
             "task": {
                 "target": {
                     "banner": banner,
-                    "entry": "./build/image2D.new.js",
+                    "entry": "./build/module.new.js",
                     "output": "./build/image2D.js"
                 }
             }

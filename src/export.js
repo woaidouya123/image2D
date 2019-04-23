@@ -10,11 +10,19 @@ import animation from './library/tools/animation';
 import { formatColor } from './core/color';
 import cardinal from './library/interpolate/Cardinal';
 image2D.extend({
-    "treeLayout": tree,
-    "Matrix4": Matrix4,
-    "animation": animation,
-    "formatColor": formatColor,
-    "cardinal": cardinal
+
+    // 布局
+    treeLayout: tree,
+
+    // 矩阵变换
+    Matrix4,
+
+    // 工具类
+    animation, formatColor,
+
+    // 插值方法
+    cardinal
+
 });
 
 /**
@@ -24,11 +32,18 @@ image2D.extend({
 import { appendTo, prependTo } from './library/xhtml/dom';
 import style from './library/xhtml/style';
 import attribute from './library/xhtml/attribute';
+import { datum, data, enter, exit, loop } from './library/xhtml/data';
 image2D.prototype.extend({
-    "appendTo": appendTo,
-    "prependTo": prependTo,
-    "css": style,
-    "attr": attribute
+
+    // 结点操作
+    appendTo, prependTo,
+
+    // 结点属性或样式操作
+    css: style, attr: attribute,
+
+    // 结点和数据绑定
+    datum, data, enter, exit, loop
+
 });
 
 // 导出接口
