@@ -6,6 +6,7 @@ import toNode from './to-node';
  * 在指定上下文查找结点
  * @param {string|dom|array|function|image2D} selector 选择器，必输
  * @param {dom} context 查找上下文，必输
+ * @return {array|image2D} 结点数组
  * 特别注意：id选择器或者传入的是维护的结点，查找上下文会被忽略
  */
 export default function (selector, context) {
@@ -16,7 +17,9 @@ export default function (selector, context) {
 
         // 如果以'<'开头表示是字符串模板
         if (/^</.test(selector)) {
-            return [toNode(selector)];
+            let node = toNode(selector);
+            if (isNode(node)) return [node];
+            else return [];
         }
 
         // *表示查找全部
@@ -28,7 +31,9 @@ export default function (selector, context) {
         // ID选择器
         // 此选择器会忽略上下文
         if (id) {
-            return document.getElementById(id[0].replace('#', ''));
+            let node = document.getElementById(id[0].replace('#', ''));
+            if (isNode(node)) return [node];
+            else return [];
         }
 
         let cls = selector.match(new RegExp('\\.' + REGEXP.identifier, 'g')),

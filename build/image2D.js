@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 22 2019 17:45:44 GMT+0800 (GMT+08:00)
+    * Date:Tue Apr 23 2019 11:55:42 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -169,6 +169,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * 在指定上下文查找结点
      * @param {string|dom|array|function|image2D} selector 选择器，必输
      * @param {dom} context 查找上下文，必输
+     * @return {array|image2D} 结点数组
      * 特别注意：id选择器或者传入的是维护的结点，查找上下文会被忽略
      */
     function sizzle(selector, context) {
@@ -179,7 +180,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 如果以'<'开头表示是字符串模板
             if (/^</.test(selector)) {
-                return [toNode$1(selector)];
+                var node = toNode$1(selector);
+                if (isNode(node)) return [node];else return [];
             }
 
             // *表示查找全部
@@ -191,7 +193,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // ID选择器
             // 此选择器会忽略上下文
             if (id) {
-                return document.getElementById(id[0].replace('#', ''));
+                var _node = document.getElementById(id[0].replace('#', ''));
+                if (isNode(_node)) return [_node];else return [];
             }
 
             var cls = selector.match(new RegExp('\\.' + REGEXP.identifier, 'g')),
@@ -896,14 +899,46 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     /**
-     * 挂载静态方法
-     * -------------------
+     * 把当前维护的结点加到目标结点内部的结尾
+     * @param {selector} target
+     * @return {image2D}
      */
-    image2D.treeLayout = tree;
-    image2D.Matrix4 = Matrix4;
-    image2D.animation = animation;
-    image2D.formatColor = formatColor;
-    image2D.cardinal = cardinal;
+    var appendTo = function appendTo(target, context) {
+        var nodes = sizzle(target, context || document);
+        if (nodes.length > 0) {
+            for (var i = 0; i < this.length; i++) {
+                nodes[0].appendChild(this[i]);
+            }
+        }
+        return this;
+    };
+
+    /**
+     * 把当前维护的结点加到目标结点内部的开头
+     * @param {selector} target
+     * @return {image2D}
+     */
+    var prependTo = function prependTo(target, context) {
+        var nodes = sizzle(target, context || document);
+        if (nodes.length > 0) {
+            for (var i = 0; i < this.length; i++) {
+                nodes[0].insertBefore(this[i], nodes[0].childNodes[0]);
+            }
+        }
+        return this;
+    };
+
+    image2D.extend({
+        "treeLayout": tree,
+        "Matrix4": Matrix4,
+        "animation": animation,
+        "formatColor": formatColor,
+        "cardinal": cardinal
+    });
+    image2D.prototype.extend({
+        "appendTo": appendTo,
+        "prependTo": prependTo
+    });
 
     var
     // 保存之前的image2D，防止直接覆盖
