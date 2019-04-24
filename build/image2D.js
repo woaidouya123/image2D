@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Wed Apr 24 2019 21:16:31 GMT+0800 (中国标准时间)
+    * Date:Wed Apr 24 2019 22:44:05 GMT+0800 (中国标准时间)
     */
 
 "use strict";
@@ -321,22 +321,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     function treeLayout() {
 
-        var scope = {
-            "e": {}
-        },
+        var config = {},
 
         // 维护的树
         alltreedata = void 0,
 
         // 根结点ID
-        rootid = void 0,
-
+        rootid = void 0;
 
         /**
          * 把内部保存的树结点数据
          * 计算结束后会调用配置的绘图方法
          */
-        update = function update() {
+        var update = function update() {
 
             var beforeDis = [],
                 size = 0,
@@ -426,10 +423,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             var tempTree = {};
             // 根结点
-            var temp = scope.e.root(initTree),
+            var temp = config.root(initTree),
                 id = void 0,
                 rid = void 0;
-            id = rid = scope.e.id(temp);
+            id = rid = config.id(temp);
             tempTree[id] = {
                 "data": temp,
                 "pid": null,
@@ -438,10 +435,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             };
             // 根据传递的原始数据，生成内部统一结构
             (function createTree(pdata, pid) {
-                var children = scope.e.child(pdata, initTree),
+                var children = config.child(pdata, initTree),
                     flag = void 0;
                 for (flag = 0; children && flag < children.length; flag++) {
-                    id = scope.e.id(children[flag]);
+                    id = config.id(children[flag]);
                     tempTree[pid].children.push(id);
                     tempTree[id] = {
                         "data": children[flag],
@@ -468,19 +465,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         // 获取根结点的方法:root(initTree)
         tree.root = function (rootback) {
-            scope.e.root = rootback;
+            config.root = rootback;
             return tree;
         };
 
         // 获取子结点的方法:child(parentTree,initTree)
         tree.child = function (childback) {
-            scope.e.child = childback;
+            config.child = childback;
             return tree;
         };
 
         // 获取结点ID方法:id(treedata)
         tree.id = function (idback) {
-            scope.e.id = idback;
+            config.id = idback;
             return tree;
         };
 
@@ -489,7 +486,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     function tree(config) {
 
-        config = initConfig({}, config);
+        config = initConfig({
+
+            // 类型：如果不是下面五种之一，就认为是原始类型
+            // t:LR|RL|BT|TB|circle
+
+            // 如果类型是LR|RL|BT|TB需要设置如下参数
+            // 1.rx,ry:顶点节点坐标；2.w,h:宽和高
+
+            // 如果类型是circle需要设置如下参数
+            // 1.cx,cy：圆心；2.r:半径；3.begin,deg：开始和跨越弧度（可选）
+            "begin": 0,
+            "deg": Math.PI * 2
+
+        }, config);
 
         var treeObj = function treeObj(initData) {
 
@@ -498,6 +508,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             .root(config.root).child(config.child).id(config.id)
             // 计算初始坐标
             (initData);
+
+            if (config.t === 'LR' || config.t === 'RL') ;else if (config.t === 'TB' || config.t === 'BT') ;else if (config.t === 'circle') ;
+
+            // 启动绘图
+            config.drawer(orgData);
+
+            return treeObj;
+        };
+
+        // 设置绘图方法
+        treeObj.drawer = function (drawerback) {
+            config.drawer = drawerback;
+            return treeObj;
         };
 
         return treeObj;
