@@ -10,6 +10,7 @@ import animation from './library/tools/animation';
 import color from './library/tools/color';
 import cardinal from './library/interpolate/Cardinal';
 import { rotate, move, scale, dot } from './library/calculate/transform';
+import track from './library/calculate/track';
 image2D.extend({
 
     // 布局
@@ -24,8 +25,8 @@ image2D.extend({
     // 工具类
     animation, color,
 
-    // 插值方法
-    cardinal
+    // 插值类计算
+    cardinal, track
 
 });
 

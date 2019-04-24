@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Wed Apr 24 2019 22:44:05 GMT+0800 (中国标准时间)
+    * Date:Thu Apr 25 2019 00:09:59 GMT+0800 (中国标准时间)
     */
 
 "use strict";
@@ -993,6 +993,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return dotObj;
     };
 
+    function track() {}
+
     /**
      * 把当前维护的结点加到目标结点内部的结尾
      * @param {selector} target
@@ -1245,8 +1247,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 工具类
         animation: animation, color: color,
 
-        // 插值方法
-        cardinal: cardinal
+        // 插值类计算
+        cardinal: cardinal, track: track
 
     });
     image2D.prototype.extend({
