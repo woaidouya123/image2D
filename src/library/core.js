@@ -10,9 +10,7 @@ image2D.prototype.init = function (selector, context) {
     for (flag = 0; flag < nodes.length; flag++) {
         this[flag] = nodes[flag];
     }
-    this.selector = selector;
     this.length = nodes.length;
-    this.__constructor__ = 'image2D';
     return this;
 };
 

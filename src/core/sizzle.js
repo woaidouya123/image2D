@@ -1,6 +1,7 @@
 import { isNode } from './type';
 import { REGEXP } from './config';
 import toNode from './to-node';
+import image2D from '../library/core';
 
 /**
  * 在指定上下文查找结点
@@ -78,7 +79,7 @@ export default function (selector, context) {
     }
 
     // 如果是image2D对象
-    else if (selector && selector.__constructor__ === 'image2D') {
+    else if (selector && selector.constructor === image2D) {
         return selector;
     }
 

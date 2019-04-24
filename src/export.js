@@ -33,15 +33,16 @@ image2D.extend({
  * 挂载对象方法
  * -------------------
  */
-import { appendTo, prependTo, remove } from './library/xhtml/dom';
+import { appendTo, prependTo, remove, filter } from './library/xhtml/dom';
 import style from './library/xhtml/style';
 import attribute from './library/xhtml/attribute';
 import { datum, data, enter, exit, loop } from './library/xhtml/data';
 import { bind, position } from './library/xhtml/event';
+import pencil, { painter } from './library/painter/pencil';
 image2D.prototype.extend({
 
     // 结点操作
-    appendTo, prependTo, remove,
+    appendTo, prependTo, remove, filter,
 
     // 结点属性或样式操作
     css: style, attr: attribute,
@@ -50,7 +51,10 @@ image2D.prototype.extend({
     datum, data, enter, exit, loop,
 
     // 结点事件
-    bind, position
+    bind, position,
+
+    // 绘画工具
+    painter, pencil
 
 });
 
