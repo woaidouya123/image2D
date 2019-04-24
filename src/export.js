@@ -7,18 +7,22 @@ import image2D from './library/core';
 import tree from './library/layout/tree';
 import Matrix4 from './library/Matrix4/index';
 import animation from './library/tools/animation';
-import { formatColor } from './core/color';
+import color from './library/tools/color';
 import cardinal from './library/interpolate/Cardinal';
+import { rotate, move, scale, dot } from './library/calculate/transform';
 image2D.extend({
 
     // 布局
-    treeLayout: tree,
+    tree,
 
     // 矩阵变换
     Matrix4,
 
+    // 二维简单变换
+    rotate, move, scale, dot,
+
     // 工具类
-    animation, formatColor,
+    animation, color,
 
     // 插值方法
     cardinal

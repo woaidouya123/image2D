@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Apr 23 2019 17:45:39 GMT+0800 (GMT+08:00)
+    * Date:Wed Apr 24 2019 15:33:59 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -321,173 +321,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      *  3.每个结点都是一块1*1的正方形，top和left分别表示正方形中心的位置
      *
      */
-    function tree() {
 
-        var scope = {
-            "e": {}
-        },
-
-        // 维护的树
-        alltreedata = void 0,
-
-        // 根结点ID
-        rootid = void 0,
-
-
-        /**
-         * 把内部保存的树结点数据
-         * 计算结束后会调用配置的绘图方法
-         */
-        update = function update() {
-
-            var beforeDis = [],
-                size = 0,
-                maxDeep = 0;
-            (function positionCalc(pNode, deep) {
-
-                if (deep > maxDeep) maxDeep = deep;
-                var flag = void 0;
-                for (flag = 0; flag < pNode.children.length; flag++) {
-                    // 因为全部的子结点的位置确定了，父结点的y位置就是子结点的中间位置
-                    // 因此有子结点的，先计算子结点
-                    positionCalc(alltreedata[pNode.children[flag]], deep + 1);
-                } // left的位置比较简单，deep从0开始编号
-                // 比如deep=0，第一层，left=0+0.5=0.5，也就是根结点
-                alltreedata[pNode.id].left = deep + 0.5;
-                if (flag == 0) {
-
-                    // beforeDis是一个数组，用以记录每一层此刻top下边缘（每一层是从上到下）
-                    // 比如一层的第一个，top值最小可以取top=0.5
-                    // 为了方便计算，beforeDis[deep] == undefined的时候表示现在准备计算的是这层的第一个结点
-                    // 因此设置最低上边缘为-0.5
-                    if (beforeDis[deep] == undefined) beforeDis[deep] = -0.5;
-                    // 父边缘同意的进行初始化
-                    if (beforeDis[deep - 1] == undefined) beforeDis[deep - 1] = -0.5;
-
-                    // 添加的新结点top值第一种求法：本层上边缘+1（比如上边缘是-0.5，那么top最小是top=-0.5+1=0.5）
-                    alltreedata[pNode.id].top = beforeDis[deep] + 1;
-
-                    var pTop = beforeDis[deep] + 1 + (alltreedata[pNode.pid].children.length - 1) * 0.5;
-                    // 计算的原则是：如果第一种可行，选择第一种，否则必须选择第二种
-                    // 判断第一种是否可行的方法就是：如果第一种计算后确定的孩子上边缘不对导致孩子和孩子的前兄弟重合就是可行的
-                    if (pTop - 1 < beforeDis[deep - 1])
-                        // 必须保证父亲结点和父亲的前一个兄弟保存1的距离，至少
-                        // 添加的新结点top值的第二种求法：根据孩子取孩子结点的中心top
-                        alltreedata[pNode.id].top = beforeDis[deep - 1] + 1 - (alltreedata[pNode.pid].children.length - 1) * 0.5;
-                } else {
-
-                    // 此刻flag!=0
-                    // 意味着结点有孩子，那么问题就解决了，直接取孩子的中间即可
-                    // 其实，flag==0的分支计算的就是孩子，是没有孩子的叶结点，那是关键
-                    alltreedata[pNode.id].top = (alltreedata[pNode.children[0]].top + alltreedata[pNode.children[flag - 1]].top) * 0.5;
-                }
-
-                // 因为计算孩子的时候
-                // 无法掌握父辈兄弟的情况
-                // 可能会出现父亲和兄弟重叠问题
-                if (alltreedata[pNode.id].top <= beforeDis[deep]) {
-                    var needUp = beforeDis[deep] + 1 - alltreedata[pNode.id].top;
-                    (function doUp(_pid, _deep) {
-                        alltreedata[_pid].top += needUp;
-                        if (beforeDis[_deep] < alltreedata[_pid].top) beforeDis[_deep] = alltreedata[_pid].top;
-                        var _flag = void 0;
-                        for (_flag = 0; _flag < alltreedata[_pid].children.length; _flag++) {
-                            doUp(alltreedata[_pid].children[_flag], _deep + 1);
-                        }
-                    })(pNode.id, deep);
-                }
-
-                // 计算好一个结点后，需要更新此刻该层的上边缘
-                beforeDis[deep] = alltreedata[pNode.id].top;
-
-                // size在每次计算一个结点后更新，是为了最终绘图的时候知道树有多宽（此处应该叫高）
-                if (alltreedata[pNode.id].top + 0.5 > size) size = alltreedata[pNode.id].top + 0.5;
-            })(alltreedata[rootid], 0);
-
-            // 传递的参数分别表示：记录了位置信息的树结点集合、根结点ID和树的宽
-            return {
-                "node": alltreedata,
-                "root": rootid,
-                "size": size,
-                "deep": maxDeep + 1
-            };
-        };
-
-        /**
-         * 根据配置的层次关系（配置的id,child,root）把原始数据变成内部结构，方便后期位置计算
-         * @param {any} initTree
-         *
-         * tempTree[id]={
-         *  "data":原始数据,
-         *  "pid":父亲ID,
-         *  "id":唯一标识ID,
-         *  "children":[cid1、cid2、...]
-         * }
-         */
-        var toInnerTree = function toInnerTree(initTree) {
-
-            var tempTree = {};
-            // 根结点
-            var temp = scope.e.root(initTree),
-                id = void 0,
-                rid = void 0;
-            id = rid = scope.e.id(temp);
-            tempTree[id] = {
-                "data": temp,
-                "pid": null,
-                "id": id,
-                "children": []
-            };
-            // 根据传递的原始数据，生成内部统一结构
-            (function createTree(pdata, pid) {
-                var children = scope.e.child(pdata, initTree),
-                    flag = void 0;
-                for (flag = 0; children && flag < children.length; flag++) {
-                    id = scope.e.id(children[flag]);
-                    tempTree[pid].children.push(id);
-                    tempTree[id] = {
-                        "data": children[flag],
-                        "pid": pid,
-                        "id": id,
-                        "children": []
-                    };
-                    createTree(children[flag], id);
-                }
-            })(temp, id);
-
-            return [rid, tempTree];
-        };
-
-        // 可以传递任意格式的树原始数据
-        // 只要配置对应的解析方法即可
-        var tree = function tree(initTree) {
-
-            var treeData = toInnerTree(initTree);
-            alltreedata = treeData[1];
-            rootid = treeData[0];
-            return update();
-        };
-
-        // 获取根结点的方法:root(initTree)
-        tree.root = function (rootback) {
-            scope.e.root = rootback;
-            return tree;
-        };
-
-        // 获取子结点的方法:child(parentTree,initTree)
-        tree.child = function (childback) {
-            scope.e.child = childback;
-            return tree;
-        };
-
-        // 获取结点ID方法:id(treedata)
-        tree.id = function (idback) {
-            scope.e.id = idback;
-            return tree;
-        };
-
-        return tree;
-    }
+    function tree() {}
 
     // 在(a,b,c)方向位移d
     function _move(d, a, b, c) {
@@ -745,17 +580,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return typeof name === 'string' ? allStyle.getPropertyValue(name) : allStyle;
     }
 
-    /**
-     * 把颜色统一转变成rgba(x,x,x,x)格式
-     * @param {String} oral_color
-     * @return {Array} 返回数字数组[r,g,b,a]
-     */
-    var formatColor = function formatColor(oral_color) {
-        var head = document.getElementsByTagName('head')[0];
-        head.style.color = oral_color;
-        var color = getStyle(head, 'color').replace(/^rgba?\(([^)]+)\)$/, '$1').split(new RegExp('\\,' + REGEXP.whitespace));
-        return [+color[0], +color[1], +color[2], color[3] == undefined ? 1 : +color[3]];
-    };
+    function color(config) {}
 
     /**
      * Hermite三次插值
@@ -897,6 +722,74 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         return cardinal;
     }
+
+    /**
+     * 点（x,y）围绕中心（cx,cy）旋转deg度
+     */
+    var _rotate2 = function _rotate2(cx, cy, deg, x, y) {
+        var cos = Math.cos(deg),
+            sin = Math.sin(deg);
+        return [+((x - cx) * cos - (y - cy) * sin + cx).toFixed(7), +((x - cx) * sin + (y - cy) * cos + cy).toFixed(7)];
+    };
+
+    /**
+     * 点（x,y）沿着向量（ax,ay）方向移动距离d
+     */
+    var _move2 = function _move2(ax, ay, d, x, y) {
+        var sqrt = Math.sqrt(ax * ax + ay * ay);
+        return [+(ax * d / sqrt + x).toFixed(7), +(ay * d / sqrt + y).toFixed(7)];
+    };
+
+    /**
+     * 点（x,y）围绕中心（cx,cy）缩放times倍
+     */
+    var _scale2 = function _scale2(cx, cy, times, x, y) {
+        return [+(times * (x - cx) + cx).toFixed(7), +(times * (y - cy) + cy).toFixed(7)];
+    };
+
+    var dot = function dot(config) {
+
+        config = initConfig({
+            // 前进方向
+            d: [1, 1],
+            // 中心坐标
+            c: [0, 0],
+            // 当前位置
+            p: [0, 0]
+        }, config);
+
+        var dotObj = {
+
+            // 前进方向以当前位置为中心，旋转deg度
+            "rotate": function rotate(deg) {
+                var dPx = config.d[0] + config.p[0],
+                    dPy = config.d[1] + config.p[1];
+                var dP = _rotate2(config.p[0], config.p[1], deg, dPx, dPy);
+                config.d = [dP[0] - config.p[0], dP[1] - config.p[1]];
+                return dotObj;
+            },
+
+            // 沿着当前前进方向前进d
+            "move": function move(d) {
+                config.p = _move2(config.d[0], config.d[1], d, config.p[0], config.p[1]);
+                return dotObj;
+            },
+
+            // 围绕中心坐标缩放
+            "scale": function scale(times) {
+                config.p = _scale2(config.c[0], config.c[1], times, config.p[0], config.p[1]);
+                return dotObj;
+            },
+
+            // 当前位置
+            "value": function value() {
+                return config.p;
+            }
+
+        };
+
+        return dotObj;
+    };
 
     /**
      * 把当前维护的结点加到目标结点内部的结尾
@@ -1097,8 +990,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 this[flag].attachEvent("on" + eventType, callback);
             } // 后绑定的先执行
         } else {
-            for (var _flag2 = 0; _flag2 < this.length; _flag2++) {
-                this[_flag2].addEventListener(eventType, callback, false);
+            for (var _flag = 0; _flag < this.length; _flag++) {
+                this[_flag].addEventListener(eventType, callback, false);
             } // 捕获
         }
 
@@ -1121,13 +1014,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     image2D.extend({
 
         // 布局
-        treeLayout: tree,
+        tree: tree,
 
         // 矩阵变换
         Matrix4: Matrix4,
 
+        // 二维简单变换
+        rotate: _rotate2, move: _move2, scale: _scale2, dot: dot,
+
         // 工具类
-        animation: animation, formatColor: formatColor,
+        animation: animation, color: color,
 
         // 插值方法
         cardinal: cardinal
