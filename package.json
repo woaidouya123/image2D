@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/yelloxing/image2D/issues"
   },
-  "homepage": "https://github.com/yelloxing/image2D#readme",
+  "homepage": "https://yelloxing.github.io/image2D",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
