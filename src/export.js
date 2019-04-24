@@ -38,7 +38,7 @@ import style from './library/xhtml/style';
 import attribute from './library/xhtml/attribute';
 import { datum, data, enter, exit, loop } from './library/xhtml/data';
 import { bind, position } from './library/xhtml/event';
-import pencil, { painter } from './library/painter/pencil';
+import painter from './library/canvas2D/painter';
 image2D.prototype.extend({
 
     // 结点操作
@@ -53,8 +53,8 @@ image2D.prototype.extend({
     // 结点事件
     bind, position,
 
-    // 绘画工具
-    painter, pencil
+    // canvas2D绘图相关
+    painter
 
 });
 

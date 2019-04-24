@@ -4,10 +4,10 @@
   "description": "🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.",
   "main": "src/export.js",
   "scripts": {
-    "start": "npm install && cuf explain --config cuf.conf.js",
+    "start": "npm install && cuf explain",
     "unit": "karma start",
-    "babel": "cuf build-babel --config cuf.conf.js",
-    "ugligy": "cuf build-ugligy --config cuf.conf.js",
+    "babel": "cuf build-babel",
+    "ugligy": "cuf build-ugligy",
     "build": "rollup -c rollup.config.js && npm run babel && npm run ugligy"
   },
   "keywords": [

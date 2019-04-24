@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Wed Apr 24 2019 17:46:32 GMT+0800 (GMT+08:00)
+    * Date:Wed Apr 24 2019 21:16:31 GMT+0800 (中国标准时间)
     */
 
 "use strict";
@@ -1200,15 +1200,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
 
     // 获取原生的canvas画笔
-    var painter = function painter() {
+    function painter() {
         if (this.length > 0) {
             if (this[0].nodeName.toLowerCase() === 'canvas') {
                 return this[0].getContext("2d");
             } else throw new Error('Painter is not a function!');
         } else throw new Error('Target empty!');
-    };
-
-    function pencil() {}
+    }
 
     image2D.extend({
 
@@ -1242,8 +1240,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 结点事件
         bind: bind, position: position,
 
-        // 绘画工具
-        painter: painter, pencil: pencil
+        // canvas2D绘图相关
+        painter: painter
 
     });
 
