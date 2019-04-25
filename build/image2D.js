@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Apr 25 2019 00:09:59 GMT+0800 (中国标准时间)
+    * Date:Thu Apr 25 2019 10:01:02 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -484,7 +484,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return tree;
     }
 
-    function tree(config) {
+    function treeLayout$1(config) {
 
         config = initConfig({
 
@@ -525,6 +525,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         return treeObj;
     }
+
+    function pieLayout() {}
 
     // 在(a,b,c)方向位移d
     function _move(d, a, b, c) {
@@ -995,6 +997,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     function track() {}
 
+    var canvas = {};
+
+    var svg = {};
+
     /**
      * 把当前维护的结点加到目标结点内部的结尾
      * @param {selector} target
@@ -1224,19 +1230,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     };
 
-    // 获取原生的canvas画笔
-    function painter() {
-        if (this.length > 0) {
-            if (this[0].nodeName.toLowerCase() === 'canvas') {
-                return this[0].getContext("2d");
-            } else throw new Error('Painter is not a function!');
-        } else throw new Error('Target empty!');
-    }
+    // 加强版本的画笔
+    function painter() {}
 
     image2D.extend({
 
         // 布局
-        tree: tree,
+        treeLayout: treeLayout$1, pieLayout: pieLayout,
 
         // 矩阵变换
         Matrix4: Matrix4,
@@ -1248,7 +1248,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         animation: animation, color: color,
 
         // 插值类计算
-        cardinal: cardinal, track: track
+        cardinal: cardinal, track: track,
+
+        // 常见图形绘制方法
+        canvas: canvas, svg: svg
 
     });
     image2D.prototype.extend({
@@ -1265,7 +1268,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 结点事件
         bind: bind, position: position,
 
-        // canvas2D绘图相关
+        // 自定义位图画笔
         painter: painter
 
     });

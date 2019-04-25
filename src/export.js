@@ -4,17 +4,20 @@ import image2D from './library/core';
  * 挂载静态方法
  * -------------------
  */
-import tree from './library/layout/tree';
+import treeLayout from './library/layout/tree';
+import pieLayout from './library/layout/pie';
 import Matrix4 from './library/Matrix4/index';
 import animation from './library/tools/animation';
 import color from './library/tools/color';
 import cardinal from './library/interpolate/Cardinal';
 import { rotate, move, scale, dot } from './library/calculate/transform';
 import track from './library/calculate/track';
+import canvas from './library/graphic/canvas';
+import svg from './library/graphic/svg';
 image2D.extend({
 
     // 布局
-    tree,
+    treeLayout, pieLayout,
 
     // 矩阵变换
     Matrix4,
@@ -26,7 +29,10 @@ image2D.extend({
     animation, color,
 
     // 插值类计算
-    cardinal, track
+    cardinal, track,
+
+    // 常见图形绘制方法
+    canvas, svg
 
 });
 
@@ -54,7 +60,7 @@ image2D.prototype.extend({
     // 结点事件
     bind, position,
 
-    // canvas2D绘图相关
+    // 自定义位图画笔
     painter
 
 });
