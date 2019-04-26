@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Apr 26 2019 15:52:31 GMT+0800 (GMT+08:00)
+    * Date:Fri Apr 26 2019 17:58:34 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1246,6 +1246,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 return enhancePainter;
             },
 
+            // 文字
+            "fillText": function fillText(text, x, y) {
+                painter.fillText(text, x, y);return enhancePainter;
+            },
+            "strokeText": function strokeText(text, x, y) {
+                painter.strokeText(text, x, y);return enhancePainter;
+            },
+
             // 路径
             "beginPath": function beginPath() {
                 painter.beginPath();return enhancePainter;
@@ -1260,15 +1268,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 painter.lineTo(x, y);return enhancePainter;
             },
 
-            // 状态
-            "save": function save() {
-                painter.save();return enhancePainter;
-            },
-            "restore": function restore() {
-                painter.restore();return enhancePainter;
-            },
-
-            // base64
+            // 地址图片
             "toDataURL": function toDataURL() {
                 return painter.toDataURL();
             },
@@ -1276,20 +1276,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // image
             "drawImage": function drawImage(img, sx, sy, sw, sh, x, y, w, h) {
                 painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);return enhancePainter;
-            },
-
-            // 文字
-            "textAlign": function textAlign(align) {
-                painter.textAlign = align;return enhancePainter;
-            },
-            "textBaseline": function textBaseline(baseline) {
-                painter.textBaseline = baseline;return enhancePainter;
-            },
-            "fillText": function fillText(text, x, y, maxW) {
-                painter.fillText(text, x, y, maxW);return enhancePainter;
-            },
-            "strokeText": function strokeText(text, x, y, maxW) {
-                painter.strokeText(text, x, y, maxW);return enhancePainter;
             }
 
         };
@@ -1297,13 +1283,42 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return enhancePainter;
     }
 
+    // 返回浏览器名称
+
+    function normalConfig(key, value) {
+
+        if (key === 'textAlign') {
+            return {
+                "left": "start",
+                "right": "end",
+                "middle": "middle"
+            }[value] || value;
+        } else if (key === 'textBaseline') {
+            // todo
+            return value;
+        }
+
+        return value;
+    }
+
+    // 返回outHTML
+
+    function _toDataURL(target, width, height, charset) {
+        debugger;
+    }
+
     function painter_svg(target, selector) {
 
         var _painter = void 0;
-        if (selector) _painter = sizzle(selector, target)[0];
+        if (selector) _painter = image2D(selector, target);
 
         // 类似canvas画笔的属性
-        var _config = {};
+        var _config = {
+            "fillStyle": "#000",
+            "strokeStyle": "#000",
+            "textAlign": "start",
+            "textBaseline": normalConfig("textBaseline", "middle")
+        };
 
         // 画笔
         var enhancePainter = {
@@ -1313,15 +1328,39 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 if (arguments.length === 1) {
                     if (_typeof(arguments[0]) !== 'object') return _config[arguments[0]];
                     for (var key in arguments[0]) {
-                        _config[key] = arguments[0][key];
+                        _config[key] = normalConfig(key, arguments[0][key]);
                     }
-                } else if (arguments.length === 2) _config[arguments[0]] = arguments[1];
+                } else if (arguments.length === 2) _config[arguments[0]] = normalConfig(arguments[0], arguments[1]);
                 return enhancePainter;
             },
 
             // 基础方法
             "painter": function painter(selector) {
-                _painter = sizzle(selector, target)[0];return enhancePainter;
+                _painter = image2D(selector, target);return enhancePainter;
+            },
+            "appendTo": function appendTo(selector) {
+                _painter.appendTo(selector, target);return enhancePainter;
+            },
+            "prependTo": function prependTo(selector) {
+                _painter.prependTo(selector, target);return enhancePainter;
+            },
+
+            // 文字
+            "fillText": function fillText(text, x, y) {
+                _painter.attr({ "x": x, "y": y, "fill": _config.fillStyle })[0].textContent = text;
+                return enhancePainter;
+            },
+            "strokeText": function strokeText(text, x, y) {
+                _painter.attr({ "x": x, "y": y, "stroke": _config.strokeStyle })[0].textContent = text;
+                return enhancePainter;
+            },
+
+            // 地址图片
+            "toDataURL": function toDataURL(charset) {
+                var width = target.getAttribute('width') || 300; // 默认值的选择是因为替换原始默认尺寸
+                var height = target.getAttribute('height') || 150;
+                charset = charset || 'utf-8';
+                return _toDataURL(target, width, height, charset);
             }
 
         };
