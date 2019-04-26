@@ -1,23 +1,7 @@
-import image2D from '../core';
-import { isNode } from '../../core/type';
-
-// 获取原生的canvas画笔
-export let getPainter = function (target) {
-    if (target) {
-        if (target.constructor === image2D) target = target[0];
-
-        if (target && target.nodeName.toLowerCase() === 'canvas') {
-            return target.getContext("2d");
-        } else if (isNode(target)) throw new Error('Painter is not a function!');
-    }
-    throw new Error('Target empty!');
-};
-
 // 加强版本的画笔
-export default function () {
+export default function (canvas) {
 
-    let canvas = this[0];
-    let painter = getPainter(canvas);
+    let painter = canvas.getContext("2d");
 
     // 画笔
     let enhancePainter = {
@@ -32,11 +16,27 @@ export default function () {
             return enhancePainter;
         },
 
-        /**
-         * 基础方法
-         * ---------------
-         */
+        // 路径
+        "beginPath": function () { painter.beginPath(); return enhancePainter; },
+        "closePath": function () { painter.closePath(); return enhancePainter; },
+        "moveTo": function (x, y) { painter.moveTo(x, y); return enhancePainter; },
+        "lineTo": function (x, y) { painter.lineTo(x, y); return enhancePainter },
 
+        // 状态
+        "save": function () { painter.save(); return enhancePainter },
+        "restore": function () { painter.restore(); return enhancePainter },
+
+        // base64
+        "toDataURL": function () { return painter.toDataURL() },
+
+        // image
+        "drawImage": function (img, sx, sy, sw, sh, x, y, w, h) { painter.drawImage(img, sx, sy, sw, sh, x, y, w, h); return enhancePainter; },
+
+        // 文字
+        "textAlign": function (align) { painter.textAlign = align; return enhancePainter; },
+        "textBaseline": function (baseline) { painter.textBaseline = baseline; return enhancePainter; },
+        "fillText": function (text, x, y, maxW) { painter.fillText(text, x, y, maxW); return enhancePainter; },
+        "strokeText": function (text, x, y, maxW) { painter.strokeText(text, x, y, maxW); return enhancePainter; },
 
 
     };

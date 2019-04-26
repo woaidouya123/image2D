@@ -18,13 +18,14 @@ export default function (config) {
 
     }, config);
 
+    let treeCalc = treeLayout()
+        // 配置数据格式
+        .root(config.root).child(config.child).id(config.id);
+
     let treeObj = function (initData) {
 
-        let orgData = treeLayout()
-            // 配置数据格式
-            .root(config.root).child(config.child).id(config.id)
-            // 计算初始坐标
-            (initData);
+        // 计算初始坐标
+        let orgData = treeCalc(initData);
 
 
         if (config.t === 'LR' || config.t === 'RL') {

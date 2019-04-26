@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Apr 26 2019 11:57:10 GMT+0800 (GMT+08:00)
+    * Date:Fri Apr 26 2019 15:52:31 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -501,13 +501,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         }, config);
 
+        var treeCalc = treeLayout()
+        // 配置数据格式
+        .root(config.root).child(config.child).id(config.id);
+
         var treeObj = function treeObj(initData) {
 
-            var orgData = treeLayout()
-            // 配置数据格式
-            .root(config.root).child(config.child).id(config.id)
             // 计算初始坐标
-            (initData);
+            var orgData = treeCalc(initData);
 
             if (config.t === 'LR' || config.t === 'RL') ;else if (config.t === 'TB' || config.t === 'BT') ;else if (config.t === 'circle') ;
 
@@ -997,10 +998,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     function track() {}
 
-    var canvas = {};
-
-    var svg = {};
-
     /**
      * 把当前维护的结点加到目标结点内部的结尾
      * @param {selector} target
@@ -1230,23 +1227,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     };
 
-    // 获取原生的canvas画笔
-    var getPainter = function getPainter(target) {
-        if (target) {
-            if (target.constructor === image2D) target = target[0];
-
-            if (target && target.nodeName.toLowerCase() === 'canvas') {
-                return target.getContext("2d");
-            } else if (isNode(target)) throw new Error('Painter is not a function!');
-        }
-        throw new Error('Target empty!');
-    };
-
     // 加强版本的画笔
-    function painter() {
+    function painter_canvas2D(canvas) {
 
-        var canvas = this[0];
-        var painter = getPainter(canvas);
+        var painter = canvas.getContext("2d");
 
         // 画笔
         var enhancePainter = {
@@ -1260,16 +1244,107 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     }
                 } else if (arguments.length === 2) painter[arguments[0]] = arguments[1];
                 return enhancePainter;
-            }
+            },
 
-            /**
-             * 基础方法
-             * ---------------
-             */
+            // 路径
+            "beginPath": function beginPath() {
+                painter.beginPath();return enhancePainter;
+            },
+            "closePath": function closePath() {
+                painter.closePath();return enhancePainter;
+            },
+            "moveTo": function moveTo(x, y) {
+                painter.moveTo(x, y);return enhancePainter;
+            },
+            "lineTo": function lineTo(x, y) {
+                painter.lineTo(x, y);return enhancePainter;
+            },
+
+            // 状态
+            "save": function save() {
+                painter.save();return enhancePainter;
+            },
+            "restore": function restore() {
+                painter.restore();return enhancePainter;
+            },
+
+            // base64
+            "toDataURL": function toDataURL() {
+                return painter.toDataURL();
+            },
+
+            // image
+            "drawImage": function drawImage(img, sx, sy, sw, sh, x, y, w, h) {
+                painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);return enhancePainter;
+            },
+
+            // 文字
+            "textAlign": function textAlign(align) {
+                painter.textAlign = align;return enhancePainter;
+            },
+            "textBaseline": function textBaseline(baseline) {
+                painter.textBaseline = baseline;return enhancePainter;
+            },
+            "fillText": function fillText(text, x, y, maxW) {
+                painter.fillText(text, x, y, maxW);return enhancePainter;
+            },
+            "strokeText": function strokeText(text, x, y, maxW) {
+                painter.strokeText(text, x, y, maxW);return enhancePainter;
+            }
 
         };
 
         return enhancePainter;
+    }
+
+    function painter_svg(target, selector) {
+
+        var _painter = void 0;
+        if (selector) _painter = sizzle(selector, target)[0];
+
+        // 类似canvas画笔的属性
+        var _config = {};
+
+        // 画笔
+        var enhancePainter = {
+
+            // 属性设置或获取
+            "config": function config() {
+                if (arguments.length === 1) {
+                    if (_typeof(arguments[0]) !== 'object') return _config[arguments[0]];
+                    for (var key in arguments[0]) {
+                        _config[key] = arguments[0][key];
+                    }
+                } else if (arguments.length === 2) _config[arguments[0]] = arguments[1];
+                return enhancePainter;
+            },
+
+            // 基础方法
+            "painter": function painter(selector) {
+                _painter = sizzle(selector, target)[0];return enhancePainter;
+            }
+
+        };
+
+        return enhancePainter;
+    }
+
+    // 统一画笔
+    // 负责启动具体的绘图对象
+    function painter() {
+
+        if (!isNode(this[0])) throw new Error('Target empty!');
+
+        var target = this[0],
+            nodeName = target.nodeName.toLowerCase();
+
+        // canvas2D
+        if (nodeName === 'canvas') return painter_canvas2D(target);
+
+        // svg
+        if (nodeName === 'svg') return painter_svg(target, arguments[0]);
+
+        throw new Error('Painter is not a function!');
     }
 
     image2D.extend({
@@ -1287,10 +1362,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         animation: animation, color: color,
 
         // 插值类计算
-        cardinal: cardinal, track: track,
-
-        // 常见图形绘制方法
-        canvas: canvas, svg: svg
+        cardinal: cardinal, track: track
 
     });
     image2D.prototype.extend({
@@ -1307,7 +1379,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 结点事件
         bind: bind, position: position,
 
-        // 自定义位图画笔
+        // 自定义画笔
         painter: painter
 
     });

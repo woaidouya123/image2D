@@ -12,8 +12,6 @@ import color from './library/tools/color';
 import cardinal from './library/interpolate/Cardinal';
 import { rotate, move, scale, dot } from './library/calculate/transform';
 import track from './library/calculate/track';
-import canvas from './library/graphic/canvas';
-import svg from './library/graphic/svg';
 image2D.extend({
 
     // 布局
@@ -29,10 +27,7 @@ image2D.extend({
     animation, color,
 
     // 插值类计算
-    cardinal, track,
-
-    // 常见图形绘制方法
-    canvas, svg
+    cardinal, track
 
 });
 
@@ -45,7 +40,7 @@ import style from './library/xhtml/style';
 import attribute from './library/xhtml/attribute';
 import { datum, data, enter, exit, loop } from './library/xhtml/data';
 import { bind, position } from './library/xhtml/event';
-import painter from './library/canvas2D/painter';
+import painter from './library/painter';
 image2D.prototype.extend({
 
     // 结点操作
@@ -60,7 +55,7 @@ image2D.prototype.extend({
     // 结点事件
     bind, position,
 
-    // 自定义位图画笔
+    // 自定义画笔
     painter
 
 });
