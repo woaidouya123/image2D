@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sun Apr 28 2019 10:51:47 GMT+0800 (GMT+08:00)
+    * Date:Sun Apr 28 2019 11:33:47 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1227,10 +1227,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     };
 
+    // 文字统一设置方法
+    var initText = function initText(painter, config) {
+        painter.font = config['font-size'] + " " + config['font-family'];
+        return painter;
+    };
+
     // 加强版本的画笔
     function painter_canvas2D(canvas) {
 
         var painter = canvas.getContext("2d");
+
+        // 默认配置不应该有canvas2D对象已经存在的属性
+        // 这里是为了简化或和svg统一接口而自定义的属性
+        var _config = {
+            "font-size": "16px",
+            "font-family": "sans-serif"
+        };
 
         // 画笔
         var enhancePainter = {
@@ -1240,18 +1253,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 if (arguments.length === 1) {
                     if (_typeof(arguments[0]) !== 'object') return painter[arguments[0]];
                     for (var key in arguments[0]) {
-                        painter[key] = arguments[0][key];
+                        if (_config[key]) _config[key] = arguments[0][key];else painter[key] = arguments[0][key];
                     }
-                } else if (arguments.length === 2) painter[arguments[0]] = arguments[1];
+                } else if (arguments.length === 2) {
+                    if (_config[arguments[0]]) _config[arguments[0]] = arguments[1];else painter[arguments[0]] = arguments[1];
+                }
                 return enhancePainter;
             },
 
             // 文字
             "fillText": function fillText(text, x, y) {
-                painter.fillText(text, x, y);return enhancePainter;
+                initText(painter, _config).fillText(text, x, y);return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y) {
-                painter.strokeText(text, x, y);return enhancePainter;
+                initText(painter, _config).strokeText(text, x, y);return enhancePainter;
             },
 
             // 路径
@@ -1266,6 +1281,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "lineTo": function lineTo(x, y) {
                 painter.lineTo(x, y);return enhancePainter;
+            },
+            "fill": function fill() {
+                painter.fill();return enhancePainter;
+            },
+            "stroke": function stroke() {
+                painter.stroke();return enhancePainter;
             },
 
             // 地址图片
@@ -1333,7 +1354,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return value;
     }
     // 文字统一设置方法
-    var initText = function initText(painter, config) {
+    var initText$1 = function initText$1(painter, config) {
         if (!isNode(painter[0])) throw new Error('Target empty!');
         if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Target error：' + painter[0]);
 
@@ -1355,7 +1376,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (selector) painter = image2D(selector, target);
 
         // 类似canvas画笔的属性
-        var _config = {
+        var _config2 = {
             "fillStyle": "#000",
             "strokeStyle": "#000",
             "textAlign": "start",
@@ -1370,11 +1391,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 属性设置或获取
             "config": function config() {
                 if (arguments.length === 1) {
-                    if (_typeof(arguments[0]) !== 'object') return _config[arguments[0]];
+                    if (_typeof(arguments[0]) !== 'object') return _config2[arguments[0]];
                     for (var key in arguments[0]) {
-                        _config[key] = normalConfig(key, arguments[0][key]);
+                        _config2[key] = normalConfig(key, arguments[0][key]);
                     }
-                } else if (arguments.length === 2) _config[arguments[0]] = normalConfig(arguments[0], arguments[1]);
+                } else if (arguments.length === 2) _config2[arguments[0]] = normalConfig(arguments[0], arguments[1]);
                 return enhancePainter;
             },
 
@@ -1391,11 +1412,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 文字
             "fillText": function fillText(text, x, y) {
-                initText(painter, _config).attr({ "x": x, "y": y, "fill": _config.fillStyle })[0].textContent = text;
+                initText$1(painter, _config2).attr({ "x": x, "y": y, "fill": _config2.fillStyle })[0].textContent = text;
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y) {
-                initText(painter, _config).attr({ "x": x, "y": y, "stroke": _config.strokeStyle, "fill": "none" })[0].textContent = text;
+                initText$1(painter, _config2).attr({ "x": x, "y": y, "stroke": _config2.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
             }
 

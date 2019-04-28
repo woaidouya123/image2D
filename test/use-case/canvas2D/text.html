@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="../../../docs/image2D.png">
+    <script src="../../../build/image2D.js"></script>
+    <title>text文字</title>
+</head>
+
+<body>
+    <script>
+
+        // 准备画布
+        var canvas = $$('<canvas>非常抱歉，您的浏览器不支持canvas!</canvas>').attr({
+            "width": 400,
+            "height": 400
+        }).css({
+            "background-color": "#d6d6d6"
+        }).appendTo('body');
+
+        // 获取并配置画笔
+        var painter = canvas.painter().config({
+            "textBaseline": "middle"
+        });
+
+        // 绘制辅助观察线条
+        painter.config('strokeStyle', 'red').moveTo(200, 0).lineTo(200, 400).stroke().moveTo(0, 200).lineTo(400, 200).stroke();
+
+        /**
+         * 测试开始
+         * ----------------------------
+         */
+
+        // 定位测试
+        painter.fillText('[左边]', 0, 200);
+
+        painter.config({
+            "textAlign": "right"
+        }).fillText('[右边]', 400, 200);
+
+        painter.config({
+            "textAlign": "center"
+        }).fillText('[中间]', 200, 200);
+
+        painter.config({
+            "textBaseline": "top"
+        }).fillText('[上边]', 200, 0);
+
+        painter.config({
+            "textBaseline": "bottom"
+        }).fillText('[下边]', 200, 400);
+
+        // 文字颜色，大小等零碎测试
+        painter.config("textBaseline", "middle");
+        painter.config('fillStyle', 'red').fillText('红色', 100, 100);
+        painter.config({ 'font-size': '30px', 'strokeStyle': '#000' }).strokeText('30px', 300, 100);
+
+    </script>
+</body>
+
+</html>
