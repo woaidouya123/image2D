@@ -8,7 +8,7 @@ export default function (canvas) {
     // 默认配置不应该有canvas2D对象已经存在的属性
     // 这里是为了简化或和svg统一接口而自定义的属性
     let config = {
-        "font-size": "16px",
+        "font-size": "16",
         "font-family": "sans-serif"
     };
 

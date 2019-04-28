@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sun Apr 28 2019 11:33:47 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 29 2019 00:35:48 GMT+0800 (中国标准时间)
     */
 
 "use strict";
@@ -1229,7 +1229,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // 文字统一设置方法
     var initText = function initText(painter, config) {
-        painter.font = config['font-size'] + " " + config['font-family'];
+        painter.font = config['font-size'] + "px " + config['font-family'];
         return painter;
     };
 
@@ -1241,7 +1241,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 默认配置不应该有canvas2D对象已经存在的属性
         // 这里是为了简化或和svg统一接口而自定义的属性
         var _config = {
-            "font-size": "16px",
+            "font-size": "16",
             "font-family": "sans-serif"
         };
 
@@ -1354,9 +1354,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return value;
     }
     // 文字统一设置方法
-    var initText$1 = function initText$1(painter, config) {
+    var initText$1 = function initText$1(painter, config, x, y) {
         if (!isNode(painter[0])) throw new Error('Target empty!');
         if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Target error：' + painter[0]);
+
+        var browser_type = browser.type();
+
+        // 针对IE和Edge浏览器特殊处理
+        if (browser_type === 'IE' || browser_type === 'Edge') {
+            if (config.textBaseline === 'text-before-edge') y += config['font-size'];else if (config.textBaseline === 'central') y += config['font-size'] * 0.5;
+        }
 
         return painter.css({
 
@@ -1365,9 +1372,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "dominant-baseline": config.textBaseline,
 
             // 文字大小和字体设置
-            "font-size": config['font-size'],
+            "font-size": config['font-size'] + "px",
             "font-family": config['font-family']
-        });
+        }).attr({ "x": x, "y": y });
     };
 
     function painter_svg(target, selector) {
@@ -1381,7 +1388,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "strokeStyle": "#000",
             "textAlign": "start",
             "textBaseline": normalConfig("textBaseline", "middle"),
-            "font-size": "16px",
+            "font-size": "16",
             "font-family": "sans-serif"
         };
 
@@ -1412,11 +1419,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 文字
             "fillText": function fillText(text, x, y) {
-                initText$1(painter, _config2).attr({ "x": x, "y": y, "fill": _config2.fillStyle })[0].textContent = text;
+                initText$1(painter, _config2, x, y).attr("fill", _config2.fillStyle)[0].textContent = text;
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y) {
-                initText$1(painter, _config2).attr({ "x": x, "y": y, "stroke": _config2.strokeStyle, "fill": "none" })[0].textContent = text;
+                initText$1(painter, _config2, x, y).attr({ "stroke": _config2.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
             }
 

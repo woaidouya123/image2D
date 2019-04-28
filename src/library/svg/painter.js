@@ -12,7 +12,7 @@ export default function (target, selector) {
         "strokeStyle": "#000",
         "textAlign": "start",
         "textBaseline": normalConfig("textBaseline", "middle"),
-        "font-size": "16px",
+        "font-size": "16",
         "font-family": "sans-serif"
     };
 
@@ -36,11 +36,11 @@ export default function (target, selector) {
 
         // 文字
         "fillText": function (text, x, y) {
-            initText(painter, config).attr({ "x": x, "y": y, "fill": config.fillStyle })[0].textContent = text;
+            initText(painter, config, x, y).attr("fill", config.fillStyle)[0].textContent = text;
             return enhancePainter;
         },
         "strokeText": function (text, x, y) {
-            initText(painter, config).attr({ "x": x, "y": y, "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
+            initText(painter, config, x, y).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
             return enhancePainter;
         },
 
