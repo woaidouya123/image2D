@@ -1,6 +1,5 @@
 import image2D from '../core';
-import normalConfig from './config';
-import toDataURL from './toDataURL';
+import normalConfig, { initText } from './config';
 
 export default function (target, selector) {
 
@@ -12,7 +11,9 @@ export default function (target, selector) {
         "fillStyle": "#000",
         "strokeStyle": "#000",
         "textAlign": "start",
-        "textBaseline": normalConfig("textBaseline", "middle")
+        "textBaseline": normalConfig("textBaseline", "middle"),
+        "font-size": "16px",
+        "font-family": "sans-serif"
     };
 
     // 画笔
@@ -29,27 +30,20 @@ export default function (target, selector) {
         },
 
         // 基础方法
-        "painter": function (selector) { painter = image2D(selector, target); return enhancePainter; },
+        "bind": function (selector) { painter = image2D(selector, target); return enhancePainter; },
         "appendTo": function (selector) { painter.appendTo(selector, target); return enhancePainter; },
         "prependTo": function (selector) { painter.prependTo(selector, target); return enhancePainter; },
 
         // 文字
         "fillText": function (text, x, y) {
-            painter.attr({ "x": x, "y": y, "fill": config.fillStyle })[0].textContent = text;
+            initText(painter, config).attr({ "x": x, "y": y, "fill": config.fillStyle })[0].textContent = text;
             return enhancePainter;
         },
         "strokeText": function (text, x, y) {
-            painter.attr({ "x": x, "y": y, "stroke": config.strokeStyle })[0].textContent = text;
+            initText(painter, config).attr({ "x": x, "y": y, "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
             return enhancePainter;
         },
 
-        // 地址图片
-        "toDataURL": function (charset) {
-            let width = target.getAttribute('width') || 300; // 默认值的选择是因为替换原始默认尺寸
-            let height = target.getAttribute('height') || 150;
-            charset = charset || 'utf-8';
-            return toDataURL(target, width, height, charset);
-        }
 
 
     };

@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Apr 26 2019 17:58:34 GMT+0800 (GMT+08:00)
+    * Date:Sun Apr 28 2019 10:51:47 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1284,40 +1284,84 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     // 返回浏览器名称
+    var type = function type() {
+        var userAgent = window.navigator.userAgent;
+
+        if (userAgent.indexOf("Opera") > -1 || userAgent.indexOf("OPR") > -1) return "Opera";
+
+        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1 && userAgent.indexOf("rv:11.0") > -1) return "IE";
+
+        if (userAgent.indexOf("Edge") > -1) return "Edge";
+
+        if (userAgent.indexOf("Firefox") > -1) return "Firefox";
+
+        if (userAgent.indexOf("Chrome") > -1) return "Chrome";
+
+        if (userAgent.indexOf("Safari") > -1) return "Safari";
+
+        return "unknown";
+    };
+
+    var browser = {
+        type: type
+    };
 
     function normalConfig(key, value) {
+        var browser_type = browser.type();
 
+        // 文字水平对齐方式
         if (key === 'textAlign') {
             return {
                 "left": "start",
                 "right": "end",
-                "middle": "middle"
+                "center": "middle"
             }[value] || value;
-        } else if (key === 'textBaseline') {
-            // todo
-            return value;
         }
+
+        // 文字垂直对齐方式
+        else if (key === 'textBaseline') {
+                return {
+                    "top": "text-before-edge",
+                    "bottom": {
+                        "Safari": "auto"
+                    }[browser_type] || "ideographic"
+                }[value] || {
+                    "Firefox": "middle"
+                }[browser_type] || "central";
+            }
 
         return value;
     }
+    // 文字统一设置方法
+    var initText = function initText(painter, config) {
+        if (!isNode(painter[0])) throw new Error('Target empty!');
+        if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Target error：' + painter[0]);
 
-    // 返回outHTML
+        return painter.css({
 
-    function _toDataURL(target, width, height, charset) {
-        debugger;
-    }
+            // 文字对齐方式
+            "text-anchor": config.textAlign,
+            "dominant-baseline": config.textBaseline,
+
+            // 文字大小和字体设置
+            "font-size": config['font-size'],
+            "font-family": config['font-family']
+        });
+    };
 
     function painter_svg(target, selector) {
 
-        var _painter = void 0;
-        if (selector) _painter = image2D(selector, target);
+        var painter = void 0;
+        if (selector) painter = image2D(selector, target);
 
         // 类似canvas画笔的属性
         var _config = {
             "fillStyle": "#000",
             "strokeStyle": "#000",
             "textAlign": "start",
-            "textBaseline": normalConfig("textBaseline", "middle")
+            "textBaseline": normalConfig("textBaseline", "middle"),
+            "font-size": "16px",
+            "font-family": "sans-serif"
         };
 
         // 画笔
@@ -1335,32 +1379,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
 
             // 基础方法
-            "painter": function painter(selector) {
-                _painter = image2D(selector, target);return enhancePainter;
+            "bind": function bind(selector) {
+                painter = image2D(selector, target);return enhancePainter;
             },
             "appendTo": function appendTo(selector) {
-                _painter.appendTo(selector, target);return enhancePainter;
+                painter.appendTo(selector, target);return enhancePainter;
             },
             "prependTo": function prependTo(selector) {
-                _painter.prependTo(selector, target);return enhancePainter;
+                painter.prependTo(selector, target);return enhancePainter;
             },
 
             // 文字
             "fillText": function fillText(text, x, y) {
-                _painter.attr({ "x": x, "y": y, "fill": _config.fillStyle })[0].textContent = text;
+                initText(painter, _config).attr({ "x": x, "y": y, "fill": _config.fillStyle })[0].textContent = text;
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y) {
-                _painter.attr({ "x": x, "y": y, "stroke": _config.strokeStyle })[0].textContent = text;
+                initText(painter, _config).attr({ "x": x, "y": y, "stroke": _config.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
-            },
-
-            // 地址图片
-            "toDataURL": function toDataURL(charset) {
-                var width = target.getAttribute('width') || 300; // 默认值的选择是因为替换原始默认尺寸
-                var height = target.getAttribute('height') || 150;
-                charset = charset || 'utf-8';
-                return _toDataURL(target, width, height, charset);
             }
 
         };
