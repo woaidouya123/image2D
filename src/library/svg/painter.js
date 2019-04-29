@@ -1,5 +1,5 @@
 import image2D from '../core';
-import normalConfig, { initText, initArc } from './config';
+import normalConfig, { initText, initArc, initCircle } from './config';
 
 export default function (target, selector) {
 
@@ -45,6 +45,8 @@ export default function (target, selector) {
         "bind": function (selector) { painter = image2D(selector, target); return enhancePainter; },
         "appendTo": function (selector) { painter.appendTo(selector, target); return enhancePainter; },
         "prependTo": function (selector) { painter.prependTo(selector, target); return enhancePainter; },
+        "afterTo": function (selector) { painter.afterTo(selector, target); return enhancePainter; },
+        "beforeTo": function (selector) { painter.beforeTo(selector, target); return enhancePainter; },
 
         // 文字
         "fillText": function (text, x, y) {
@@ -65,10 +67,15 @@ export default function (target, selector) {
             initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
             return enhancePainter;
         },
-        "arc": function (cx, cy, r1, r2, beginDeg, deg) {
-            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": config.fillStyle });
-            return enhancePainter;
-        }
+
+        // 圆形
+        "fillCircle": function (cx, cy, r) {
+            initCircle(painter, cx, cy, r).attr("fill", config.fillStyle); return enhancePainter;
+        },
+        "strokeCircle": function (cx, cy, r) {
+            initCircle(painter, cx, cy, r).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
+        },
+
 
     };
 

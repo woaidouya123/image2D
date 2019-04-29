@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 29 2019 11:52:55 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 29 2019 15:23:22 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -202,7 +202,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 结点和class混合选择器
             if (tag || cls) {
-                var allNodes = document.getElementsByTagName(tag ? tag[0] : "*"),
+                var allNodes = context.getElementsByTagName(tag ? tag[0] : "*"),
                     temp = [];
                 for (var i = 0; i < allNodes.length; i++) {
                     var clazz = " " + allNodes[i].getAttribute('class') + " ",
@@ -1032,6 +1032,41 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return this;
     };
 
+    /**
+     * 把当前维护的结点加到目标结点之后
+     * @param {selector} target
+     * @return {image2D}
+     */
+    var afterTo = function afterTo(target, context) {
+        var nodes = sizzle(target, context || document);
+        if (nodes.length > 0) {
+            for (var i = 0; i < this.length; i++) {
+                //如果第二个参数undefined,在结尾追加，目的一样达到
+                nodes[0].parentNode.insertBefore(this[i], nodes[0].nextSibling);
+            }
+        } else {
+            throw new Error('Target empty!');
+        }
+        return this;
+    };
+
+    /**
+     * 把当前维护的结点加到目标结点之前
+     * @param {selector} target
+     * @return {image2D}
+     */
+    var beforeTo = function beforeTo(target, context) {
+        var nodes = sizzle(target, context || document);
+        if (nodes.length > 0) {
+            for (var i = 0; i < this.length; i++) {
+                nodes[0].parentNode.insertBefore(this[i], nodes[0]);
+            }
+        } else {
+            throw new Error('Target empty!');
+        }
+        return this;
+    };
+
     // 删除当前维护的结点
     var remove = function remove() {
         for (var i = 0; i < this.length; i++) {
@@ -1286,6 +1321,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    // 画圆统一设置方法
+    var initCircle = function initCircle(painter, cx, cy, r) {
+        painter.beginPath();
+        painter.moveTo(cx + r, cy);
+        painter.arc(cx, cy, r, 0, Math.PI * 2);
+        return painter;
+    };
+
     // 加强版本的画笔
     function painter_canvas2D(canvas) {
 
@@ -1361,8 +1404,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
                 initArc(painter, _config, cx, cy, r1, r2, beginDeg, deg).stroke();return enhancePainter;
             },
-            "arc": function arc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc(painter, _config, cx, cy, r1, r2, beginDeg, deg).fill();painter.stroke();return enhancePainter;
+
+            // 圆形
+            "fillCircle": function fillCircle(cx, cy, r) {
+                initCircle(painter, cx, cy, r).fill();return enhancePainter;
+            },
+            "strokeCircle": function strokeCircle(cx, cy, r) {
+                initCircle(painter, cx, cy, r).stroke();return enhancePainter;
             }
 
         };
@@ -1422,7 +1470,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // 文字统一设置方法
     var initText$1 = function initText$1(painter, config, x, y) {
         if (!isNode(painter[0])) throw new Error('Target empty!');
-        if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Target error：' + painter[0]);
+        if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
         var browser_type = browser.type();
 
@@ -1445,7 +1493,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // 画弧统一设置方法
     var initArc$1 = function initArc$1(painter, config, cx, cy, r1, r2, beginDeg, deg) {
-        if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Target error：' + painter[0]);
+        if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
         arc(beginDeg, deg, cx, cy, r1, r2, function (beginA, endA, begInnerX, begInnerY, begOuterX, begOuterY, endInnerX, endInnerY, endOuterX, endOuterY, r) {
             var f = endA - beginA > Math.PI ? 1 : 0,
                 d = "M" + begInnerX + " " + begInnerY;
@@ -1459,6 +1507,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 开头
             if (config["arc-start-cap"] != 'round') d += "L" + begInnerX + " " + begInnerY;else d += "A" + r + " " + r + " " + " 0 1 0 " + begInnerX + " " + begInnerY;
             painter.attr('d', d);
+        });
+        return painter;
+    };
+
+    // 画圆统一设置方法
+    var initCircle$1 = function initCircle$1(painter, cx, cy, r) {
+        if (painter[0].nodeName.toLowerCase() !== 'circle') throw new Error('Need a <circle> !');
+        painter.attr({
+            "cx": cx,
+            "cy": cy,
+            "r": r
         });
         return painter;
     };
@@ -1514,6 +1573,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "prependTo": function prependTo(selector) {
                 painter.prependTo(selector, target);return enhancePainter;
             },
+            "afterTo": function afterTo(selector) {
+                painter.afterTo(selector, target);return enhancePainter;
+            },
+            "beforeTo": function beforeTo(selector) {
+                painter.beforeTo(selector, target);return enhancePainter;
+            },
 
             // 文字
             "fillText": function fillText(text, x, y) {
@@ -1534,9 +1599,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": _config2.lineWidth, "stroke": _config2.strokeStyle, "fill": "none" });
                 return enhancePainter;
             },
-            "arc": function arc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": _config2.lineWidth, "stroke": _config2.strokeStyle, "fill": _config2.fillStyle });
-                return enhancePainter;
+
+            // 圆形
+            "fillCircle": function fillCircle(cx, cy, r) {
+                initCircle$1(painter, cx, cy, r).attr("fill", _config2.fillStyle);return enhancePainter;
+            },
+            "strokeCircle": function strokeCircle(cx, cy, r) {
+                initCircle$1(painter, cx, cy, r).attr({ "stroke-width": _config2.lineWidth, "stroke": _config2.strokeStyle, "fill": "none" });return enhancePainter;
             }
 
         };
@@ -1583,7 +1652,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     image2D.prototype.extend({
 
         // 结点操作
-        appendTo: appendTo, prependTo: prependTo, remove: remove, filter: filter,
+        appendTo: appendTo, prependTo: prependTo, afterTo: afterTo, beforeTo: beforeTo, remove: remove, filter: filter,
 
         // 结点属性或样式操作
         css: style, attr: attribute,

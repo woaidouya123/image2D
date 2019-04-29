@@ -1,4 +1,4 @@
-import { initText, initArc } from './config';
+import { initText, initArc, initCircle } from './config';
 
 // 加强版本的画笔
 export default function (canvas) {
@@ -57,8 +57,13 @@ export default function (canvas) {
         "strokeArc": function (cx, cy, r1, r2, beginDeg, deg) {
             initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).stroke(); return enhancePainter;
         },
-        "arc": function (cx, cy, r1, r2, beginDeg, deg) {
-            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).fill(); painter.stroke(); return enhancePainter;
+
+        // 圆形
+        "fillCircle": function (cx, cy, r) {
+            initCircle(painter, cx, cy, r).fill(); return enhancePainter;
+        },
+        "strokeCircle": function (cx, cy, r) {
+            initCircle(painter, cx, cy, r).stroke(); return enhancePainter;
         },
 
     };

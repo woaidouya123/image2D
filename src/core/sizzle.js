@@ -42,7 +42,7 @@ export default function (selector, context) {
 
         // 结点和class混合选择器
         if (tag || cls) {
-            let allNodes = document.getElementsByTagName(tag ? tag[0] : "*"), temp = [];
+            let allNodes = context.getElementsByTagName(tag ? tag[0] : "*"), temp = [];
             for (let i = 0; i < allNodes.length; i++) {
                 let clazz = " " + allNodes[i].getAttribute('class') + " ", flag = true;
                 for (let j = 0; cls && j < cls.length; j++) {

@@ -36,3 +36,11 @@ export let initArc = function (painter, config, cx, cy, r1, r2, beginDeg, deg) {
     });
     return painter;
 };
+
+// 画圆统一设置方法
+export let initCircle = function (painter, cx, cy, r) {
+    painter.beginPath();
+    painter.moveTo(cx + r, cy);
+    painter.arc(cx, cy, r, 0, Math.PI * 2);
+    return painter;
+};

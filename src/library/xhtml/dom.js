@@ -33,6 +33,39 @@ export let prependTo = function (target, context) {
     return this;
 };
 
+/**
+ * 把当前维护的结点加到目标结点之后
+ * @param {selector} target
+ * @return {image2D}
+ */
+export let afterTo = function (target, context) {
+    let nodes = sizzle(target, context || document);
+    if (nodes.length > 0) {
+        for (let i = 0; i < this.length; i++)
+            //如果第二个参数undefined,在结尾追加，目的一样达到
+            nodes[0].parentNode.insertBefore(this[i], nodes[0].nextSibling);
+    } else {
+        throw new Error('Target empty!');
+    }
+    return this;
+};
+
+/**
+ * 把当前维护的结点加到目标结点之前
+ * @param {selector} target
+ * @return {image2D}
+ */
+export let beforeTo = function (target, context) {
+    let nodes = sizzle(target, context || document);
+    if (nodes.length > 0) {
+        for (let i = 0; i < this.length; i++)
+            nodes[0].parentNode.insertBefore(this[i], nodes[0]);
+    } else {
+        throw new Error('Target empty!');
+    }
+    return this;
+};
+
 // 删除当前维护的结点
 export let remove = function () {
     for (let i = 0; i < this.length; i++)

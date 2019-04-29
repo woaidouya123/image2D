@@ -32,7 +32,7 @@ export default function (key, value) {
 // 文字统一设置方法
 export let initText = function (painter, config, x, y) {
     if (!isNode(painter[0])) throw new Error('Target empty!');
-    if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Target error：' + painter[0]);
+    if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
     let browser_type = browser.type();
 
@@ -56,7 +56,7 @@ export let initText = function (painter, config, x, y) {
 
 // 画弧统一设置方法
 export let initArc = function (painter, config, cx, cy, r1, r2, beginDeg, deg) {
-    if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Target error：' + painter[0]);
+    if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
     arc(beginDeg, deg, cx, cy, r1, r2, function (
         beginA, endA,
         begInnerX, begInnerY,
@@ -83,6 +83,17 @@ export let initArc = function (painter, config, cx, cy, r1, r2, beginDeg, deg) {
         else
             d += "A" + r + " " + r + " " + " 0 1 0 " + begInnerX + " " + begInnerY;
         painter.attr('d', d);
+    });
+    return painter;
+};
+
+// 画圆统一设置方法
+export let initCircle = function (painter, cx, cy, r) {
+    if (painter[0].nodeName.toLowerCase() !== 'circle') throw new Error('Need a <circle> !');
+    painter.attr({
+        "cx": cx,
+        "cy": cy,
+        "r": r
     });
     return painter;
 };
