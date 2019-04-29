@@ -1,5 +1,5 @@
 import image2D from '../core';
-import normalConfig, { initText } from './config';
+import normalConfig, { initText, initArc } from './config';
 
 export default function (target, selector) {
 
@@ -8,12 +8,23 @@ export default function (target, selector) {
 
     // 类似canvas画笔的属性
     let config = {
+
+        // 填充和描边设置
         "fillStyle": "#000",
         "strokeStyle": "#000",
+
+        // 文字对齐方式
         "textAlign": "start",
         "textBaseline": normalConfig("textBaseline", "middle"),
+
+        // 文字设置
         "font-size": "16",
-        "font-family": "sans-serif"
+        "font-family": "sans-serif",
+
+        // arc二端闭合方式['butt':直线闭合,'round':圆帽闭合]
+        "arc-start-cap": "butt",
+        "arc-end-cap": "butt"
+
     };
 
     // 画笔
@@ -44,7 +55,15 @@ export default function (target, selector) {
             return enhancePainter;
         },
 
-
+        // 弧
+        "fillArc": function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr("fill", config.fillStyle);
+            return enhancePainter;
+        },
+        "strokeArc": function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke": config.strokeStyle, "fill": "none" });
+            return enhancePainter;
+        },
 
     };
 

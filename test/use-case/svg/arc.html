@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="../../../docs/image2D.png">
+    <script src="../../../build/image2D.js"></script>
+    <title>image2D - 用例测试 - arc弧</title>
+</head>
+
+<body>
+    <script>
+
+        // 准备画布
+        var svg = $$('<svg></svg>').attr({
+            "width": 400,
+            "height": 400
+        }).appendTo('body');
+
+        // 获取并配置画笔
+        var painter = svg.painter();
+
+        /**
+         * 测试开始
+         * ----------------------------
+         */
+
+        painter.bind('<path>').fillArc(200, 200, 140, 200, 0, Math.PI).appendTo(svg);
+
+        painter.bind('<path>').config({
+            "fillStyle": "green",
+            "arc-start-cap": "round"
+        }).fillArc(200, 200, 160, 180, Math.PI / 2, Math.PI).appendTo(svg);
+
+        painter.bind('<path>').config({
+            "strokeStyle": "blue",
+            "arc-end-cap": "round",
+            "arc-start-cap": "butt"
+        }).strokeArc(200, 200, 140, 160, Math.PI * 7 / 4, Math.PI / 4).appendTo(svg);
+
+        painter.bind('<path>').fillArc(200, 200, 10, 30, 0, -Math.PI * 3).appendTo(svg);
+
+        painter.bind('<path>').config("arc-start-cap", "round").fillArc(200, 200, 50, 70, 1, -Math.PI * 2 + 1).appendTo(svg);
+
+    </script>
+</body>
+
+</html>

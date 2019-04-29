@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 29 2019 00:35:48 GMT+0800 (中国标准时间)
+    * Date:Mon Apr 29 2019 11:24:46 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1227,9 +1227,62 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     };
 
+    // r1和r2，内半径和外半径
+    // beginA起点弧度，rotateA旋转弧度式
+    function arc(beginA, rotateA, cx, cy, r1, r2, doback) {
+
+        if (rotateA > Math.PI * 2) rotateA = Math.PI * 2;
+        if (rotateA < -Math.PI * 2) rotateA = -Math.PI * 2;
+
+        // 保证逆时针也是可以的
+        if (rotateA < 0) {
+            beginA += rotateA;
+            rotateA *= -1;
+        }
+
+        var temp = [],
+            p = void 0;
+
+        // 内部
+        p = _rotate2(0, 0, beginA, r1, 0);
+        temp[0] = p[0];
+        temp[1] = p[1];
+        p = _rotate2(0, 0, rotateA, p[0], p[1]);
+        temp[2] = p[0];
+        temp[3] = p[1];
+
+        // 外部
+        p = _rotate2(0, 0, beginA, r2, 0);
+        temp[4] = p[0];
+        temp[5] = p[1];
+        p = _rotate2(0, 0, rotateA, p[0], p[1]);
+        temp[6] = p[0];
+        temp[7] = p[1];
+
+        doback(beginA, beginA + rotateA, temp[0] + cx, temp[1] + cy, temp[4] + cx, temp[5] + cy, temp[2] + cx, temp[3] + cy, temp[6] + cx, temp[7] + cy, (r2 - r1) * 0.5);
+    }
+
     // 文字统一设置方法
     var initText = function initText(painter, config) {
         painter.font = config['font-size'] + "px " + config['font-family'];
+        return painter;
+    };
+
+    // 画弧统一设置方法
+    var initArc = function initArc(painter, config, cx, cy, r1, r2, beginDeg, deg) {
+        arc(beginDeg, deg, cx, cy, r1, r2, function (beginA, endA, begInnerX, begInnerY, begOuterX, begOuterY, endInnerX, endInnerY, endOuterX, endOuterY, r) {
+            if (r < 0) r = -r;
+            painter.beginPath();
+            painter.moveTo(begInnerX, begInnerY);
+            painter.arc(
+            // (圆心x，圆心y，半径，开始角度，结束角度，true逆时针/false顺时针)
+            cx, cy, r1, beginA, endA, false);
+            // 结尾
+            if (config["arc-end-cap"] != 'round') painter.lineTo(endOuterX, endOuterY);else painter.arc((endInnerX + endOuterX) * 0.5, (endInnerY + endOuterY) * 0.5, r, endA - Math.PI, endA, true);
+            painter.arc(cx, cy, r2, endA, beginA, true);
+            // 开头
+            if (config["arc-start-cap"] != 'round') painter.lineTo(begInnerX, begInnerY);else painter.arc((begInnerX + begOuterX) * 0.5, (begInnerY + begOuterY) * 0.5, r, beginA, beginA - Math.PI, true);
+        });
         return painter;
     };
 
@@ -1242,7 +1295,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 这里是为了简化或和svg统一接口而自定义的属性
         var _config = {
             "font-size": "16",
-            "font-family": "sans-serif"
+            "font-family": "sans-serif",
+            "arc-start-cap": "butt",
+            "arc-end-cap": "butt"
         };
 
         // 画笔
@@ -1297,6 +1352,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // image
             "drawImage": function drawImage(img, sx, sy, sw, sh, x, y, w, h) {
                 painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);return enhancePainter;
+            },
+
+            // 弧
+            "fillArc": function fillArc(cx, cy, r1, r2, beginDeg, deg) {
+                initArc(painter, _config, cx, cy, r1, r2, beginDeg, deg).fill();return enhancePainter;
+            },
+            "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
+                initArc(painter, _config, cx, cy, r1, r2, beginDeg, deg).stroke();return enhancePainter;
             }
 
         };
@@ -1377,6 +1440,25 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }).attr({ "x": x, "y": y });
     };
 
+    // 画弧统一设置方法
+    var initArc$1 = function initArc$1(painter, config, cx, cy, r1, r2, beginDeg, deg) {
+        arc(beginDeg, deg, cx, cy, r1, r2, function (beginA, endA, begInnerX, begInnerY, begOuterX, begOuterY, endInnerX, endInnerY, endOuterX, endOuterY, r) {
+            var f = endA - beginA > Math.PI ? 1 : 0,
+                d = "M" + begInnerX + " " + begInnerY;
+            if (r < 0) r = -r;
+            d +=
+            // 横半径 竖半径 x轴偏移角度 0小弧/1大弧 0逆时针/1顺时针 终点x 终点y
+            "A" + r1 + " " + r1 + " 0 " + f + " 1 " + endInnerX + " " + endInnerY;
+            // 结尾
+            if (config["arc-end-cap"] != 'round') d += "L" + endOuterX + " " + endOuterY;else d += "A" + r + " " + r + " " + " 0 1 0 " + endOuterX + " " + endOuterY;
+            d += "A" + r2 + " " + r2 + " 0 " + f + " 0 " + begOuterX + " " + begOuterY;
+            // 开头
+            if (config["arc-start-cap"] != 'round') d += "L" + begInnerX + " " + begInnerY;else d += "A" + r + " " + r + " " + " 0 1 0 " + begInnerX + " " + begInnerY;
+            painter.attr('d', d);
+        });
+        return painter;
+    };
+
     function painter_svg(target, selector) {
 
         var painter = void 0;
@@ -1384,12 +1466,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         // 类似canvas画笔的属性
         var _config2 = {
+
+            // 填充和描边设置
             "fillStyle": "#000",
             "strokeStyle": "#000",
+
+            // 文字对齐方式
             "textAlign": "start",
             "textBaseline": normalConfig("textBaseline", "middle"),
+
+            // 文字设置
             "font-size": "16",
-            "font-family": "sans-serif"
+            "font-family": "sans-serif",
+
+            // arc二端闭合方式['butt':直线闭合,'round':圆帽闭合]
+            "arc-start-cap": "butt",
+            "arc-end-cap": "butt"
+
         };
 
         // 画笔
@@ -1424,6 +1517,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeText": function strokeText(text, x, y) {
                 initText$1(painter, _config2, x, y).attr({ "stroke": _config2.strokeStyle, "fill": "none" })[0].textContent = text;
+                return enhancePainter;
+            },
+
+            // 弧
+            "fillArc": function fillArc(cx, cy, r1, r2, beginDeg, deg) {
+                initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr("fill", _config2.fillStyle);
+                return enhancePainter;
+            },
+            "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
+                initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke": _config2.strokeStyle, "fill": "none" });
                 return enhancePainter;
             }
 

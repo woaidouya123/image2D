@@ -1,5 +1,38 @@
+import arc from '../calculate/graphic/arc';
+
 // 文字统一设置方法
 export let initText = function (painter, config) {
     painter.font = config['font-size'] + "px " + config['font-family'];
+    return painter;
+};
+
+// 画弧统一设置方法
+export let initArc = function (painter, config, cx, cy, r1, r2, beginDeg, deg) {
+    arc(beginDeg, deg, cx, cy, r1, r2, function (
+        beginA, endA,
+        begInnerX, begInnerY,
+        begOuterX, begOuterY,
+        endInnerX, endInnerY,
+        endOuterX, endOuterY,
+        r
+    ) {
+        if (r < 0) r = -r;
+        painter.beginPath();
+        painter.moveTo(begInnerX, begInnerY);
+        painter.arc(
+            // (圆心x，圆心y，半径，开始角度，结束角度，true逆时针/false顺时针)
+            cx, cy, r1, beginA, endA, false);
+        // 结尾
+        if (config["arc-end-cap"] != 'round')
+            painter.lineTo(endOuterX, endOuterY);
+        else
+            painter.arc((endInnerX + endOuterX) * 0.5, (endInnerY + endOuterY) * 0.5, r, endA - Math.PI, endA, true);
+        painter.arc(cx, cy, r2, endA, beginA, true);
+        // 开头
+        if (config["arc-start-cap"] != 'round')
+            painter.lineTo(begInnerX, begInnerY);
+        else
+            painter.arc((begInnerX + begOuterX) * 0.5, (begInnerY + begOuterY) * 0.5, r, beginA, beginA - Math.PI, true);
+    });
     return painter;
 };

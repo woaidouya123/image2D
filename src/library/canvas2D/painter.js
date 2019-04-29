@@ -1,4 +1,4 @@
-import { initText } from './config';
+import { initText, initArc } from './config';
 
 // 加强版本的画笔
 export default function (canvas) {
@@ -9,7 +9,9 @@ export default function (canvas) {
     // 这里是为了简化或和svg统一接口而自定义的属性
     let config = {
         "font-size": "16",
-        "font-family": "sans-serif"
+        "font-family": "sans-serif",
+        "arc-start-cap": "butt",
+        "arc-end-cap": "butt"
     };
 
     // 画笔
@@ -48,7 +50,13 @@ export default function (canvas) {
         // image
         "drawImage": function (img, sx, sy, sw, sh, x, y, w, h) { painter.drawImage(img, sx, sy, sw, sh, x, y, w, h); return enhancePainter; },
 
-
+        // 弧
+        "fillArc": function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).fill(); return enhancePainter;
+        },
+        "strokeArc": function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).stroke(); return enhancePainter;
+        },
 
     };
 
