@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 29 2019 11:24:46 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 29 2019 11:35:09 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1442,6 +1442,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // 画弧统一设置方法
     var initArc$1 = function initArc$1(painter, config, cx, cy, r1, r2, beginDeg, deg) {
+        if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Target error：' + painter[0]);
         arc(beginDeg, deg, cx, cy, r1, r2, function (beginA, endA, begInnerX, begInnerY, begOuterX, begOuterY, endInnerX, endInnerY, endOuterX, endOuterY, r) {
             var f = endA - beginA > Math.PI ? 1 : 0,
                 d = "M" + begInnerX + " " + begInnerY;

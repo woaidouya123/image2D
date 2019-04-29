@@ -56,6 +56,7 @@ export let initText = function (painter, config, x, y) {
 
 // 画弧统一设置方法
 export let initArc = function (painter, config, cx, cy, r1, r2, beginDeg, deg) {
+    if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Target error：' + painter[0]);
     arc(beginDeg, deg, cx, cy, r1, r2, function (
         beginA, endA,
         begInnerX, begInnerY,
