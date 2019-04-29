@@ -44,6 +44,9 @@ export default function (canvas) {
         "fill": function () { painter.fill(); return enhancePainter },
         "stroke": function () { painter.stroke(); return enhancePainter },
 
+        // 擦除画面
+        "clearn": function (x, y, width, height) { painter.clearRect(x || 0, y || 0, width || canvas.clientWidth, height || canvas.clientHeight); return enhancePainter; },
+
         // 地址图片
         "toDataURL": function () { return painter.toDataURL() },
 

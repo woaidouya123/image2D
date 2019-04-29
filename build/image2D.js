@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 29 2019 15:23:22 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 29 2019 17:02:37 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -484,18 +484,86 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return tree;
     }
 
+    /**
+     * 点（x,y）围绕中心（cx,cy）旋转deg度
+     */
+    var _rotate2 = function _rotate2(cx, cy, deg, x, y) {
+        var cos = Math.cos(deg),
+            sin = Math.sin(deg);
+        return [+((x - cx) * cos - (y - cy) * sin + cx).toFixed(7), +((x - cx) * sin + (y - cy) * cos + cy).toFixed(7)];
+    };
+
+    /**
+     * 点（x,y）沿着向量（ax,ay）方向移动距离d
+     */
+    var _move2 = function _move2(ax, ay, d, x, y) {
+        var sqrt = Math.sqrt(ax * ax + ay * ay);
+        return [+(ax * d / sqrt + x).toFixed(7), +(ay * d / sqrt + y).toFixed(7)];
+    };
+
+    /**
+     * 点（x,y）围绕中心（cx,cy）缩放times倍
+     */
+    var _scale2 = function _scale2(cx, cy, times, x, y) {
+        return [+(times * (x - cx) + cx).toFixed(7), +(times * (y - cy) + cy).toFixed(7)];
+    };
+
+    var dot = function dot(config) {
+
+        config = initConfig({
+            // 前进方向
+            d: [1, 1],
+            // 中心坐标
+            c: [0, 0],
+            // 当前位置
+            p: [0, 0]
+        }, config);
+
+        var dotObj = {
+
+            // 前进方向以当前位置为中心，旋转deg度
+            "rotate": function rotate(deg) {
+                var dPx = config.d[0] + config.p[0],
+                    dPy = config.d[1] + config.p[1];
+                var dP = _rotate2(config.p[0], config.p[1], deg, dPx, dPy);
+                config.d = [dP[0] - config.p[0], dP[1] - config.p[1]];
+                return dotObj;
+            },
+
+            // 沿着当前前进方向前进d
+            "move": function move(d) {
+                config.p = _move2(config.d[0], config.d[1], d, config.p[0], config.p[1]);
+                return dotObj;
+            },
+
+            // 围绕中心坐标缩放
+            "scale": function scale(times) {
+                config.p = _scale2(config.c[0], config.c[1], times, config.p[0], config.p[1]);
+                return dotObj;
+            },
+
+            // 当前位置
+            "value": function value() {
+                return config.p;
+            }
+
+        };
+
+        return dotObj;
+    };
+
     function treeLayout$1(config) {
 
         config = initConfig({
 
             // 类型：如果不是下面五种之一，就认为是原始类型
-            // t:LR|RL|BT|TB|circle
+            // type:LR|RL|BT|TB|circle
 
             // 如果类型是LR|RL|BT|TB需要设置如下参数
-            // 1.rx,ry:顶点节点坐标；2.w,h:宽和高
+            // width,height:宽和高
 
             // 如果类型是circle需要设置如下参数
-            // 1.cx,cy：圆心；2.r:半径；3.begin,deg：开始和跨越弧度（可选）
+            // 1.cx,cy：圆心；2.radius:半径；3.begin-deg,deg：开始和跨越弧度（可选）
             "begin": 0,
             "deg": Math.PI * 2
 
@@ -510,11 +578,61 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 计算初始坐标
             var orgData = treeCalc(initData);
 
-            if (config.t === 'LR' || config.t === 'RL') ;else if (config.t === 'TB' || config.t === 'BT') ;else if (config.t === 'circle') ;
+            if (config.type === 'LR' || config.type === 'RL') {
+
+                // 每层间隔
+                var dis1 = config.width / orgData.deep;
+                if ("RL" === config.type) dis1 *= -1;
+                // 兄弟间隔
+                var dis2 = config.height / (orgData.size - -0.5);
+                for (var i in orgData.node) {
+                    var node = orgData.node[i];
+                    orgData.node[i].left = +(("RL" == config.type ? config.width : 0) - -node.left * dis1).toFixed(7);
+                    orgData.node[i].top = +(node.top * dis2).toFixed(7);
+                }
+            } else if (config.type === 'TB' || config.type === 'BT') {
+
+                // 每层间隔
+                var _dis = config.height / orgData.deep;
+                if ("BT" == config.type) _dis *= -1;
+                // 兄弟间隔
+                var _dis2 = config.width / (orgData.size - -0.5);
+                var _left = void 0,
+                    _top = void 0;
+                for (var _i3 in orgData.node) {
+                    var _node2 = orgData.node[_i3];
+                    _left = _node2.left;
+                    _top = _node2.top;
+                    orgData.node[_i3].top = +(("BT" == config.type ? config.height : 0) - -_left * _dis).toFixed(7);
+                    orgData.node[_i3].left = +(_top * _dis2).toFixed(7);
+                }
+            } else if (config.type === 'circle') {
+
+                config['begin-deg'] = config['begin-deg'] || 0;
+                config.deg = config.deg || Math.PI * 2;
+
+                // 每层间距
+                var _dis3 = config.radius / (orgData.deep - 1);
+                // 兄弟间隔弧度
+                var _dis4 = config.deg / (orgData.size - -0.5);
+                for (var _i4 in orgData.node) {
+                    var _node3 = orgData.node[_i4];
+                    orgData.node[_i4].deg = (config['begin-deg'] - -_dis4 * _node3.top) % (Math.PI * 2);
+                    var pos = _rotate2(config.cx, config.cy, orgData.node[_i4].deg, config.cx - -_dis3 * (_node3.left - 0.5), config.cy);
+                    orgData.node[_i4].left = +pos[0];
+                    orgData.node[_i4].top = +pos[1];
+                }
+            }
 
             // 启动绘图
             config.drawer(orgData);
 
+            return treeObj;
+        };
+
+        // 配置
+        treeObj.config = function (_config) {
+            config = initConfig(config, _config);
             return treeObj;
         };
 
@@ -928,74 +1046,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return cardinal;
     }
 
-    /**
-     * 点（x,y）围绕中心（cx,cy）旋转deg度
-     */
-    var _rotate2 = function _rotate2(cx, cy, deg, x, y) {
-        var cos = Math.cos(deg),
-            sin = Math.sin(deg);
-        return [+((x - cx) * cos - (y - cy) * sin + cx).toFixed(7), +((x - cx) * sin + (y - cy) * cos + cy).toFixed(7)];
-    };
-
-    /**
-     * 点（x,y）沿着向量（ax,ay）方向移动距离d
-     */
-    var _move2 = function _move2(ax, ay, d, x, y) {
-        var sqrt = Math.sqrt(ax * ax + ay * ay);
-        return [+(ax * d / sqrt + x).toFixed(7), +(ay * d / sqrt + y).toFixed(7)];
-    };
-
-    /**
-     * 点（x,y）围绕中心（cx,cy）缩放times倍
-     */
-    var _scale2 = function _scale2(cx, cy, times, x, y) {
-        return [+(times * (x - cx) + cx).toFixed(7), +(times * (y - cy) + cy).toFixed(7)];
-    };
-
-    var dot = function dot(config) {
-
-        config = initConfig({
-            // 前进方向
-            d: [1, 1],
-            // 中心坐标
-            c: [0, 0],
-            // 当前位置
-            p: [0, 0]
-        }, config);
-
-        var dotObj = {
-
-            // 前进方向以当前位置为中心，旋转deg度
-            "rotate": function rotate(deg) {
-                var dPx = config.d[0] + config.p[0],
-                    dPy = config.d[1] + config.p[1];
-                var dP = _rotate2(config.p[0], config.p[1], deg, dPx, dPy);
-                config.d = [dP[0] - config.p[0], dP[1] - config.p[1]];
-                return dotObj;
-            },
-
-            // 沿着当前前进方向前进d
-            "move": function move(d) {
-                config.p = _move2(config.d[0], config.d[1], d, config.p[0], config.p[1]);
-                return dotObj;
-            },
-
-            // 围绕中心坐标缩放
-            "scale": function scale(times) {
-                config.p = _scale2(config.c[0], config.c[1], times, config.p[0], config.p[1]);
-                return dotObj;
-            },
-
-            // 当前位置
-            "value": function value() {
-                return config.p;
-            }
-
-        };
-
-        return dotObj;
-    };
-
     function track() {}
 
     /**
@@ -1169,8 +1219,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 获取数据
         if (arguments.length <= 0) {
             var _temp3 = [];
-            for (var _i3 = 0; _i3 < this.length; _i3++) {
-                _temp3[_i3] = this[_i3].__data__;
+            for (var _i5 = 0; _i5 < this.length; _i5++) {
+                _temp3[_i5] = this[_i5].__data__;
             }return _temp3;
         }
 
@@ -1336,7 +1386,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         // 默认配置不应该有canvas2D对象已经存在的属性
         // 这里是为了简化或和svg统一接口而自定义的属性
-        var _config = {
+        var _config2 = {
             "font-size": "16",
             "font-family": "sans-serif",
             "arc-start-cap": "butt",
@@ -1351,20 +1401,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 if (arguments.length === 1) {
                     if (_typeof(arguments[0]) !== 'object') return painter[arguments[0]];
                     for (var key in arguments[0]) {
-                        if (_config[key]) _config[key] = arguments[0][key];else painter[key] = arguments[0][key];
+                        if (_config2[key]) _config2[key] = arguments[0][key];else painter[key] = arguments[0][key];
                     }
                 } else if (arguments.length === 2) {
-                    if (_config[arguments[0]]) _config[arguments[0]] = arguments[1];else painter[arguments[0]] = arguments[1];
+                    if (_config2[arguments[0]]) _config2[arguments[0]] = arguments[1];else painter[arguments[0]] = arguments[1];
                 }
                 return enhancePainter;
             },
 
             // 文字
             "fillText": function fillText(text, x, y) {
-                initText(painter, _config).fillText(text, x, y);return enhancePainter;
+                initText(painter, _config2).fillText(text, x, y);return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y) {
-                initText(painter, _config).strokeText(text, x, y);return enhancePainter;
+                initText(painter, _config2).strokeText(text, x, y);return enhancePainter;
             },
 
             // 路径
@@ -1387,6 +1437,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 painter.stroke();return enhancePainter;
             },
 
+            // 擦除画面
+            "clearn": function clearn(x, y, width, height) {
+                painter.clearRect(x || 0, y || 0, width || canvas.clientWidth, height || canvas.clientHeight);return enhancePainter;
+            },
+
             // 地址图片
             "toDataURL": function toDataURL() {
                 return painter.toDataURL();
@@ -1399,10 +1454,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 弧
             "fillArc": function fillArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc(painter, _config, cx, cy, r1, r2, beginDeg, deg).fill();return enhancePainter;
+                initArc(painter, _config2, cx, cy, r1, r2, beginDeg, deg).fill();return enhancePainter;
             },
             "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc(painter, _config, cx, cy, r1, r2, beginDeg, deg).stroke();return enhancePainter;
+                initArc(painter, _config2, cx, cy, r1, r2, beginDeg, deg).stroke();return enhancePainter;
             },
 
             // 圆形
@@ -1528,7 +1583,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (selector) painter = image2D(selector, target);
 
         // 类似canvas画笔的属性
-        var _config2 = {
+        var _config3 = {
 
             // 基本设置
             "fillStyle": "#000",
@@ -1555,11 +1610,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 属性设置或获取
             "config": function config() {
                 if (arguments.length === 1) {
-                    if (_typeof(arguments[0]) !== 'object') return _config2[arguments[0]];
+                    if (_typeof(arguments[0]) !== 'object') return _config3[arguments[0]];
                     for (var key in arguments[0]) {
-                        _config2[key] = normalConfig(key, arguments[0][key]);
+                        _config3[key] = normalConfig(key, arguments[0][key]);
                     }
-                } else if (arguments.length === 2) _config2[arguments[0]] = normalConfig(arguments[0], arguments[1]);
+                } else if (arguments.length === 2) _config3[arguments[0]] = normalConfig(arguments[0], arguments[1]);
                 return enhancePainter;
             },
 
@@ -1582,30 +1637,30 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 文字
             "fillText": function fillText(text, x, y) {
-                initText$1(painter, _config2, x, y).attr("fill", _config2.fillStyle)[0].textContent = text;
+                initText$1(painter, _config3, x, y).attr("fill", _config3.fillStyle)[0].textContent = text;
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y) {
-                initText$1(painter, _config2, x, y).attr({ "stroke": _config2.strokeStyle, "fill": "none" })[0].textContent = text;
+                initText$1(painter, _config3, x, y).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
             },
 
             // 弧
             "fillArc": function fillArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr("fill", _config2.fillStyle);
+                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr("fill", _config3.fillStyle);
                 return enhancePainter;
             },
             "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": _config2.lineWidth, "stroke": _config2.strokeStyle, "fill": "none" });
+                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
                 return enhancePainter;
             },
 
             // 圆形
             "fillCircle": function fillCircle(cx, cy, r) {
-                initCircle$1(painter, cx, cy, r).attr("fill", _config2.fillStyle);return enhancePainter;
+                initCircle$1(painter, cx, cy, r).attr("fill", _config3.fillStyle);return enhancePainter;
             },
             "strokeCircle": function strokeCircle(cx, cy, r) {
-                initCircle$1(painter, cx, cy, r).attr({ "stroke-width": _config2.lineWidth, "stroke": _config2.strokeStyle, "fill": "none" });return enhancePainter;
+                initCircle$1(painter, cx, cy, r).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
             }
 
         };
