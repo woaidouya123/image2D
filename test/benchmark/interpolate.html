@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>image2D - 性能基准测试 - 插值</title>
+    <link rel="shortcut icon" href="../../docs/image2D.png">
+    <script src="./JSLitmus.js"></script>
+    <script src="../../build/image2D.js"></script>
+</head>
+
+<body>
+
+    <script>
+
+        JSLitmus.test('cardinal插值法', function () {
+            var cardinal = image2D.cardinal().setP([[0, 2], [1, 10], [2, 5], [3, 4]]), flag;
+            for (flag = 0; flag <= 3; flag += 0.01) {
+                cardinal(flag);
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
