@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 0.0.1-dev
+    * version 0.0.2-dev
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 29 2019 11:35:09 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 29 2019 11:52:55 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1360,6 +1360,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
                 initArc(painter, _config, cx, cy, r1, r2, beginDeg, deg).stroke();return enhancePainter;
+            },
+            "arc": function arc(cx, cy, r1, r2, beginDeg, deg) {
+                initArc(painter, _config, cx, cy, r1, r2, beginDeg, deg).fill();painter.stroke();return enhancePainter;
             }
 
         };
@@ -1468,9 +1471,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 类似canvas画笔的属性
         var _config2 = {
 
-            // 填充和描边设置
+            // 基本设置
             "fillStyle": "#000",
             "strokeStyle": "#000",
+            "lineWidth": 1,
 
             // 文字对齐方式
             "textAlign": "start",
@@ -1527,7 +1531,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 return enhancePainter;
             },
             "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke": _config2.strokeStyle, "fill": "none" });
+                initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": _config2.lineWidth, "stroke": _config2.strokeStyle, "fill": "none" });
+                return enhancePainter;
+            },
+            "arc": function arc(cx, cy, r1, r2, beginDeg, deg) {
+                initArc$1(painter, _config2, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": _config2.lineWidth, "stroke": _config2.strokeStyle, "fill": _config2.fillStyle });
                 return enhancePainter;
             }
 

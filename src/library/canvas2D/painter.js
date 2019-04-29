@@ -57,6 +57,9 @@ export default function (canvas) {
         "strokeArc": function (cx, cy, r1, r2, beginDeg, deg) {
             initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).stroke(); return enhancePainter;
         },
+        "arc": function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).fill(); painter.stroke(); return enhancePainter;
+        },
 
     };
 

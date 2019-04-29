@@ -9,9 +9,10 @@ export default function (target, selector) {
     // 类似canvas画笔的属性
     let config = {
 
-        // 填充和描边设置
+        // 基本设置
         "fillStyle": "#000",
         "strokeStyle": "#000",
+        "lineWidth": 1,
 
         // 文字对齐方式
         "textAlign": "start",
@@ -61,9 +62,13 @@ export default function (target, selector) {
             return enhancePainter;
         },
         "strokeArc": function (cx, cy, r1, r2, beginDeg, deg) {
-            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke": config.strokeStyle, "fill": "none" });
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
             return enhancePainter;
         },
+        "arc": function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": config.fillStyle });
+            return enhancePainter;
+        }
 
     };
 
