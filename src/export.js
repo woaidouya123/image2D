@@ -5,17 +5,14 @@ import image2D from './library/core';
  * -------------------
  */
 import treeLayout from './library/layout/tree';
-import pieLayout from './library/layout/pie';
 import Matrix4 from './library/Matrix4/index';
 import animation from './library/tools/animation';
-import color from './library/tools/color';
 import cardinal from './library/interpolate/Cardinal';
 import { rotate, move, scale, dot } from './library/calculate/transform';
-import track from './library/calculate/track';
 image2D.extend({
 
     // 布局
-    treeLayout, pieLayout,
+    treeLayout,
 
     // 矩阵变换
     Matrix4,
@@ -24,10 +21,10 @@ image2D.extend({
     rotate, move, scale, dot,
 
     // 工具类
-    animation, color,
+    animation,
 
     // 插值类计算
-    cardinal, track
+    cardinal
 
 });
 

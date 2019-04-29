@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 29 2019 17:02:37 GMT+0800 (GMT+08:00)
+    * Date:Mon Apr 29 2019 17:25:09 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -564,7 +564,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 如果类型是circle需要设置如下参数
             // 1.cx,cy：圆心；2.radius:半径；3.begin-deg,deg：开始和跨越弧度（可选）
-            "begin": 0,
+            "begin-deg": 0,
             "deg": Math.PI * 2
 
         }, config);
@@ -608,9 +608,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 }
             } else if (config.type === 'circle') {
 
-                config['begin-deg'] = config['begin-deg'] || 0;
-                config.deg = config.deg || Math.PI * 2;
-
                 // 每层间距
                 var _dis3 = config.radius / (orgData.deep - 1);
                 // 兄弟间隔弧度
@@ -644,8 +641,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         return treeObj;
     }
-
-    function pieLayout() {}
 
     // 在(a,b,c)方向位移d
     function _move(d, a, b, c) {
@@ -889,23 +884,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     /**
-     * 返回渲染后的CSS样式值
-     * @param {DOM} dom 目标结点
-     * @param {String} name 属性名称（可选）
-     * @return {String}
-     */
-    function getStyle(dom, name) {
-
-        // 获取结点的全部样式
-        var allStyle = document.defaultView && document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(dom, null) : dom.currentStyle;
-
-        // 如果没有指定属性名称，返回全部样式
-        return typeof name === 'string' ? allStyle.getPropertyValue(name) : allStyle;
-    }
-
-    function color(config) {}
-
-    /**
      * Hermite三次插值
      * @param {Json} config 可选
      */
@@ -1046,8 +1024,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return cardinal;
     }
 
-    function track() {}
-
     /**
      * 把当前维护的结点加到目标结点内部的结尾
      * @param {selector} target
@@ -1132,6 +1108,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
         return image2D(temp);
     };
+
+    /**
+     * 返回渲染后的CSS样式值
+     * @param {DOM} dom 目标结点
+     * @param {String} name 属性名称（可选）
+     * @return {String}
+     */
+    function getStyle(dom, name) {
+
+        // 获取结点的全部样式
+        var allStyle = document.defaultView && document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(dom, null) : dom.currentStyle;
+
+        // 如果没有指定属性名称，返回全部样式
+        return typeof name === 'string' ? allStyle.getPropertyValue(name) : allStyle;
+    }
 
     /**
      * 设置或获取样式
@@ -1689,7 +1680,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     image2D.extend({
 
         // 布局
-        treeLayout: treeLayout$1, pieLayout: pieLayout,
+        treeLayout: treeLayout$1,
 
         // 矩阵变换
         Matrix4: Matrix4,
@@ -1698,10 +1689,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         rotate: _rotate2, move: _move2, scale: _scale2, dot: dot,
 
         // 工具类
-        animation: animation, color: color,
+        animation: animation,
 
         // 插值类计算
-        cardinal: cardinal, track: track
+        cardinal: cardinal
 
     });
     image2D.prototype.extend({

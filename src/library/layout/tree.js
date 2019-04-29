@@ -14,7 +14,7 @@ export default function (config) {
 
         // 如果类型是circle需要设置如下参数
         // 1.cx,cy：圆心；2.radius:半径；3.begin-deg,deg：开始和跨越弧度（可选）
-        "begin": 0,
+        "begin-deg": 0,
         "deg": Math.PI * 2
 
     }, config);
@@ -58,9 +58,6 @@ export default function (config) {
             }
 
         } else if (config.type === 'circle') {
-
-            config['begin-deg'] = config['begin-deg'] || 0;
-            config.deg = config.deg || Math.PI * 2;
 
             // 每层间距
             let dis1 = config.radius / (orgData.deep - 1);
