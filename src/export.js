@@ -38,6 +38,7 @@ import attribute from './library/xhtml/attribute';
 import { datum, data, enter, exit, loop } from './library/xhtml/data';
 import { bind, position } from './library/xhtml/event';
 import painter from './library/painter';
+import layer from './library/canvas2D/layer';
 image2D.prototype.extend({
 
     // 结点操作
@@ -53,7 +54,10 @@ image2D.prototype.extend({
     bind, position,
 
     // 自定义画笔
-    painter
+    painter,
+
+    // 图层
+    layer
 
 });
 

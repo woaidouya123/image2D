@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Apr 29 2019 17:25:09 GMT+0800 (GMT+08:00)
+    * Date:Sun May 05 2019 21:51:27 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1677,6 +1677,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         throw new Error('Painter is not a function!');
     }
 
+    function layer() {
+
+        if (!isNode(this[0])) throw new Error('Target empty!');
+
+        if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
+
+        var layer = {};
+
+        return layer;
+    }
+
     image2D.extend({
 
         // 布局
@@ -1710,7 +1721,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         bind: bind, position: position,
 
         // 自定义画笔
-        painter: painter
+        painter: painter,
+
+        // 图层
+        layer: layer
 
     });
 

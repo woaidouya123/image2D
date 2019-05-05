@@ -1,0 +1,90 @@
+body {
+    background: #fff;
+    line-height: 1.5em;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: .12rem;
+}
+
+body>* {
+    min-width: 9.8rem;
+}
+
+a {
+    font-weight: bold;
+    color: #000000;
+}
+
+/* 页眉 */
+
+header {
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 1px 2px;
+    line-height: .42rem;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+header>ul {
+    width: 9.8rem;
+    margin: auto;
+    background-image: url(./image2D.png);
+    background-position: .3rem center;
+    background-repeat: no-repeat;
+    background-size: auto 70%;
+    padding-left: .7rem;
+}
+
+header>ul>li {
+    display: inline-block;
+    padding: 0 .2rem;
+    line-height: .42rem;
+    cursor: pointer;
+}
+
+header>ul>li:hover {
+    background-color: hsla(0, 0%, 100%, .3);
+}
+
+/* 正文 */
+
+.container {
+    background-image: url(./header.png);
+    background-repeat: no-repeat;
+    background-position: center -.1rem;
+    padding: 1.8rem calc(50vw - 4.8rem) .1rem;
+}
+
+.container>.title {
+    font-size: .16rem;
+    font-weight: 800;
+    line-height: 2em;
+}
+
+/* 页脚 */
+
+footer {
+    padding: .4rem .1rem;
+    text-align: center;
+    background-color: #f6f9fa;
+}
+
+footer>ul {
+    padding-bottom: .2rem;
+}
+
+footer>ul>li {
+    display: inline-block;
+    padding: 0 .2rem;
+    line-height: 1.2em;
+}
+
+footer>ul>li:not(:last-child) {
+    border-right: 1px solid #000;
+}
+
+footer>em {
+    font-style: normal;
+    font-family: cursive;
+}

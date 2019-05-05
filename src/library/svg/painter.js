@@ -74,8 +74,7 @@ export default function (target, selector) {
         },
         "strokeCircle": function (cx, cy, r) {
             initCircle(painter, cx, cy, r).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
-        },
-
+        }
 
     };
 

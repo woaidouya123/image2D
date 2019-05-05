@@ -67,7 +67,7 @@ export default function (canvas) {
         },
         "strokeCircle": function (cx, cy, r) {
             initCircle(painter, cx, cy, r).stroke(); return enhancePainter;
-        },
+        }
 
     };
 
