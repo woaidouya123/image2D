@@ -19,7 +19,7 @@
 
             // 定位
             window.setTimeout(function () {
-                window.location.href = window.location.href.replace(/[^#]*(#\/){0,1}/, '');
+                window.location.href = "#" + window.location.href.replace(/[^#]*#(\/){0,1}/, '');
             }, 200);
 
             // 打印文字
