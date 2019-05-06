@@ -83,13 +83,18 @@ header>ul>li:hover {
 }
 
 .container>.big.title {
-    font-size: .17rem;
-    color: #721f2d;
+    font-size: .18rem;
+    color: rgb(203, 83, 139);
 }
 
 .container>.small.title {
-    font-size: .15rem;
+    font-size: .16rem;
     color: rgb(203, 83, 139);
+}
+
+.container>.little.title {
+    font-size: .14rem;
+    color: #85a646;
 }
 
 .container>p {
@@ -102,6 +107,25 @@ header>ul>li:hover {
     text-indent: 0;
     color: #ac2c23;
     text-decoration: underline;
+}
+
+.container>p.warn {
+    background-image: url('./warn.png');
+    background-repeat: no-repeat;
+    background-size: auto .21rem;
+    font-size: .12rem;
+    color: #dac305;
+    font-weight: 400;
+}
+
+.container>ul {
+    margin-left: 2em;
+    font-size: .13rem;
+    line-height: 2.4em;
+}
+
+.container>ul>li {
+    list-style-type: decimal;
 }
 
 /* 页脚 */
