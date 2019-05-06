@@ -8,14 +8,37 @@
     <link rel="stylesheet" href="easycss.min.css">
     <link rel="shortcut icon" href="image2D.png">
     <link rel="stylesheet" href="style.css">
-    <title>image2D 查询手册</title>
+    <link rel="stylesheet" href="prettify.css">
+    <script src="./prettify.js"></script>
     <script>
-        alert('非常抱歉的告诉你，本项目目前依旧处于开发阶段，预计2019年7月会发布第一个测试beta版本！');
+
+        function loadpage() {
+
+            // 格式化代码
+            prettyPrint();
+
+            // 定位
+            window.setTimeout(function () {
+                window.location.href = window.location.href.replace(/[^#]*(#\/){0,1}/, '');
+            }, 200);
+
+            // 打印文字
+            window.console && window.console.log && (console.log([
+                '%c ',
+                ' ',
+                '🍇 提供更友好的web端绘图接口。',
+                ' '
+            ].join('\n'), "color:#721f2d"),
+                console.log("\n\nhttps://github.com/yelloxing/image2D\n\n"));
+
+        }
+
     </script>
+    <title>image2D 查询手册</title>
 </head>
 
-<body>
-    <header id='top'>
+<body onload="loadpage()" id='top'>
+    <header>
         <ul>
             <li>
                 <a href="#preview">简介</a>
@@ -33,18 +56,53 @@
                 <a href="#tool">小工具</a>
             </li>
         </ul>
+        <a href="https://github.com/yelloxing/image2D" class="github" target="_blank">
+            Fork me on Github
+        </a>
     </header>
     <div class="container">
 
-        <h2 class="title" id='preview'>简介</h2>
+        <h2 class="title big" id='preview'>简介</h2>
+        <p>
+            首先，让我们来了解一个这个库主要解决的问题是什么，如何使用以及问题反馈等基本信息。
+        </p>
 
-        <h2 class="title" id='xhtml'>结点操作</h2>
+        <h4 class="title small">关注的问题</h4>
+        <p>
+            本库致力于提供更简单的Web端二维绘图接口，主要包括这些方面：画笔、辅助计算、结点操作和一些零碎的小工具方法。我们希望绘图是简单而有趣的、高效而愉悦的！
+        </p>
+        <p>
+            主要是在svg和canvas 2d上绘图，虽然有提供比如Maritx4坐标变换等三维相关方法，这是考虑到一些潜在的需求。
+        </p>
 
-        <h2 class="title" id='painter'>画笔</h2>
+        <h4 class="title small">如何使用</h4>
+        <p>
+            如果你开发的是一个web项目，直接在页面引入打包后的文件后即可（在代码中通过image2D或$$调用）：
+        </p>
+        <pre class='prettyprint lang-html'>&lt;script src="./build/image2D.min.js" type="text/javascript"&gt;&lt;/script&gt;</pre>
+        <p>
+            如果你想通过npm方式管理，首先你需要通过命令行安装image2D，就像这样：
+        </p>
+        <pre class='prettyprint lang-js'>npm install --save image2d</pre>
+        <p>
+            安装好了以后，在需要的地方引入即可：
+        </p>
+        <pre class='prettyprint lang-js'>import $$ from 'image2d';</pre>
 
-        <h2 class="title" id='calculate'>计算</h2>
+        <h4 class="title small">获取帮助</h4>
+        <p>
+            在使用image2D的时候，如果遇到任何疑惑或问题，包括建议或对未来版本的想法，请先在
+            <a target="_blank" href="https://github.com/yelloxing/image2D/issues">Github issue</a>
+            上查找是否存在相似内容，然后进行补充或追问，当然也可以增加新的话题进行交流，除非特殊情况，你会在48小时内获得作者回复。
+        </p>
 
-        <h2 class="title" id='tool'>小工具</h2>
+        <h2 class="title big" id='xhtml'>结点操作</h2>
+
+        <h2 class="title big" id='painter'>画笔</h2>
+
+        <h2 class="title big" id='calculate'>计算</h2>
+
+        <h2 class="title big" id='tool'>小工具</h2>
 
     </div>
     <footer>

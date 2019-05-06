@@ -1,6 +1,5 @@
 import { isNode, isCanvas2D, isArray } from '../../core/type';
 import image2D from '../core';
-import $array from '../../core/array';
 
 export default function () {
 
@@ -38,18 +37,14 @@ export default function () {
 
         // 删除图层
         "delete": function (id) {
-            let ids = isArray(id) ? id : [id];
-
             // 删除索引
-            $array.delete(layer_index, function (item) {
-                return ids.indexOf(item) >= 0;
-            });
-
+            for (let i = 0; i < layer_index.length; i++)
+                if (layer_index[i] === id) {
+                    layer_index.splice(i, 1);
+                    break;
+                }
             // 删除图层
-            for (let i = 0; i < ids.length; i++) {
-                delete layer[ids[i]];
-            }
-
+            delete layer[id];
             return layerManager;
         },
 

@@ -1,7 +1,7 @@
 body {
     background: #fff;
-    line-height: 1.5em;
-    font-family: Georgia, "Times New Roman", Times, serif;
+    line-height: 1.8em;
+    font-family: monospace;
     font-size: .12rem;
 }
 
@@ -11,7 +11,24 @@ body>* {
 
 a {
     font-weight: bold;
-    color: #000000;
+    color: #000;
+    display: inline-block;
+}
+
+.github {
+    position: fixed;
+    transform: rotate(45deg);
+    top: .6rem;
+    line-height: 1.6em;
+    right: -.6rem;
+    background-color: #ac2c23;
+    outline: .04rem solid #ac2c23;
+    transform-origin: 1.5rem .23rem;
+    border: .02rem dashed #d14742;
+    width: 3rem;
+    text-align: center;
+    color: #ebdbd9;
+    font-family: sans-serif;
 }
 
 /* 页眉 */
@@ -38,9 +55,13 @@ header>ul {
 
 header>ul>li {
     display: inline-block;
-    padding: 0 .2rem;
     line-height: .42rem;
     cursor: pointer;
+}
+
+header>ul>li>a {
+    width: 100%;
+    padding: 0 .2rem;
 }
 
 header>ul>li:hover {
@@ -57,9 +78,30 @@ header>ul>li:hover {
 }
 
 .container>.title {
-    font-size: .16rem;
     font-weight: 800;
     line-height: 2em;
+}
+
+.container>.big.title {
+    font-size: .17rem;
+    color: #721f2d;
+}
+
+.container>.small.title {
+    font-size: .15rem;
+    color: rgb(203, 83, 139);
+}
+
+.container>p {
+    text-indent: 2em;
+    font-size: .14rem;
+    font-weight: 600;
+}
+
+.container>p>a {
+    text-indent: 0;
+    color: #ac2c23;
+    text-decoration: underline;
 }
 
 /* 页脚 */

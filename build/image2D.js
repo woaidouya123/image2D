@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon May 06 2019 12:04:44 GMT+0800 (GMT+08:00)
+    * Date:Mon May 06 2019 14:12:49 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -48,15 +48,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     var isCanvas2D = function isCanvas2D(param) {
         return param && param.constructor === CanvasRenderingContext2D;
-    };
-
-    /**
-     * 判断传入的元素是不是数组
-     * @param {Any} param
-     * @return {Boolean} true:数组，false:不是数组
-     */
-    var isArray = function isArray(param) {
-        return param && param.constructor === Array;
     };
 
     /**
@@ -1695,29 +1686,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         throw new Error('Painter is not a function!');
     }
 
-    // 数组操作补充
-    var $array = {
-
-        // 删除数组中满足调整的元素，并且返回删除的元素的原位置(返回的是数组)
-        // checkback(item,index)是判断函数，返回true满足条件删除
-        "delete": function _delete(array, checkback) {
-
-            var org_index = [];
-
-            // 查找元素
-            for (var index = 0; index < array.length; index++) {
-                if (checkback(array[index], index)) org_index.push(index);
-            }
-
-            // 删除元素
-            for (var _index = org_index.length; _index > 0; _index--) {
-                array.splice(org_index[_index - 1], 1);
-            }
-
-            return org_index;
-        }
-    };
-
     function layer() {
 
         if (!isNode(this[0])) throw new Error('Target empty!');
@@ -1756,18 +1724,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 删除图层
             "delete": function _delete(id) {
-                var ids = isArray(id) ? id : [id];
-
                 // 删除索引
-                $array.delete(layer_index, function (item) {
-                    return ids.indexOf(item) >= 0;
-                });
-
-                // 删除图层
-                for (var i = 0; i < ids.length; i++) {
-                    delete layer[ids[i]];
-                }
-
+                for (var i = 0; i < layer_index.length; i++) {
+                    if (layer_index[i] === id) {
+                        layer_index.splice(i, 1);
+                        break;
+                    }
+                } // 删除图层
+                delete layer[id];
                 return layerManager;
             },
 
