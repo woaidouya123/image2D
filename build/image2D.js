@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sun May 05 2019 21:51:27 GMT+0800 (GMT+08:00)
+    * Date:Mon May 06 2019 12:02:48 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -39,6 +39,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     var isText = function isText(param) {
         return param && param.nodeType === 3;
+    };
+
+    /**
+     * 判断传入的元素是不是canvas2D画笔
+     * @param {Any} param
+     * @return {Boolean} true:画笔，false:不是画笔
+     */
+    var isCanvas2D = function isCanvas2D(param) {
+        return param && param.constructor === CanvasRenderingContext2D;
+    };
+
+    /**
+     * 判断传入的元素是不是数组
+     * @param {Any} param
+     * @return {Boolean} true:数组，false:不是数组
+     */
+    var isArray = function isArray(param) {
+        return param && param.constructor === Array;
     };
 
     /**
@@ -1677,15 +1695,107 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         throw new Error('Painter is not a function!');
     }
 
+    // 数组操作补充
+    var $array = {
+
+        // 删除数组中满足调整的元素，并且返回删除的元素的原位置(返回的是数组)
+        // checkback(item,index)是判断函数，返回true满足条件删除
+        "delete": function _delete(array, checkback) {
+
+            var org_index = [];
+
+            // 查找元素
+            for (var index = 0; index < array.length; index++) {
+                if (checkback(array[index], index)) org_index.push(index);
+            }
+
+            // 删除元素
+            for (var _index = org_index.length; _index > 0; _index--) {
+                array.splice(org_index[_index - 1], 1);
+            }
+
+            return org_index;
+        }
+    };
+
     function layer() {
 
         if (!isNode(this[0])) throw new Error('Target empty!');
 
         if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
 
-        var layer = {};
+        // 画笔
+        var painter = this[0].getContext("2d"),
 
-        return layer;
+        // 图层集合
+        layer = {};
+        layer_index = [];
+        var width = this[0].clientWidth,
+            //内容+内边距
+        height = this[0].clientHeight;
+
+        var layerManager = {
+
+            // 获取指定图层画笔
+            "painter": function painter(id) {
+                if (!layer[id] || !isCanvas2D(layer[id].painter)) {
+                    // 初始化的图层都可见
+                    layer[id] = { "visible": true };
+
+                    layer[id].canvas = document.createElement('canvas');
+                    // 设置大小才会避免莫名其妙的错误
+                    layer[id].canvas.setAttribute('width', width);
+                    layer[id].canvas.setAttribute('height', height);
+
+                    layer[id].painter = image2D(layer[id].canvas).painter();
+
+                    layer_index.push(id);
+                }
+                return layer[id].painter;
+            },
+
+            // 删除图层
+            "delete": function _delete(id) {
+                var ids = isArray(id) ? id : [id];
+
+                // 删除索引
+                $array.delete(layer_index, function (item) {
+                    return ids.indexOf(item);
+                });
+
+                // 删除图层
+                for (var i = 0; i < ids.length; i++) {
+                    delete layer[ids[i]];
+                }
+
+                return layerManager;
+            },
+
+            // 更新内容到画布
+            "update": function update() {
+                painter.clearRect(0, 0, width, height);
+                painter.save();
+                for (var i = 0; i < layer_index.length; i++) {
+                    if (layer[layer_index[i]].visible) painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width, height, 0, 0, width, height);
+                }
+                painter.restore();
+                return layerManager;
+            },
+
+            // 隐藏图层
+            "hidden": function hidden(id) {
+                layer[id].visible = false;
+                return layerManager;
+            },
+
+            // 显示图层
+            "show": function show(id) {
+                layer[id].visible = true;
+                return layerManager;
+            }
+        };
+
+        return layerManager;
     }
 
     image2D.extend({
