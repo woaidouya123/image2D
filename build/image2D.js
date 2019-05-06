@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon May 06 2019 12:02:48 GMT+0800 (GMT+08:00)
+    * Date:Mon May 06 2019 12:04:44 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1760,7 +1760,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
                 // 删除索引
                 $array.delete(layer_index, function (item) {
-                    return ids.indexOf(item);
+                    return ids.indexOf(item) >= 0;
                 });
 
                 // 删除图层

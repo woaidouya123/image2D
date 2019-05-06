@@ -42,7 +42,7 @@ export default function () {
 
             // 删除索引
             $array.delete(layer_index, function (item) {
-                return ids.indexOf(item);
+                return ids.indexOf(item) >= 0;
             });
 
             // 删除图层
