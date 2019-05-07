@@ -549,7 +549,78 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');</pre>
             在绘制一些常见图形的时候，比如关系图，单个结点或连线并不难，麻烦的是位置的计算等，和图形模块不同，布局就是专门计算一些特殊图形位置的模块，用一句通俗的话说就是：决定什么元素绘制在哪里。因此，布局应该和具体的绘图方法无关，她只关心位置的计算。
         </p>
 
+        <h6 class="title little">树布局</h6>
 
+        <p>
+            调用treeLayout方法，传递配置config（后续也可以提供config方法来修改配置）就可以获取树布局实例：
+        </p>
+        <pre class='prettyprint lang-js'>var treeLayout=$$.treeLayout(config);</pre>
+        <p>
+            config是一个键值对格式的配置json，由于原始数据格式不一定，你需要传递数据格式的配置（必须的，可选部分在后面说明）：
+        </p>
+        <ul>
+            <li>"root":function(initTree){ /*返回根结点*/ }</li>
+            <li>"id":function(treedata){ /*返回id*/ }</li>
+            <li>"child":function(parentTree, initTree){ /*返回孩子结点*/ }</li>
+        </ul>
+        <p>
+            你还必须配置绘图方法，因为布局并不知道如何绘制：
+        </p>
+        <pre class='prettyprint lang-js'>treeLayout.drawer(function(data){ /*绘制*/ });</pre>
+        <p>
+            data是计算后带有结点坐标的数据，格式如下：
+        </p>
+        <pre class='prettyprint lang-js'>{node: {
+    "XXX":{
+        children: []
+        data: any
+        id: string||number
+        left: number
+        pid: any
+        top: number
+    },
+    ...
+}, root: string||number, size: number, deep: number}</pre>
+        <p>
+            node记录的是每个结点的信息，每个结点中的left和top就是该结点应该绘制的位置，data是结点的原始数据。
+        </p>
+        <p>
+            上面说明的都配置好以后，就可以启动布局计算并绘图了：
+        </p>
+        <pre class='prettyprint lang-js'>treeLayout(data);</pre>
+
+        <h6 class="title sub-little">基本模型</h6>
+        <img src="./layout-tree_design.png" style="float:right;background-color:#fff;" width=260>
+        <p>
+            可能你已经发现了，树图分为很多种（圆形树，倒树等），上面并没有配置这些信息（有接口提供配置，稍后说明）。是的，没有配置的时候，默认选择的是基本模型，那什么是基本模型？
+        </p>
+        <p>
+            右图是某个具体例子的基本模型，其中每个红色矩形都是一个1x1的正方形，坐标原心位于左上角绿色顶点。
+        </p>
+        <pre class='prettyprint lang-js'>"油画":{
+    children: [];
+    data: (2) ["油画", "手绘"];
+    id: "油画";
+    left: 1.5;
+    pid: "手绘";
+    show: true;
+    top: 1.5
+}</pre>
+        <p>
+            主要看看top和left，和右边的图对应，是不是很清晰了。tree布局的核心位置计算就是把每个结点看成一个1x1的正方形，别的具体树图都是从此出发计算得出的，这就是基本模型。
+        </p>
+
+        <h6 class="title sub-little">配置模型</h6>
+        <p>
+            虽然从基本模型出发计算具体的树图已经很容易了，不过为了方便，依旧对常见的树图提供了下列配置选项：
+        </p>
+        <ul>
+            <li>type:LR|RL|BT|TB|circle，配置树图的类型（默认原始模型，会忽略下列全部设置）。</li>
+            <li>width,height:number，设置树图的宽和高（如果类型是LR|RL|BT|TB需要设置）。</li>
+            <li>cx,cy:number，设置圆心（如果类型是circle需要设置）。</li>
+            <li>radius:number，设置树图半径（如果类型是circle需要设置）。</li>
+            <li>begin-deg,deg:number，开始和跨越弧度（可选，如果类型是circle设置该参数有效）。</li>
+        </ul>
 
         <h2 class="title big" id='tool'>五.小工具</h2>
         <p>
