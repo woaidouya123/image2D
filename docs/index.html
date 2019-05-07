@@ -361,7 +361,37 @@
 
         <h4 class="title small">3.2 矢图svg</h4>
 
+        <p>
+            这种画笔比较特殊，画笔是绑定在维护了svg结点的结点对象上的，不过具体的绘制（比如文字是text标签）却需要对应更具体的标签，因此获取painter方法的时候可以传递一个选择器selector来绑定本次绘制目标（可选）：
+        </p>
+        <pre class='prettyprint lang-js'>var painter=imageObject.painter(selector);</pre>
 
+        <p>
+            因为绘制文字、圆形和圆弧等对应的目标标签不一样，并且一个结点只可以绘制一个图形，因此在每次绘制前都需要明确目标结点：
+        </p>
+        <pre class='prettyprint lang-js'>painter.bind(selector);</pre>
+        <p>
+            大部分情况下，selector应该都是模板字符串，比如"&lt;text&gt;"，绘制结束需要追加到svg中去，我们提供了四种追加方法：
+        </p>
+        <pre class='prettyprint lang-js'>painter.appendTo|prependTo|afterTo|beforeTo(selector);</pre>
+        <p>
+            因为限制了查找上下文是获取画笔的svg，只需要传递一个参数，具体方法和前面常规的结点操作一样。
+        </p>
+
+        <p>
+            鉴于svg绘图的特殊性，下面以绘制文字举一个例子来看看绘制整体代码：
+        </p>
+        <pre class='prettyprint lang-js'>// 获取画笔
+var painter=$$('svg').painter('&lt;text&gt;');
+
+// 配置画笔
+painter.config({
+    "fillStyle":"red",
+    "font-size":30
+});
+
+// 绘制文字并追加到画布
+painter.fillText('Step By Step', 100, 100).appendTo('g.text');</pre>
 
         <h4 class="title small">3.3 通用绘图方法</h4>
         <p>
