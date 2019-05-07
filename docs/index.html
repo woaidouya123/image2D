@@ -18,7 +18,7 @@
             var doScroll = function () {
                 var toTop = document.documentElement.scrollTop || document.body.scrollTop;
                 header.style.top = toTop + "px";
-                if (toTop <= 170)
+                if (toTop <= 130)
                     header.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
                 else
                     header.style.backgroundColor = 'rgba(255, 255, 255, 1.0)';
@@ -421,6 +421,104 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');</pre>
         <pre class='prettyprint lang-js'>painter.strokeCircle(cx, cy, r);</pre>
 
         <h2 class="title big" id='calculate'>四.计算</h2>
+        <p>
+            绘图的时候难免要进行一些比较复杂的计算，这里根据使用场景不同，提供了几种常见的辅助计算。
+        </p>
+
+        <h4 class="title small">4.1 二维简单坐标变换</h4>
+        <p>
+            简单坐标变换分为二类：独立的变换和变换对象dot。
+        </p>
+
+        <h6 class="title little">独立的变换</h6>
+
+        <p>点（x,y）围绕中心（cx,cy）旋转deg度：</p>
+        <pre class='prettyprint lang-js'>$$.rotate(cx, cy, deg, x, y);</pre>
+
+        <p>点（x,y）沿着向量（ax,ay）方向移动距离d：</p>
+        <pre class='prettyprint lang-js'>$$.move(ax, ay, d, x, y);</pre>
+
+        <p>点（x,y）围绕中心（cx,cy）缩放times倍：</p>
+        <pre class='prettyprint lang-js'>$$.scale(cx, cy, times, x, y);</pre>
+
+        <h6 class="title little">变换对象</h6>
+        <p>
+            dot表示一个会移动的二维点，内部维护着「前进方向向量」、「当前位置」和「中心坐标」。首先，我们来看看如何获取一个dot实例：
+        </p>
+        <pre class='prettyprint lang-js'>var dot=$$.dot({
+    // 前进方向、中心坐标和当前位置（都可选，下列是缺省值）
+    d: [1, 1],c: [0, 0],p: [0, 0]
+});</pre>
+
+        <p>
+            下列是一些变换方法，通过这些方法可以控制点dot的坐标改变或获取当前坐标。
+        </p>
+
+        <p>前进方向以当前位置为中心，旋转deg度（注意，改变的是前进方向，不是当前坐标）：</p>
+        <pre class='prettyprint lang-js'>dot.rotate(deg);</pre>
+
+        <p>沿着当前前进方向前进d：</p>
+        <pre class='prettyprint lang-js'>dot.move(d);</pre>
+
+        <p>围绕中心坐标缩放：</p>
+        <pre class='prettyprint lang-js'>dot.scale(times);</pre>
+
+        <p>返回当前位置：</p>
+        <pre class='prettyprint lang-js'>var p=dot.value();</pre>
+
+        <h4 class="title small">4.2 Matrix4三维坐标变换</h4>
+        <p>
+            Matrix4是一个列主序存储的4x4矩阵，使用该矩阵对象的第一步是像下面这样获取该对象，参数initMatrix4可选，你可以传递一个初始化矩阵或默认采用单位矩阵E初始化。
+        </p>
+        <pre class='prettyprint lang-js'>var matrix4=$$.Matrix4(initMatrix4);</pre>
+        <p>
+            和前面的二维坐标变换不同的是，变换不是直接作用在具体的点上，而是先求解出一系列变换的变换矩阵，最后应用在具体点上。
+        </p>
+
+        <h6 class="title little">基本运算</h6>
+
+        <p>返回matrix4当前记录的内部矩阵：</p>
+        <pre class='prettyprint lang-js'>var val=matrix4.value();</pre>
+        <p>
+            比如采用默认值初始化的矩阵对象，打印结果如下：
+        </p>
+        <pre class='prettyprint lang-js'>(16) [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]</pre>
+
+        <p>二个矩阵相乘：</p>
+        <pre class='prettyprint lang-js'>matrix4.multiply(newMatrix4[, flag]);</pre>
+        <p>
+            第一个参数应该是一个和value打印出来一样格式的一维数组，列主序存储。flag默认false，可不传，表示左乘，即newMatrix4 × matrix4，如果设置flag为true，表示右乘。
+        </p>
+
+        <p>把变换矩阵作用在具体的点上：</p>
+        <pre class='prettyprint lang-js'>var position=matrix4.use(x, y, z, w);</pre>
+        <p>
+            矩阵的目的是对坐标进行变换，use方法返回齐次坐标(x, y, z, w)经过matrix4矩阵变换后的坐标值。其中z和w可以不传递，默认0和1，返回的坐标值是一个齐次坐标。
+        </p>
+
+        <h6 class="title little">坐标变换</h6>
+
+        <p>沿着向量(a, b, c)方向移动距离dis（其中c可以不传，默认0）：</p>
+        <pre class='prettyprint lang-js'>matrix4.move(dis, a, b, c);</pre>
+
+        <p>以点(cx, cy, cz)为中心，分别在x、y和z方向上缩放xTimes、yTimes和zTimes倍（其中cx、cy和cz都可以不传递，默认0）：</p>
+        <pre class='prettyprint lang-js'>matrix4.scale(xTimes, yTimes, zTimes, cx, cy, cz);</pre>
+
+        <p>围绕射线(a1, b1, c1) -> (a2, b2, c2)旋转deg度（方向由右手法则确定）：</p>
+        <pre class='prettyprint lang-js'>matrix4.rotate(deg, a1, b1, c1, a2, b2, c2);</pre>
+        <p>
+            a1、b1、c1、a2、b2和c2这6个值在设置的时候，不是一定需要全部设置，还有以下可选：
+        </p>
+        <ul>
+            <li>只设置了a1和b1，表示在xoy平面围绕（a1, b1）旋转。</li>
+            <li>只设置三个点(设置不足六个点都认为只设置了三个点)，表示围绕从原点出发的射线旋转。</li>
+        </ul>
+
+        <h4 class="title small">4.3 曲线插值</h4>
+
+
+        <h4 class="title small">4.4 布局</h4>
+
 
         <h2 class="title big" id='tool'>五.小工具</h2>
         <p>

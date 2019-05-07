@@ -43,6 +43,8 @@ header {
     position: relative;
     top: 0;
     left: 0;
+    transition-property: background-color;
+    transition-duration: 700ms;
 }
 
 header>ul {
@@ -83,6 +85,8 @@ header>ul>li:hover {
 .container>.title {
     font-weight: 800;
     line-height: 2em;
+    padding: .4rem 0 .2rem;
+    margin-top: -.3rem;
 }
 
 .container>.big.title {
