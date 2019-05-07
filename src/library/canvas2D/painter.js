@@ -48,7 +48,7 @@ export default function (canvas) {
         "clearn": function (x, y, width, height) { painter.clearRect(x || 0, y || 0, width || canvas.clientWidth, height || canvas.clientHeight); return enhancePainter; },
 
         // 地址图片
-        "toDataURL": function () { return painter.toDataURL() },
+        "toDataURL": function () { return canvas.toDataURL() },
 
         // image
         "drawImage": function (img, sx, sy, sw, sh, x, y, w, h) { painter.drawImage(img, sx, sy, sw, sh, x, y, w, h); return enhancePainter; },

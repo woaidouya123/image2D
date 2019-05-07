@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon May 06 2019 14:12:49 GMT+0800 (GMT+08:00)
+    * Date:Tue May 07 2019 10:52:29 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1444,7 +1444,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 地址图片
             "toDataURL": function toDataURL() {
-                return painter.toDataURL();
+                return canvas.toDataURL();
             },
 
             // image
