@@ -50,23 +50,30 @@
 
 <body onload="loadpage()" id='top'>
     <header>
-        <ul>
-            <li>
-                <a href="#preview">简介</a>
-            </li>
-            <li>
-                <a href="#xhtml">结点操作</a>
-            </li>
-            <li>
-                <a href="#painter">画笔</a>
-            </li>
-            <li>
-                <a href="#calculate">计算</a>
-            </li>
-            <li>
-                <a href="#tool">小工具</a>
-            </li>
-        </ul>
+        <div>
+            <ul>
+                <li>
+                    <a href="#preview">简介</a>
+                </li>
+                <li>
+                    <a href="#xhtml">结点操作</a>
+                </li>
+                <li>
+                    <a href="#painter">画笔</a>
+                </li>
+                <li>
+                    <a href="#calculate">计算</a>
+                </li>
+                <li>
+                    <a href="#tool">小工具</a>
+                </li>
+            </ul>
+            <a href="https://github.com/yelloxing" class='yelloxing' target="_blank">作者主页</a>
+            <span>
+                心叶（yelloxing）
+            </span>
+            <a href="https://github.com/pencil-studio" class='studio' target="_blank">交流</a>
+        </div>
         <a href="https://github.com/yelloxing/image2D" class="github" target="_blank">
             Fork me on Github
         </a>
@@ -182,6 +189,11 @@
             从页面中删除当前维护的结点：
         </p>
         <pre class='prettyprint lang-js'>imageObject.remove();</pre>
+
+        <p>
+            设置或获取结点中的文本：
+        </p>
+        <pre class='prettyprint lang-js'>imageObject.text([content]);</pre>
 
         <h4 class="title small">2.3 样式和属性</h4>
 

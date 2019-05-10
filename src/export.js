@@ -32,7 +32,7 @@ image2D.extend({
  * 挂载对象方法
  * -------------------
  */
-import { appendTo, prependTo, afterTo, beforeTo, remove, filter } from './library/xhtml/dom';
+import { appendTo, prependTo, afterTo, beforeTo, remove, filter, text } from './library/xhtml/dom';
 import style from './library/xhtml/style';
 import attribute from './library/xhtml/attribute';
 import { datum, data, enter, exit, loop } from './library/xhtml/data';
@@ -42,7 +42,7 @@ import layer from './library/canvas2D/layer';
 image2D.prototype.extend({
 
     // 结点操作
-    appendTo, prependTo, afterTo, beforeTo, remove, filter,
+    appendTo, prependTo, afterTo, beforeTo, remove, filter, text,
 
     // 结点属性或样式操作
     css: style, attr: attribute,

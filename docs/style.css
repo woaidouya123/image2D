@@ -3,10 +3,7 @@ body {
     line-height: 1.8em;
     font-family: monospace;
     font-size: .12rem;
-}
-
-body>* {
-    min-width: 9.8rem;
+    min-width: 12rem;
 }
 
 a {
@@ -47,9 +44,15 @@ header {
     transition-duration: 700ms;
 }
 
-header>ul {
+header>div {
     width: 9.8rem;
     margin: auto;
+    position: relative;
+}
+
+header>div>ul {
+    width: 7rem;
+    display: inline-block;
     background-image: url(./image2D.png);
     background-position: .3rem center;
     background-repeat: no-repeat;
@@ -57,29 +60,63 @@ header>ul {
     padding-left: .7rem;
 }
 
-header>ul>li {
+header>div>ul>li {
     display: inline-block;
     line-height: .42rem;
     cursor: pointer;
 }
 
-header>ul>li>a {
+header>div>ul>li>a {
     width: 100%;
     padding: 0 .2rem;
 }
 
-header>ul>li:hover {
+header>div>ul>li:hover {
     background-color: hsla(0, 0%, 100%, .3);
+}
+
+header>div>a.yelloxing {
+    background-image: url('./yelloxing.jpg');
+    background-size: 100% auto;
+    height: .34rem;
+    width: .34rem;
+    font-size: 0;
+    vertical-align: middle;
+    border-radius: 50%;
+}
+
+header>div>span {
+    font-weight: 800;
+    padding-left: .1rem;
+}
+
+header>div>a.studio {
+    height: .5rem;
+    width: .7rem;
+    text-align: center;
+    font-size: .14rem;
+    color: #fff;
+    background-color: #ac2c23;
+    border-radius: 0 0 .06rem .06rem;
+    position: absolute;
+    top: 0;
+    right: .2rem;
 }
 
 /* 正文 */
 
 .container {
-    background-image: url(./header.png);
+    background-image: url(./header.jpg);
     background-repeat: no-repeat;
     background-position: center -.1rem;
     padding: 1.8rem calc(50vw - 4.8rem) .1rem;
     margin-top: -.42rem;
+}
+
+@media screen and (max-width:1200px) {
+    .container {
+        padding: 1.8rem calc(6rem - 4.8rem) .1rem;
+    }
 }
 
 .container>.title {

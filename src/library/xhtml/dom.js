@@ -81,3 +81,13 @@ export let filter = function (filterback) {
     }
     return image2D(temp);
 };
+
+// 修改文本或获取结点文本
+export let text = function (content) {
+    if (content) {
+        for (let i = 0; i < this.length; i++) this[i].textContent = content;
+        return this;
+    }
+    if (this.length <= 0) throw new Error('Target empty!');
+    return this[0].textContent;
+};

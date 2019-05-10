@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 0.0.3-dev
+    * version 0.0.4-dev
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri May 10 2019 17:50:25 GMT+0800 (GMT+08:00)
+    * Date:Fri May 10 2019 21:39:34 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1118,6 +1118,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return image2D(temp);
     };
 
+    // 修改文本或获取结点文本
+    var text = function text(content) {
+        if (content) {
+            for (var i = 0; i < this.length; i++) {
+                this[i].textContent = content;
+            }return this;
+        }
+        if (this.length <= 0) throw new Error('Target empty!');
+        return this[0].textContent;
+    };
+
     /**
      * 返回渲染后的CSS样式值
      * @param {DOM} dom 目标结点
@@ -1779,7 +1790,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     image2D.prototype.extend({
 
         // 结点操作
-        appendTo: appendTo, prependTo: prependTo, afterTo: afterTo, beforeTo: beforeTo, remove: remove, filter: filter,
+        appendTo: appendTo, prependTo: prependTo, afterTo: afterTo, beforeTo: beforeTo, remove: remove, filter: filter, text: text,
 
         // 结点属性或样式操作
         css: style, attr: attribute,
