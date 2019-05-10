@@ -16,7 +16,7 @@ export default function (target, selector) {
 
         // 文字对齐方式
         "textAlign": "start",
-        "textBaseline": normalConfig("textBaseline", "middle"),
+        "textBaseline": "middle",
 
         // 文字设置
         "font-size": "16",

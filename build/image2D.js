@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri May 10 2019 17:06:04 GMT+0800 (GMT+08:00)
+    * Date:Fri May 10 2019 17:32:38 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1473,31 +1473,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return enhancePainter;
     }
 
-    // 返回浏览器名称
-    var type = function type() {
-        var userAgent = window.navigator.userAgent;
-
-        if (userAgent.indexOf("Opera") > -1 || userAgent.indexOf("OPR") > -1) return "Opera";
-
-        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1 && userAgent.indexOf("rv:11.0") > -1) return "IE";
-
-        if (userAgent.indexOf("Edge") > -1) return "Edge";
-
-        if (userAgent.indexOf("Firefox") > -1) return "Firefox";
-
-        if (userAgent.indexOf("Chrome") > -1) return "Chrome";
-
-        if (userAgent.indexOf("Safari") > -1) return "Safari";
-
-        return "unknown";
-    };
-
-    var browser = {
-        type: type
-    };
-
     function normalConfig(key, value) {
-        var browser_type = browser.type();
 
         // 文字水平对齐方式
         if (key === 'textAlign') {
@@ -1508,18 +1484,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }[value] || value;
         }
 
-        // 文字垂直对齐方式
-        else if (key === 'textBaseline') {
-                return {
-                    "top": "text-before-edge",
-                    "bottom": {
-                        "Safari": "auto"
-                    }[browser_type] || "ideographic"
-                }[value] || {
-                    "Firefox": "middle"
-                }[browser_type] || "central";
-            }
-
         return value;
     }
     // 文字统一设置方法
@@ -1527,18 +1491,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (!isNode(painter[0])) throw new Error('Target empty!');
         if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
-        var browser_type = browser.type();
-
-        // 针对IE和Edge浏览器特殊处理
-        if (browser_type === 'IE' || browser_type === 'Edge') {
-            if (config.textBaseline === 'text-before-edge') y += config['font-size'];else if (config.textBaseline === 'central') y += config['font-size'] * 0.5;
-        }
+        // 垂直对齐采用dy实现
+        painter.attr('dy', {
+            "top": 0,
+            "middle": -config['font-size'] * 0.5,
+            "bottom": -config['font-size']
+        }[config.textBaseline]);
 
         return painter.css({
 
             // 文字对齐方式
             "text-anchor": config.textAlign,
-            "dominant-baseline": config.textBaseline,
+            "dominant-baseline": "hanging",
 
             // 文字大小和字体设置
             "font-size": config['font-size'] + "px",
@@ -1599,7 +1563,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 文字对齐方式
             "textAlign": "start",
-            "textBaseline": normalConfig("textBaseline", "middle"),
+            "textBaseline": "middle",
 
             // 文字设置
             "font-size": "16",
