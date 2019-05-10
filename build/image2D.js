@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri May 10 2019 17:32:38 GMT+0800 (GMT+08:00)
+    * Date:Fri May 10 2019 17:50:25 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1493,16 +1493,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         // 垂直对齐采用dy实现
         painter.attr('dy', {
-            "top": 0,
-            "middle": -config['font-size'] * 0.5,
-            "bottom": -config['font-size']
+            "top": config['font-size'] * 0.5,
+            "middle": 0,
+            "bottom": -config['font-size'] * 0.5
         }[config.textBaseline]);
 
         return painter.css({
 
             // 文字对齐方式
             "text-anchor": config.textAlign,
-            "dominant-baseline": "hanging",
+            "dominant-baseline": "central",
 
             // 文字大小和字体设置
             "font-size": config['font-size'] + "px",
