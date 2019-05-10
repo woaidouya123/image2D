@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue May 07 2019 11:38:22 GMT+0800 (GMT+08:00)
+    * Date:Fri May 10 2019 17:06:04 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1577,6 +1577,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    // 路径统一设置方法
+    var initPath = function initPath(painter, path) {
+        if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
+        painter.attr('d', path);
+        return painter;
+    };
+
     function painter_svg(target, selector) {
 
         var painter = void 0;
@@ -1603,6 +1610,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "arc-end-cap": "butt"
 
         };
+
+        // 路径(和canvas2D的类似)
+        var path = "";
 
         // 画笔
         var enhancePainter = {
@@ -1633,6 +1643,28 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "beforeTo": function beforeTo(selector) {
                 painter.beforeTo(selector, target);return enhancePainter;
+            },
+
+            // 路径
+            "beginPath": function beginPath() {
+                path = "";return enhancePainter;
+            },
+            "closePath": function closePath() {
+                path += "Z";return enhancePainter;
+            },
+            "moveTo": function moveTo(x, y) {
+                path += "M" + x + " " + y;return enhancePainter;
+            },
+            "lineTo": function lineTo(x, y) {
+                path += "L" + x + " " + y;return enhancePainter;
+            },
+            "fill": function fill() {
+                initPath(painter, path).attr("fill", _config3.fillStyle);
+                return enhancePainter;
+            },
+            "stroke": function stroke() {
+                initPath(painter, path).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
+                return enhancePainter;
             },
 
             // 文字

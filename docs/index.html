@@ -336,29 +336,6 @@
             <li>(img, sx, sy, swidth, sheight, x, y, width, height):剪切图像，并在画布上定位被剪切的部分。</li>
         </ul>
 
-        <h6 class="title little">路径</h6>
-        <p>
-            基于路径可以绘制几乎大部分图形，这里独立一小段来说明。
-        </p>
-
-        <p>开始一段独立的路径：</p>
-        <pre class='prettyprint lang-js'>painter.beginPath();</pre>
-
-        <p>闭合当前路径，也就是路径首尾闭合：</p>
-        <pre class='prettyprint lang-js'>painter.closePath();</pre>
-
-        <p>画笔移动到点(x, y)，此时笔离开了画布：</p>
-        <pre class='prettyprint lang-js'>painter.moveTo(x, y);</pre>
-
-        <p>画笔移动到点(x, y)，此时笔没有离开画布：</p>
-        <pre class='prettyprint lang-js'>painter.lineTo(x, y);</pre>
-
-        <p>把当前路径包裹的区域填充颜色：</p>
-        <pre class='prettyprint lang-js'>painter.fill();</pre>
-
-        <p>把当前路径上色（轮廓线）：</p>
-        <pre class='prettyprint lang-js'>painter.stroke();</pre>
-
         <h4 class="title small">3.2 矢图svg</h4>
 
         <p>
@@ -419,6 +396,29 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');</pre>
 
         <p>以(cx, cy)为圆心，半径r绘制轮廓圆形：</p>
         <pre class='prettyprint lang-js'>painter.strokeCircle(cx, cy, r);</pre>
+
+        <h6 class="title little">路径</h6>
+        <p>
+            基于路径可以绘制几乎大部分图形，这里独立一小段来说明。
+        </p>
+
+        <p>开始一段独立的路径：</p>
+        <pre class='prettyprint lang-js'>painter.beginPath();</pre>
+
+        <p>闭合当前路径，也就是路径首尾闭合：</p>
+        <pre class='prettyprint lang-js'>painter.closePath();</pre>
+
+        <p>画笔移动到点(x, y)，此时笔离开了画布：</p>
+        <pre class='prettyprint lang-js'>painter.moveTo(x, y);</pre>
+
+        <p>画笔移动到点(x, y)，此时笔没有离开画布：</p>
+        <pre class='prettyprint lang-js'>painter.lineTo(x, y);</pre>
+
+        <p>把当前路径包裹的区域填充颜色：</p>
+        <pre class='prettyprint lang-js'>painter.fill();</pre>
+
+        <p>把当前路径上色（轮廓线）：</p>
+        <pre class='prettyprint lang-js'>painter.stroke();</pre>
 
         <h2 class="title big" id='calculate'>四.计算</h2>
         <p>

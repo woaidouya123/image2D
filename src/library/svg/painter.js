@@ -1,5 +1,5 @@
 import image2D from '../core';
-import normalConfig, { initText, initArc, initCircle } from './config';
+import normalConfig, { initText, initArc, initCircle, initPath } from './config';
 
 export default function (target, selector) {
 
@@ -28,6 +28,9 @@ export default function (target, selector) {
 
     };
 
+    // 路径(和canvas2D的类似)
+    let path="";
+
     // 画笔
     let enhancePainter = {
 
@@ -47,6 +50,20 @@ export default function (target, selector) {
         "prependTo": function (selector) { painter.prependTo(selector, target); return enhancePainter; },
         "afterTo": function (selector) { painter.afterTo(selector, target); return enhancePainter; },
         "beforeTo": function (selector) { painter.beforeTo(selector, target); return enhancePainter; },
+
+        // 路径
+        "beginPath": function () { path = ""; return enhancePainter; },
+        "closePath": function () { path += "Z"; return enhancePainter; },
+        "moveTo": function (x, y) { path += "M" + x + " " + y; return enhancePainter; },
+        "lineTo": function (x, y) { path += "L" + x + " " + y; return enhancePainter; },
+        "fill": function () {
+            initPath(painter, path).attr("fill", config.fillStyle);
+            return enhancePainter;
+        },
+        "stroke": function () {
+            initPath(painter, path).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
+            return enhancePainter;
+        },
 
         // 文字
         "fillText": function (text, x, y) {

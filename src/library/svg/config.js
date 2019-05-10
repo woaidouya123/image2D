@@ -97,3 +97,10 @@ export let initCircle = function (painter, cx, cy, r) {
     });
     return painter;
 };
+
+// 路径统一设置方法
+export let initPath = function (painter, path) {
+    if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
+    painter.attr('d', path);
+    return painter;
+};
