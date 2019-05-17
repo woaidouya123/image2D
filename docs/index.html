@@ -43,6 +43,29 @@
             ].join('\n'), "color:#721f2d"),
                 console.log("\n\nhttps://github.com/yelloxing/image2D\n\n"));
 
+            // 设置项目研发阶段（正式使用去掉）
+            var canvas = document.createElement("canvas");
+            canvas.setAttribute('width', 300);
+            canvas.setAttribute('height', 200);
+            var painter = canvas.getContext('2d');
+            painter.fillStyle = "rgba(220,220,220,0.8)";
+            painter.font = "30px sans-serif";
+            painter.translate(0, 100);
+            painter.rotate(-Math.PI / 4);
+            painter.textAlign = 'center';
+            painter.textBaseline = 'middle';
+            painter.fillText("alpha 内测阶段", 100, 100);
+            var bgDiv = document.createElement("div");
+            document.getElementsByTagName('body')[0].appendChild(bgDiv);
+            bgDiv.style.backgroundImage = "url(" + canvas.toDataURL() + ")";
+            bgDiv.style.position = 'fixed';
+            bgDiv.style.width = '100vw';
+            bgDiv.style.height = '100vh';
+            bgDiv.style.left = '0';
+            bgDiv.style.top = '0';
+            bgDiv.style.zIndex = 2;
+            bgDiv.style.pointerEvents = 'none';
+
         }
     </script>
     <title>image2D 查询手册</title>
