@@ -1,4 +1,4 @@
-import image2D from '../../../src/export';
+import image2D from '../../../src/image2D';
 
 describe('旋转矩阵', function () {
 

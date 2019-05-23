@@ -61,12 +61,4 @@ image2D.prototype.extend({
 
 });
 
-// 导出接口
-export {
-
-    // 库对象
-    image2D as default,
-    image2D as $$,
-    image2D
-
-};
+export default image2D;

@@ -1,8 +1,8 @@
 {
   "name": "image2d",
-  "version": "0.0.6-dev",
+  "version": "0.0.7-dev",
   "description": "🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.",
-  "main": "src/export.js",
+  "main": "build/export.js",
   "scripts": {
     "start": "npm install && cuf explain",
     "unit": "karma start",
