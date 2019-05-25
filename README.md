@@ -6,7 +6,7 @@
 ### 邮箱:yelloxing@gmail.com
 ****
 
-- 项目处于alpha内部测试阶段，敬请期待，也欢迎加入（如果想试用，可以[点击查看文档](https://yelloxing.github.io/image2D/),接口在alpha阶段未稳定下来，beta开始基本稳定）！
+- 项目处于beta外部测试阶段，敬请期待，也欢迎加入（如果想试用，可以[点击查看文档](https://yelloxing.github.io/image2D/),接口在alpha阶段未稳定下来，beta开始基本稳定）！
 
 ### 免责声明
 ------
