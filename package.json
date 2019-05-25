@@ -8,7 +8,8 @@
     "unit": "karma start",
     "babel": "cuf build-babel",
     "ugligy": "cuf build-ugligy",
-    "build": "rollup -c rollup.config.js && npm run babel && npm run ugligy"
+    "build": "rollup -c rollup.config.js && npm run babel && npm run ugligy",
+    "support": "npx browserslist"
   },
   "keywords": [
     "image",
@@ -44,5 +45,12 @@
     "rollup": "^1.8.0",
     "uglify-js": "^3.5.6",
     "watchify": "^3.9.0"
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "ie > 8",
+    "chrome >= 61",
+    "firefox >= 65"
+  ]
 }
