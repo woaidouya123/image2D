@@ -16,7 +16,7 @@ export default function (key, value) {
 };
 
 // 文字统一设置方法
-export let initText = function (painter, config, x, y) {
+export let initText = function (painter, config, x, y, deg) {
     if (!isNode(painter[0])) throw new Error('Target empty!');
     if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
@@ -24,8 +24,9 @@ export let initText = function (painter, config, x, y) {
     painter.attr('dy', {
         "top": config['font-size'] * 0.5,
         "middle": 0,
-        "bottom": -config['font-size'] * 0.5
-    }[config.textBaseline]);
+        "bottom": -config['font-size'] * 0.5,
+    }[config.textBaseline])
+        .attr("transform", "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")");
 
     return painter.css({
 

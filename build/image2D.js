@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 0.0.7-dev
+    * version 0.1.0-beta
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu May 23 2019 21:40:58 GMT+0800 (GMT+08:00)
+    * Date:Sun May 26 2019 01:24:10 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1421,11 +1421,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
 
             // 文字
-            "fillText": function fillText(text, x, y) {
-                initText(painter, _config2).fillText(text, x, y);return enhancePainter;
+            "fillText": function fillText(text, x, y, deg) {
+                painter.save();
+                painter.beginPath();
+                painter.translate(x, y);
+                painter.rotate(deg || 0);
+                initText(painter, _config2).fillText(text, 0, 0);
+                painter.restore();
+                return enhancePainter;
             },
-            "strokeText": function strokeText(text, x, y) {
-                initText(painter, _config2).strokeText(text, x, y);return enhancePainter;
+            "strokeText": function strokeText(text, x, y, deg) {
+                painter.save();
+                painter.beginPath();
+                painter.translate(x, y);
+                painter.rotate(deg || 0);
+                initText(painter, _config2).strokeText(text, 0, 0);
+                painter.restore();
+                return enhancePainter;
             },
 
             // 路径
@@ -1498,7 +1510,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return value;
     }
     // 文字统一设置方法
-    var initText$1 = function initText$1(painter, config, x, y) {
+    var initText$1 = function initText$1(painter, config, x, y, deg) {
         if (!isNode(painter[0])) throw new Error('Target empty!');
         if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
@@ -1507,7 +1519,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "top": config['font-size'] * 0.5,
             "middle": 0,
             "bottom": -config['font-size'] * 0.5
-        }[config.textBaseline]);
+        }[config.textBaseline]).attr("transform", "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")");
 
         return painter.css({
 
@@ -1643,12 +1655,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
 
             // 文字
-            "fillText": function fillText(text, x, y) {
-                initText$1(painter, _config3, x, y).attr("fill", _config3.fillStyle)[0].textContent = text;
+            "fillText": function fillText(text, x, y, deg) {
+                initText$1(painter, _config3, x, y, deg || 0).attr("fill", _config3.fillStyle)[0].textContent = text;
                 return enhancePainter;
             },
-            "strokeText": function strokeText(text, x, y) {
-                initText$1(painter, _config3, x, y).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
+            "strokeText": function strokeText(text, x, y, deg) {
+                initText$1(painter, _config3, x, y, deg || 0).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
             },
 

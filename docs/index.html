@@ -54,7 +54,7 @@
             painter.rotate(-Math.PI / 4);
             painter.textAlign = 'center';
             painter.textBaseline = 'middle';
-            painter.fillText("alpha 内测阶段", 100, 100);
+            painter.fillText("beta 外测阶段", 100, 100);
             var bgDiv = document.createElement("div");
             document.getElementsByTagName('body')[0].appendChild(bgDiv);
             bgDiv.style.backgroundImage = "url(" + canvas.toDataURL() + ")";
@@ -410,11 +410,11 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');</pre>
             上面说明的绘图方法都是具体画笔特有的（因为不同的画笔存在差异），除此之外，大部分方法是通用的。
         </p>
 
-        <p>在点(x, y)处绘制填充的文字text：</p>
-        <pre class='prettyprint lang-js'>painter.fillText(text, x, y);</pre>
+        <p>在点(x, y)处绘制填充的文字text；deg表示文字旋转角度，可选：</p>
+        <pre class='prettyprint lang-js'>painter.fillText(text, x, y[, deg]);</pre>
 
-        <p>在点(x, y)处绘制轮廓的文字text：</p>
-        <pre class='prettyprint lang-js'>painter.strokeText(text, x, y);</pre>
+        <p>在点(x, y)处绘制轮廓的文字text；deg表示文字旋转角度，可选：</p>
+        <pre class='prettyprint lang-js'>painter.strokeText(text, x, y[, deg]);</pre>
 
         <p>以(cx, cy)为圆心，内外半径分别是r1和r2，从弧度beginDeg开始，跨越弧度deg，绘制填充圆弧：</p>
         <pre class='prettyprint lang-js'>painter.fillArc(cx, cy, r1, r2, beginDeg, deg);</pre>

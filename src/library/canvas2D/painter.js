@@ -33,8 +33,24 @@ export default function (canvas) {
         },
 
         // 文字
-        "fillText": function (text, x, y) { initText(painter, config).fillText(text, x, y); return enhancePainter; },
-        "strokeText": function (text, x, y) { initText(painter, config).strokeText(text, x, y); return enhancePainter; },
+        "fillText": function (text, x, y, deg) {
+            painter.save();
+            painter.beginPath();
+            painter.translate(x, y);
+            painter.rotate(deg || 0);
+            initText(painter, config).fillText(text, 0, 0);
+            painter.restore();
+            return enhancePainter;
+        },
+        "strokeText": function (text, x, y, deg) {
+            painter.save();
+            painter.beginPath();
+            painter.translate(x, y);
+            painter.rotate(deg || 0);
+            initText(painter, config).strokeText(text, 0, 0);
+            painter.restore();
+            return enhancePainter;
+        },
 
         // 路径
         "beginPath": function () { painter.beginPath(); return enhancePainter; },

@@ -29,7 +29,7 @@ export default function (target, selector) {
     };
 
     // 路径(和canvas2D的类似)
-    let path="";
+    let path = "";
 
     // 画笔
     let enhancePainter = {
@@ -66,12 +66,12 @@ export default function (target, selector) {
         },
 
         // 文字
-        "fillText": function (text, x, y) {
-            initText(painter, config, x, y).attr("fill", config.fillStyle)[0].textContent = text;
+        "fillText": function (text, x, y, deg) {
+            initText(painter, config, x, y, deg || 0).attr("fill", config.fillStyle)[0].textContent = text;
             return enhancePainter;
         },
-        "strokeText": function (text, x, y) {
-            initText(painter, config, x, y).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
+        "strokeText": function (text, x, y, deg) {
+            initText(painter, config, x, y, deg || 0).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
             return enhancePainter;
         },
 
