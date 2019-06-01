@@ -6,7 +6,7 @@
 ### 邮箱:yelloxing@gmail.com
 ****
 
-- 项目处于beta外部测试阶段，如果使用遇到问题，请在[issue](https://github.com/yelloxing/image2D/issues)中提出！
+- 项目处于beta外部测试阶段，如果使用遇到问题或好的建议，请在[issue](https://github.com/yelloxing/image2D/issues)中提出！
 
 如何使用？
 --------------------------------------
