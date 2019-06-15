@@ -8,7 +8,10 @@ import image2D from '../library/core';
  * @param {string|dom|array|function|image2D} selector 选择器，必输
  * @param {dom} context 查找上下文，必输
  * @return {array|image2D} 结点数组
- * 特别注意：id选择器或者传入的是维护的结点，查找上下文会被忽略
+ *
+ * 特别注意：
+ *  1.id选择器或者传入的是维护的结点，查找上下文会被忽略
+ *  2.如果selector传入的是一个字符串模板，context可选，其表示模板类型
  */
 export default function (selector, context) {
 
@@ -18,7 +21,7 @@ export default function (selector, context) {
 
         // 如果以'<'开头表示是字符串模板
         if (/^</.test(selector)) {
-            let node = toNode(selector);
+            let node = toNode(selector, context);
             if (isNode(node)) return [node];
             else return [];
         }

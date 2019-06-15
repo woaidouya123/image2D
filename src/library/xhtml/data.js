@@ -53,14 +53,14 @@ export let data = function (datas, calcback) {
 
 // 把过滤出来多于结点的数据部分变成结点返回
 // 需要传递一个字符串来标明新创建元素是什么
-export let enter = function (template) {
+export let enter = function (template,type) {
 
     if (!this.__enter__ || this.__enter__.constructor !== Array)
         throw new Error('Not a data node object to be balanced!');
 
     let temp = [];
     for (let i = 0; i < this.__enter__.length; i++) {
-        temp[i] = toNode(template);
+        temp[i] = toNode(template,type);
         temp[i].__data__ = this.__enter__[i];
     }
 
