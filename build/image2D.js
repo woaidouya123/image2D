@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.0.0
+    * version 1.0.1
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sat Jun 15 2019 13:16:05 GMT+0800 (GMT+08:00)
+    * Date:Tue Jun 18 2019 14:28:05 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -169,23 +169,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var mark = /<([^>]+)>.*/.exec(template)[1];
 
-        // 特殊和常见标签固定上下文
-        if (type !== 'svg' && type !== 'SVG' && [
-
-        // 画布
-        "canvas",
-
-        // 布局标签
-        "div", "span", "p",
-
-        // 标题
-        "h1", "h2", "h3", "h4", "h5", "h6",
-
-        // 表单
-        "form", "input", "button", "textarea", "label",
-
-        // 表格
-        "table", "thead", "tbody", "tr", "td", "th"].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
+        // 除了画布canvas，其余默认svg标签
+        if ("canvas" === mark.toLowerCase()) type = 'HTML';
 
         return toNode(template, type);
     }

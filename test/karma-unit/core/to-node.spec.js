@@ -6,7 +6,7 @@ describe('字符串模板变成结点', function () {
     it('HTML模板', function () {
 
         expect(toNode('<canvas>').namespaceURI).toEqual(NAMESPACE.xhtml);
-        expect(toNode('<div>').namespaceURI).toEqual(NAMESPACE.xhtml);
+        expect(toNode('<div>', 'html').namespaceURI).toEqual(NAMESPACE.xhtml);
 
     });
 

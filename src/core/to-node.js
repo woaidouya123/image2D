@@ -35,25 +35,8 @@ export default function (template, type) {
 
     let mark = /<([^>]+)>.*/.exec(template)[1];
 
-    // 特殊和常见标签固定上下文
-    if (type !== 'svg' && type !== 'SVG' && [
-
-        // 画布
-        "canvas",
-
-        // 布局标签
-        "div", "span", "p",
-
-        // 标题
-        "h1", "h2", "h3", "h4", "h5", "h6",
-
-        // 表单
-        "form", "input", "button", "textarea", "label",
-
-        // 表格
-        "table", "thead", "tbody", "tr", "td", "th"
-
-    ].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
+    // 除了画布canvas，其余默认svg标签
+    if ("canvas" === mark.toLowerCase()) type = 'HTML';
 
     return toNode(template, type);
 };
