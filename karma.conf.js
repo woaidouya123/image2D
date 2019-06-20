@@ -1,4 +1,18 @@
 module.exports = function (config) {
+
+    var configuration = {
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        },
+    };
+
+    if (process.env.TRAVIS) {
+        configuration.browsers = ['Chrome_travis_ci'];
+    }
+
     config.set({
 
         basePath: './',
@@ -51,13 +65,13 @@ module.exports = function (config) {
 
 
         // 自启动浏览器
-        browsers: ['Chrome'],
-        // browsers: ['Opera', 'Chrome', 'Firefox', 'Safari'],
+        // browsers: ['Chrome'],
+        browsers: ['Opera', 'Chrome', 'Firefox', 'Safari'],
 
 
         //  开启或禁用持续集成模式
         //  设置为true, Karma将打开浏览器，执行测试并最后退出
-        singleRun: true,
+        singleRun: false,
 
 
         // 并发级别（启动的浏览器数）
