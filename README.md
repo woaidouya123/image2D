@@ -1,6 +1,8 @@
 # 🍇 image2D
 使用ECMAScript绘制二维图片。📊📈🎉 Drawing Two-Dimensional Pictures Using ECMAScript.
 
+[![travis](https://www.travis-ci.org/yelloxing/image2D.svg?branch=master)](https://www.travis-ci.org/yelloxing/image2D)
+
 ****
 ### 作者:心叶
 ### 邮箱:yelloxing@gmail.com
