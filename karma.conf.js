@@ -1,19 +1,6 @@
 module.exports = function (config) {
 
     var configuration = {
-        customLaunchers: {
-            Chrome_travis_ci: {
-                base: 'Chrome',
-                flags: ['--no-sandbox']
-            }
-        },
-    };
-
-    if (process.env.TRAVIS) {
-        configuration.browsers = ['Chrome_travis_ci'];
-    }
-
-    config.set({
 
         basePath: './',
 
@@ -63,18 +50,30 @@ module.exports = function (config) {
         // 启用或禁用自动检测文件变化进行测试
         autoWatch: true,
 
-
-        // 自启动浏览器
-        // browsers: ['Chrome'],
-        browsers: ['Opera', 'Chrome', 'Firefox', 'Safari'],
-
+        // 并发级别（启动的浏览器数）
+        concurrency: 1,
 
         //  开启或禁用持续集成模式
         //  设置为true, Karma将打开浏览器，执行测试并最后退出
-        singleRun: false,
+        singleRun: true,
 
+        // 自启动浏览器
+        browsers: ['Opera', 'Chrome', 'Firefox', 'Safari']
 
-        // 并发级别（启动的浏览器数）
-        concurrency: Infinity
-    })
+    };
+
+    /**
+     * 针对travis自动化测试，调整参数
+     */
+    if (process.env.TRAVIS) {
+        configuration.customLaunchers = {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        };
+        configuration.browsers = ['Chrome_travis_ci'];
+    }
+
+    config.set(configuration);
 }
