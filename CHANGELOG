@@ -7,3 +7,7 @@ v1.0.1：
     date：2019-06-18
     changes：
       -  模板字符串类型判断调整（只有canvas可以默认，其余html标签必须指定类型）
+v1.0.2：
+    date：2019-06-22
+    changes：
+      -  添加travis.yml集成测试（对应的karma.conf.js进行了调整和优化）
