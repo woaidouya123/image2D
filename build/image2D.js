@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Jun 18 2019 14:28:05 GMT+0800 (GMT+08:00)
+    * Date:Fri Jun 21 2019 23:40:09 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1363,7 +1363,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     // 文字统一设置方法
-    var initText = function initText(painter, config) {
+    var initText = function initText(painter, config, x, y, deg) {
+        painter.beginPath();
+        painter.translate(x, y);
+        painter.rotate(deg);
         painter.font = config['font-size'] + "px " + config['font-family'];
         return painter;
     };
@@ -1427,19 +1430,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 文字
             "fillText": function fillText(text, x, y, deg) {
                 painter.save();
-                painter.beginPath();
-                painter.translate(x, y);
-                painter.rotate(deg || 0);
-                initText(painter, _config2).fillText(text, 0, 0);
+                initText(painter, _config2, x, y, deg || 0).fillText(text, 0, 0);
                 painter.restore();
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y, deg) {
                 painter.save();
-                painter.beginPath();
-                painter.translate(x, y);
-                painter.rotate(deg || 0);
-                initText(painter, _config2).strokeText(text, 0, 0);
+                initText(painter, _config2, x, y, deg || 0).strokeText(text, 0, 0);
                 painter.restore();
                 return enhancePainter;
             },
