@@ -33,6 +33,6 @@ import $$ from 'image2d';
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT)
+[MIT](https://github.com/yelloxing/image2D/blob/master/LICENSE)
 
 Copyright (c) 2007-present, yelloxing
