@@ -1,7 +1,10 @@
 import arc from '../calculate/graphic/arc';
 
 // 文字统一设置方法
-export let initText = function (painter, config) {
+export let initText = function (painter, config, x, y, deg) {
+    painter.beginPath();
+    painter.translate(x, y);
+    painter.rotate(deg);
     painter.font = config['font-size'] + "px " + config['font-family'];
     return painter;
 };

@@ -33,5 +33,3 @@ export let isCanvas2D = function (param) {
 export let isArray = function (param) {
     return param && param.constructor === Array;
 };
-
-

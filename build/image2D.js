@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 0.1.1-beta
+    * version 1.0.2
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Wed May 29 2019 21:52:30 GMT+0800 (GMT+08:00)
+    * Date:Sat Jun 22 2019 00:42:27 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -142,7 +142,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var toNode = function toNode(template, type) {
         var frame = void 0,
             childNodes = void 0;
-        if (type === 'HTML') {
+        if (type === 'html' || type === 'HTML') {
             frame = document.createElement("div");
             frame.innerHTML = template;
         } else {
@@ -159,19 +159,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * 变成结点
      * @param {string} template
+     * @param {string} type
      * @return {dom} 返回结点
      */
-    function toNode$1(template) {
+    function toNode$1(template, type) {
 
         // 把传递元素类型和标记进行统一处理
         if (new RegExp("^" + REGEXP.identifier + "$").test(template)) template = "<" + template + "></" + template + ">";
 
-        var node = toNode(template, 'SVG');
-        if (!node || /[A-Z]/.test(node.tagName) || node.tagName === 'canvas') {
-            node = toNode(template, 'HTML');
-        }
+        var mark = /<([^>]+)>.*/.exec(template)[1];
 
-        return node;
+        // 除了画布canvas，其余默认svg标签
+        if ("canvas" === mark.toLowerCase()) type = 'HTML';
+
+        return toNode(template, type);
     }
 
     /**
@@ -179,7 +180,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param {string|dom|array|function|image2D} selector 选择器，必输
      * @param {dom} context 查找上下文，必输
      * @return {array|image2D} 结点数组
-     * 特别注意：id选择器或者传入的是维护的结点，查找上下文会被忽略
+     *
+     * 特别注意：
+     *  1.id选择器或者传入的是维护的结点，查找上下文会被忽略
+     *  2.如果selector传入的是一个字符串模板，context可选，其表示模板类型
      */
     function sizzle(selector, context) {
 
@@ -189,7 +193,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 如果以'<'开头表示是字符串模板
             if (/^</.test(selector)) {
-                var node = toNode$1(selector);
+                var node = toNode$1(selector, context);
                 if (isNode(node)) return [node];else return [];
             }
 
@@ -1257,13 +1261,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // 把过滤出来多于结点的数据部分变成结点返回
     // 需要传递一个字符串来标明新创建元素是什么
-    var enter = function enter(template) {
+    var enter = function enter(template, type) {
 
         if (!this.__enter__ || this.__enter__.constructor !== Array) throw new Error('Not a data node object to be balanced!');
 
         var temp = [];
         for (var i = 0; i < this.__enter__.length; i++) {
-            temp[i] = toNode$1(template);
+            temp[i] = toNode$1(template, type);
             temp[i].__data__ = this.__enter__[i];
         }
 
@@ -1359,7 +1363,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     // 文字统一设置方法
-    var initText = function initText(painter, config) {
+    var initText = function initText(painter, config, x, y, deg) {
+        painter.beginPath();
+        painter.translate(x, y);
+        painter.rotate(deg);
         painter.font = config['font-size'] + "px " + config['font-family'];
         return painter;
     };
@@ -1423,19 +1430,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 文字
             "fillText": function fillText(text, x, y, deg) {
                 painter.save();
-                painter.beginPath();
-                painter.translate(x, y);
-                painter.rotate(deg || 0);
-                initText(painter, _config2).fillText(text, 0, 0);
+                initText(painter, _config2, x, y, deg || 0).fillText(text, 0, 0);
                 painter.restore();
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y, deg) {
                 painter.save();
-                painter.beginPath();
-                painter.translate(x, y);
-                painter.rotate(deg || 0);
-                initText(painter, _config2).strokeText(text, 0, 0);
+                initText(painter, _config2, x, y, deg || 0).strokeText(text, 0, 0);
                 painter.restore();
                 return enhancePainter;
             },

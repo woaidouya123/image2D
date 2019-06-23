@@ -4,12 +4,12 @@
 module.exports = function (cuf, options) {
     cuf.print.log(
         "\n🍇  image2D" +
-        "\n________________________________________________________" +
+        "\n------------------------------------------------------------" +
         "\nDrawing Two-Dimensional Pictures Using ECMAScript." +
         "\n使用ECMAScript绘制二维图片。\n"
     );
     for (let key in options) {
         cuf.print.log(key);
-        cuf.print.warn("$ " + options[key] + "\n");
+        cuf.print.warn("StepByStep:image2D $  " + options[key] + "\n");
     }
 };
