@@ -31,6 +31,12 @@ npm install --save image2d
 import $$ from 'image2d';
 ```
 
+或
+
+```js
+const $$ = require("image2d");
+```
+
 ## License
 
 [MIT](https://github.com/yelloxing/image2D/blob/master/LICENSE)
