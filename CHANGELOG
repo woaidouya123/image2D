@@ -1,13 +1,19 @@
-v1.0.0：
-    date：2019-06-15
-    changes：
+v1.0.0:
+    date:2019-06-15
+    changes:
       -  初始化版本
+      -  ESMAScript6+规范引入（import / export，编译时加载）和script标签全局引入方式
       -  查询文档，常规方法，karma单元测试，用例测试和基准测试
-v1.0.1：
-    date：2019-06-18
-    changes：
+v1.0.1:
+    date:2019-06-18
+    changes:
       -  模板字符串类型判断调整（只有canvas可以默认，其余html标签必须指定类型）
-v1.0.2：
-    date：2019-06-22
-    changes：
+v1.0.2:
+    date:2019-06-22
+    changes:
       -  添加travis.yml集成测试（对应的karma.conf.js进行了调整和优化）
+v1.1.0:
+    date:2019-06-27
+    chagnes:
+      -  添加对CommonJS / AMD规范引入方式的支持（require / exports，运行时加载）
+      -  添加了作者和邮箱信息、代码贡献需知等信息类文件
