@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Jun 27 2019 09:35:36 GMT+0800 (GMT+08:00)
+    * Date:Fri Jun 28 2019 09:44:39 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -145,6 +145,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (type === 'html' || type === 'HTML') {
             frame = document.createElement("div");
             frame.innerHTML = template;
+
+            // 比如tr标签，它应该被tbody或thead包含
+            // 这里容器是div，这类标签无法生成
+            if (!/</.test(frame.innerHTML)) {
+                throw new Error('This template cannot be generated using div as a container:' + template);
+            }
         } else {
             frame = document.createElementNS(NAMESPACE.svg, 'svg');
             // 部分浏览器svg元素没有innerHTML
@@ -178,7 +184,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * 在指定上下文查找结点
      * @param {string|dom|array|function|image2D} selector 选择器，必输
-     * @param {dom} context 查找上下文，必输
+     * @param {dom|'html'|'svg'} context 查找上下文，或标签类型，必输
      * @return {array|image2D} 结点数组
      *
      * 特别注意：
@@ -188,11 +194,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     function sizzle(selector, context) {
 
         // 如果是字符串
-        if (typeof selector === 'string') {
+        // context如果是字符串（应该是'html'或'svg'）表示这是生成结点，也走这条路线
+        if (typeof context == 'string' || typeof selector === 'string') {
             selector = selector.trim().replace(new RegExp(REGEXP.blank, 'g'), '');
 
             // 如果以'<'开头表示是字符串模板
-            if (/^</.test(selector)) {
+            if (typeof context == 'string' || /^</.test(selector)) {
                 var node = toNode$1(selector, context);
                 if (isNode(node)) return [node];else return [];
             }

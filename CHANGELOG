@@ -17,3 +17,7 @@ v1.1.0:
     chagnes:
       -  添加对CommonJS / AMD规范引入方式的支持（require / exports，运行时加载）
       -  添加了作者和邮箱信息、代码贡献需知等信息类文件
+vX.X.X:
+    date:X-X-X
+    chagnes:
+      -  针对toNode生成html结点方法，添加了是否成功判断（比如tr标签，它应该被tbody或thead包含，这里容器是div，这类标签无法生成）

@@ -6,7 +6,7 @@ import image2D from '../library/core';
 /**
  * 在指定上下文查找结点
  * @param {string|dom|array|function|image2D} selector 选择器，必输
- * @param {dom} context 查找上下文，必输
+ * @param {dom|'html'|'svg'} context 查找上下文，或标签类型，必输
  * @return {array|image2D} 结点数组
  *
  * 特别注意：
@@ -16,11 +16,12 @@ import image2D from '../library/core';
 export default function (selector, context) {
 
     // 如果是字符串
-    if (typeof selector === 'string') {
+    // context如果是字符串（应该是'html'或'svg'）表示这是生成结点，也走这条路线
+    if (typeof context == 'string' || typeof selector === 'string') {
         selector = selector.trim().replace(new RegExp(REGEXP.blank, 'g'), '');
 
         // 如果以'<'开头表示是字符串模板
-        if (/^</.test(selector)) {
+        if (typeof context == 'string' || /^</.test(selector)) {
             let node = toNode(selector, context);
             if (isNode(node)) return [node];
             else return [];
