@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Jun 28 2019 23:35:04 GMT+0800 (GMT+08:00)
+    * Date:Fri Jun 28 2019 23:53:12 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1240,6 +1240,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 获取样式
         if (arguments.length <= 1 && (arguments.length <= 0 || _typeof(arguments[0]) !== 'object')) {
             if (this.length <= 0) throw new Error('Target empty!');
+
+            // 为了获取非style定义的样式，需要使用特殊的方法获取
             return getStyle(this[0], arguments[0]);
         }
 
@@ -1399,9 +1401,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param {Event} event
      */
     var position = function position(event) {
+
+        // 返回元素的大小及其相对于视口的位置
         var bounding = this[0].getBoundingClientRect();
+
         if (!event || !event.clientX) throw new Error('Event is necessary!');
         return {
+
+            // 鼠标相对元素位置 = 鼠标相对窗口坐标 - 元素相对窗口坐标
             "x": event.clientX - bounding.left,
             "y": event.clientY - bounding.top
         };
