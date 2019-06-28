@@ -1,9 +1,13 @@
 import image2D from './image2D';
 
-
+// 判断当前环境，如果不是浏览器环境
 if (typeof module === "object" && typeof module.exports === "object") {
     module.exports = image2D;
-} else {
+}
+// 浏览器环境下
+// 因为浏览器下挂载到window对象上
+// 为了防止覆盖，额外提供一个noConflict方法，用以在覆盖的时候恢复
+else {
     let
         // 保存之前的image2D，防止直接覆盖
         _image2D = window.image2D,
