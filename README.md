@@ -41,4 +41,4 @@ const $$ = require("image2d");
 
 [MIT](https://github.com/yelloxing/image2D/blob/master/LICENSE)
 
-Copyright (c) 2007-present, yelloxing
+Copyright (c) 2007-present 走一步 再走一步
