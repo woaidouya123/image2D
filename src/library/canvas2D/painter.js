@@ -5,6 +5,23 @@ export default function (canvas) {
 
     let painter = canvas.getContext("2d");
 
+    // 如果没有针对模糊问题处理
+    if (canvas.__had_scale2_canvas__ !== 'YES') {
+        canvas.__had_scale2_canvas__ = 'YES';
+
+        let width = canvas.clientWidth,//内容+内边距
+            height = canvas.clientHeight;
+
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+
+        canvas.setAttribute('width', width * 2);
+        canvas.setAttribute('height', height * 2);
+
+        // 通过缩放实现0.5px模糊问题
+        painter.scale(2, 2);
+    }
+
     // 默认配置不应该有canvas2D对象已经存在的属性
     // 这里是为了简化或和svg统一接口而自定义的属性
     let config = {

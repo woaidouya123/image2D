@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Jul 05 2019 09:37:56 GMT+0800 (GMT+08:00)
+    * Date:Wed Jul 10 2019 17:45:59 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1489,6 +1489,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var painter = canvas.getContext("2d");
 
+        // 如果没有针对模糊问题处理
+        if (canvas.__had_scale2_canvas__ !== 'YES') {
+            canvas.__had_scale2_canvas__ = 'YES';
+
+            var width = canvas.clientWidth,
+                //内容+内边距
+            height = canvas.clientHeight;
+
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+
+            canvas.setAttribute('width', width * 2);
+            canvas.setAttribute('height', height * 2);
+
+            // 通过缩放实现0.5px模糊问题
+            painter.scale(2, 2);
+        }
+
         // 默认配置不应该有canvas2D对象已经存在的属性
         // 这里是为了简化或和svg统一接口而自定义的属性
         var _config2 = {
@@ -1818,6 +1836,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     // 初始化的图层都可见
                     layer[id] = { "visible": true };
 
+                    // 后期可以考虑使用离线画布offScreenCanvas提高效率
                     layer[id].canvas = document.createElement('canvas');
                     // 设置大小才会避免莫名其妙的错误
                     layer[id].canvas.setAttribute('width', width);
