@@ -6,23 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>0.5Px模糊问题</title>
+
+    <script>
+        function drawerImage(ctx) {
+
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(10, 10, 180, 180);
+
+            ctx.beginPath();
+            ctx.moveTo(20, 20);
+            ctx.lineTo(100, 160);
+            ctx.lineTo(180, 20);
+            ctx.stroke();
+
+        }
+    </script>
 </head>
 
 <body>
 
-    <canvas width="400" height="400" id="canvas" style="width:200px;height:200px"></canvas>
+    <span>SVG绘图效果</span>
+    <svg width="200" height="200">
+        <rect x='10' y='10' width='180' height='180' fill='none' stroke='#000'></rect>
+        <path d="M20,20L100,160L180,20" fill='none' stroke='#000'></path>
+    </svg>
+
+    <span>优化后方案</span>
+    <canvas width="400" height="400" id="canvas1" style="width:200px;height:200px"></canvas>
     <script>
 
-        var canvas = document.getElementById('canvas');
+        var canvas = document.getElementById('canvas1');
         var ctx = canvas.getContext('2d');
         ctx.scale(2, 2);
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(10, 10, 100, 100);
+
+        drawerImage(ctx);
 
     </script>
 
+    <span>原始效果</span>
+    <canvas width="200" height="200" id="canvas2"></canvas>
+    <script>
 
+        var canvas = document.getElementById('canvas2');
+        var ctx = canvas.getContext('2d');
+
+        drawerImage(ctx);
+
+    </script>
 
 </body>
 
