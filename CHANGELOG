@@ -24,4 +24,4 @@ v1.1.1:
 vX.X.X：
     date：X-X-X
     chagnes：
-      -  针对canvas画线条模糊问题进行修复
+      -  针对canvas画线条模糊问题进行修复(固定放大二倍绘图区域)
