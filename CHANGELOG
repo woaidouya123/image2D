@@ -21,7 +21,7 @@ v1.1.1:
     date:2019-07-05
     chagnes:
       -  针对toNode生成html结点方法，添加了是否成功判断（比如tr标签，它应该被tbody或thead包含，这里容器是div，这类标签无法生成）
-vX.X.X：
-    date：X-X-X
+v1.1.3:
+    date：2019-07-11
     chagnes：
       -  针对canvas画线条模糊问题进行修复(固定放大二倍绘图区域)
