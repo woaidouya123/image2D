@@ -1,5 +1,5 @@
 import image2D from '../core';
-import normalConfig, { initText, initArc, initCircle, initPath } from './config';
+import normalConfig, { initText, initArc, initCircle, initPath, initRect } from './config';
 
 export default function (target, selector) {
 
@@ -91,6 +91,14 @@ export default function (target, selector) {
         },
         "strokeCircle": function (cx, cy, r) {
             initCircle(painter, cx, cy, r).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
+        },
+
+        // 矩形
+        "fillRect": function (x, y, width, height) {
+            initRect(painter, x, y, width, height).attr("fill", config.fillStyle); return enhancePainter;
+        },
+        "strokeRect": function (x, y, width, height) {
+            initRect(painter, x, y, width, height).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
         }
 
     };

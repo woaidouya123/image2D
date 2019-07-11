@@ -1,8 +1,9 @@
-import { initText, initArc, initCircle } from './config';
+import { initText, initArc, initCircle, initRect } from './config';
 
 // 加强版本的画笔
 export default function (canvas) {
 
+    // 获取canvas2D画笔
     let painter = canvas.getContext("2d");
 
     // 如果没有针对模糊问题处理
@@ -12,9 +13,11 @@ export default function (canvas) {
         let width = canvas.clientWidth,//内容+内边距
             height = canvas.clientHeight;
 
+        // 设置显示大小
         canvas.style.width = width + "px";
         canvas.style.height = height + "px";
 
+        // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
         canvas.setAttribute('width', width * 2);
         canvas.setAttribute('height', height * 2);
 
@@ -25,10 +28,10 @@ export default function (canvas) {
     // 默认配置不应该有canvas2D对象已经存在的属性
     // 这里是为了简化或和svg统一接口而自定义的属性
     let config = {
-        "font-size": "16",
-        "font-family": "sans-serif",
-        "arc-start-cap": "butt",
-        "arc-end-cap": "butt"
+        "font-size": "16", // 文字大小
+        "font-family": "sans-serif", // 字体
+        "arc-start-cap": "butt", // 弧开始闭合方式
+        "arc-end-cap": "butt" // 弧结束闭合方式
     };
 
     // 画笔
@@ -94,6 +97,14 @@ export default function (canvas) {
         },
         "strokeCircle": function (cx, cy, r) {
             initCircle(painter, cx, cy, r).stroke(); return enhancePainter;
+        },
+
+        // 矩形
+        "fillRect": function (x, y, width, height) {
+            initRect(painter, x, y, width, height).fill(); return enhancePainter;
+        },
+        "strokeRect": function (x, y, width, height) {
+            initRect(painter, x, y, width, height).stroke(); return enhancePainter;
         }
 
     };
