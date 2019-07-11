@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.0.2
+    * version 1.1.3
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sat Jun 22 2019 00:42:27 GMT+0800 (GMT+08:00)
+    * Date:Thu Jul 11 2019 17:52:51 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -145,6 +145,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (type === 'html' || type === 'HTML') {
             frame = document.createElement("div");
             frame.innerHTML = template;
+
+            // 比如tr标签，它应该被tbody或thead包含
+            // 这里容器是div，这类标签无法生成
+            if (!/</.test(frame.innerHTML)) {
+                throw new Error('This template cannot be generated using div as a container:' + template);
+            }
         } else {
             frame = document.createElementNS(NAMESPACE.svg, 'svg');
             // 部分浏览器svg元素没有innerHTML
@@ -178,7 +184,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * 在指定上下文查找结点
      * @param {string|dom|array|function|image2D} selector 选择器，必输
-     * @param {dom} context 查找上下文，必输
+     * @param {dom|'html'|'svg'} context 查找上下文，或标签类型，必输
      * @return {array|image2D} 结点数组
      *
      * 特别注意：
@@ -188,11 +194,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     function sizzle(selector, context) {
 
         // 如果是字符串
-        if (typeof selector === 'string') {
+        // context如果是字符串（应该是'html'或'svg'）表示这是生成结点，也走这条路线
+        if (typeof context == 'string' || typeof selector === 'string') {
             selector = selector.trim().replace(new RegExp(REGEXP.blank, 'g'), '');
 
             // 如果以'<'开头表示是字符串模板
-            if (/^</.test(selector)) {
+            if (typeof context == 'string' || /^</.test(selector)) {
                 var node = toNode$1(selector, context);
                 if (isNode(node)) return [node];else return [];
             }
@@ -274,21 +281,89 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                             }
     }
 
+    /**
+     * 设计需求是：
+     * image2D和image2D(selector[, context])
+     * 分别表示绘图类和绘图对象
+     *
+     * 题外：为什么不选择image2D和new image2D(selector[, context])?
+     * 只是感觉没有前面的写法用起来简洁
+     *
+     * 为了实现需求，第一反应是：
+     * let image2D=function(selector,context){
+     *      return new image2D();
+     * };
+     *
+     * 在image2D上挂载静态方法，在image2D.prototype上挂载对象方法，
+     * 看起来稳的很，其实这明显是一个死循环。
+     *
+     * 为了解决这个问题，我们在image2D的原型上定义了一个方法：
+     * image2D.prototype.init=function(selector,context){
+     *      return this;
+     * };
+     *
+     *  执行下面的方法：
+     *  let temp=image2D.prototype.init(selector, context);
+     *  上面返回的temp很明显就是image2D.prototype，其实就是image2D对象
+     * （例如：new A()，其实就是取A.prototype，这样对比就很好理解了）
+     *
+     * 因此可以改造代码如下：
+     *
+     * 这样image2D和new image2D(selector[, context])就分别表示类和对象。
+     *
+     * 问：看起来是不是实现了？
+     * 答：是的，实现了。
+     * 问：可是总感觉有点不好，说不出为什么。
+     * 答：是不是感觉image2D()打印出来的东西有点多？
+     * 问：是的。
+     *
+     * 事实上，因为直接取image2D.prototype作为new image2D(),
+     * 理论上说，使用上区别不大，唯一不足的是，
+     * 挂载在image2D.prototype上的方法会在打印image2D对象的时候看见，不舒服。
+     *
+     * 为了看起来好看些，代码再次改造：
+     * let image2D = function (selector, context) {
+     *      return new image2D.prototype.init(selector, context);
+     * };
+     *
+     * 为了让image2D(selector, context)返回的是image2D对象，需要修改image2D.prototype.init的原型：
+     * image2D.prototype.init.prototype = image2D.prototype;
+     *
+     * 这样：
+     *      image2D(selector, context) ==
+     *      return new image2D.prototype.init(selector, context) ==
+     *      image2D.prototype.init.prototype ==
+     *      image2D.prototype ==
+     *      new image2D(selector, context)
+     *
+     * 此时需求就实现了，
+     * 而且打印image2D(selector, context)的时候，
+     * 对象上的方法都在原型上，看起来就比较舒服了。
+     */
+
     var image2D = function image2D(selector, context) {
         return new image2D.prototype.init(selector, context);
     };
 
     image2D.prototype.init = function (selector, context) {
+
+        // 如果没有传递，默认使用document作为上下文
         this.context = context = context || document;
+
+        // 使用sizzle获取需要维护的结点，并把结点维护到image2D对象中
         var nodes = sizzle(selector, context),
             flag = void 0;
         for (flag = 0; flag < nodes.length; flag++) {
             this[flag] = nodes[flag];
         }
+
+        // 设置结点个数
         this.length = nodes.length;
         return this;
     };
 
+    // 扩展方法
+    // 在image2D和image2D.prototype上分别调用extend方法就可以在类和对象上扩展方法了
     image2D.prototype.extend = image2D.extend = function () {
 
         var target = arguments[0] || {};
@@ -315,6 +390,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             try {
                 target[key] = source[key];
             } catch (e) {
+
+                // 为什么需要try{}catch(e){}？
+                // 一些对象的特殊属性不允许覆盖，比如name
+                // 执行：image2D.extend({'name':'新名称'})
+                // 会抛出TypeError
                 throw new Error("Illegal property value！");
             }
         }
@@ -1160,6 +1240,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 获取样式
         if (arguments.length <= 1 && (arguments.length <= 0 || _typeof(arguments[0]) !== 'object')) {
             if (this.length <= 0) throw new Error('Target empty!');
+
+            // 为了获取非style定义的样式，需要使用特殊的方法获取
             return getStyle(this[0], arguments[0]);
         }
 
@@ -1319,9 +1401,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param {Event} event
      */
     var position = function position(event) {
+
+        // 返回元素的大小及其相对于视口的位置
         var bounding = this[0].getBoundingClientRect();
+
         if (!event || !event.clientX) throw new Error('Event is necessary!');
         return {
+
+            // 鼠标相对元素位置 = 鼠标相对窗口坐标 - 元素相对窗口坐标
             "x": event.clientX - bounding.left,
             "y": event.clientY - bounding.top
         };
@@ -1397,18 +1484,46 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    // 画矩形统一设置方法
+    var initRect = function initRect(painter, x, y, width, height) {
+        painter.beginPath();
+        painter.rect(x, y, width, height);
+        return painter;
+    };
+
     // 加强版本的画笔
     function painter_canvas2D(canvas) {
 
+        // 获取canvas2D画笔
         var painter = canvas.getContext("2d");
+
+        // 如果没有针对模糊问题处理
+        if (canvas.__had_scale2_canvas__ !== 'YES') {
+            canvas.__had_scale2_canvas__ = 'YES';
+
+            var width = canvas.clientWidth,
+                //内容+内边距
+            height = canvas.clientHeight;
+
+            // 设置显示大小
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+
+            // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
+            canvas.setAttribute('width', width * 2);
+            canvas.setAttribute('height', height * 2);
+
+            // 通过缩放实现模糊问题
+            painter.scale(2, 2);
+        }
 
         // 默认配置不应该有canvas2D对象已经存在的属性
         // 这里是为了简化或和svg统一接口而自定义的属性
         var _config2 = {
-            "font-size": "16",
-            "font-family": "sans-serif",
-            "arc-start-cap": "butt",
-            "arc-end-cap": "butt"
+            "font-size": "16", // 文字大小
+            "font-family": "sans-serif", // 字体
+            "arc-start-cap": "butt", // 弧开始闭合方式
+            "arc-end-cap": "butt" // 弧结束闭合方式
         };
 
         // 画笔
@@ -1490,6 +1605,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeCircle": function strokeCircle(cx, cy, r) {
                 initCircle(painter, cx, cy, r).stroke();return enhancePainter;
+            },
+
+            // 矩形
+            "fillRect": function fillRect(x, y, width, height) {
+                initRect(painter, x, y, width, height).fill();return enhancePainter;
+            },
+            "strokeRect": function strokeRect(x, y, width, height) {
+                initRect(painter, x, y, width, height).stroke();return enhancePainter;
             }
 
         };
@@ -1569,6 +1692,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var initPath = function initPath(painter, path) {
         if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
         painter.attr('d', path);
+        return painter;
+    };
+
+    // 画矩形统一设置方法
+    var initRect$1 = function initRect$1(painter, x, y, width, height) {
+        if (painter[0].nodeName.toLowerCase() !== 'rect') throw new Error('Need a <rect> !');
+        painter.attr({
+            "x": x,
+            "y": y,
+            "width": width,
+            "height": height
+        });
         return painter;
     };
 
@@ -1681,6 +1816,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeCircle": function strokeCircle(cx, cy, r) {
                 initCircle$1(painter, cx, cy, r).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
+            },
+
+            // 矩形
+            "fillRect": function fillRect(x, y, width, height) {
+                initRect$1(painter, x, y, width, height).attr("fill", _config3.fillStyle);return enhancePainter;
+            },
+            "strokeRect": function strokeRect(x, y, width, height) {
+                initRect$1(painter, x, y, width, height).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
             }
 
         };
@@ -1692,6 +1835,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // 负责启动具体的绘图对象
     function painter() {
 
+        // 因为绘图画布是必须的，因此在判断画布类型前，如果压根没有结点，肯定是非法的
         if (!isNode(this[0])) throw new Error('Target empty!');
 
         var target = this[0],
@@ -1730,6 +1874,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     // 初始化的图层都可见
                     layer[id] = { "visible": true };
 
+                    // 后期可以考虑使用离线画布offScreenCanvas提高效率
                     layer[id].canvas = document.createElement('canvas');
                     // 设置大小才会避免莫名其妙的错误
                     layer[id].canvas.setAttribute('width', width);
@@ -1822,39 +1967,44 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     });
 
+    // 判断当前环境，如果不是浏览器环境
     if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
         module.exports = image2D;
-    } else {
-        var
-        // 保存之前的image2D，防止直接覆盖
-        _image2D = window.image2D,
-
-
-        // 保存之前的$$，防止直接覆盖
-        _$$ = window.$$;
-
-        image2D.noConflict = function (deep) {
-
-            // 如果当前的$$是被最新的image2D覆盖的
-            // 恢复之前的
-            if (window.$$ === image2D) {
-                window.$$ = _$$;
-            }
-
-            // 如果当前的image2D是被最新的image2D覆盖的
-            // 且标记需要恢复
-            // 恢复之前的
-            if (deep && window.image2D === image2D) {
-                window.image2D = _image2D;
-            }
-
-            // 返回当前image2D
-            // 因为调用这个方法以后
-            // 全局window下的image2D和$$是什么
-            // 已经不一定了
-            return image2D;
-        };
-        // 挂载库对象到根
-        window.image2D = window.$$ = image2D;
     }
+    // 浏览器环境下
+    // 因为浏览器下挂载到window对象上
+    // 为了防止覆盖，额外提供一个noConflict方法，用以在覆盖的时候恢复
+    else {
+            var
+            // 保存之前的image2D，防止直接覆盖
+            _image2D = window.image2D,
+
+
+            // 保存之前的$$，防止直接覆盖
+            _$$ = window.$$;
+
+            image2D.noConflict = function (deep) {
+
+                // 如果当前的$$是被最新的image2D覆盖的
+                // 恢复之前的
+                if (window.$$ === image2D) {
+                    window.$$ = _$$;
+                }
+
+                // 如果当前的image2D是被最新的image2D覆盖的
+                // 且标记需要恢复
+                // 恢复之前的
+                if (deep && window.image2D === image2D) {
+                    window.image2D = _image2D;
+                }
+
+                // 返回当前image2D
+                // 因为调用这个方法以后
+                // 全局window下的image2D和$$是什么
+                // 已经不一定了
+                return image2D;
+            };
+            // 挂载库对象到根
+            window.image2D = window.$$ = image2D;
+        }
 })();

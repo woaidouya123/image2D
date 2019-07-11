@@ -23,6 +23,7 @@ export default function () {
                 // 初始化的图层都可见
                 layer[id] = { "visible": true };
 
+                // 后期可以考虑使用离线画布offScreenCanvas提高效率
                 layer[id].canvas = document.createElement('canvas');
                 // 设置大小才会避免莫名其妙的错误
                 layer[id].canvas.setAttribute('width', width);

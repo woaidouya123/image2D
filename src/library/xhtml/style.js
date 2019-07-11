@@ -12,6 +12,8 @@ export default function () {
     // 获取样式
     if (arguments.length <= 1 && (arguments.length <= 0 || typeof arguments[0] !== 'object')) {
         if (this.length <= 0) throw new Error('Target empty!');
+
+        // 为了获取非style定义的样式，需要使用特殊的方法获取
         return getStyle(this[0], arguments[0]);
     }
 

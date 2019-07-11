@@ -7,36 +7,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="../../../docs/image2D.png">
     <script src="../../../build/image2D.js"></script>
-    <title>image2D - 用例测试 - path路径</title>
+    <title>image2D - 用例测试 - rect矩形</title>
 </head>
 
 <body>
     <script>
 
         // 准备画布
-        var svg = $$('<svg></svg>').attr({
+        var canvas = $$('<canvas>非常抱歉，您的浏览器不支持canvas!</canvas>').attr({
             "width": 400,
             "height": 200
         }).appendTo('body');
 
         // 获取并配置画笔
-        var painter = svg.painter().config({
-            "strokeStyle": "red",
-            "lineWidth": 1
-        });
+        var painter = canvas.painter();
 
         /**
          * 测试开始
          * ----------------------------
          */
 
-        painter.bind("<path>")
-            .beginPath()
-            .moveTo(50, 50)
-            .lineTo(200, 50).lineTo(300, 100).lineTo(150, 150).lineTo(100, 200)
-            .closePath()
-            .stroke()
-            .appendTo(svg);
+        painter.strokeRect(10, 10, 80, 180);
+        painter.fillRect(100, 10, 290, 180);
 
     </script>
 </body>

@@ -47,3 +47,10 @@ export let initCircle = function (painter, cx, cy, r) {
     painter.arc(cx, cy, r, 0, Math.PI * 2);
     return painter;
 };
+
+// 画矩形统一设置方法
+export let initRect = function (painter, x, y, width, height) {
+    painter.beginPath();
+    painter.rect(x, y, width, height);
+    return painter;
+};

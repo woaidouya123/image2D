@@ -3,6 +3,7 @@ import image2D from './library/core';
 /**
  * 挂载静态方法
  * -------------------
+ * 这里挂载的方法可以通过image2D.XXX()形式直接调用
  */
 import treeLayout from './library/layout/tree';
 import Matrix4 from './library/Matrix4/index';
@@ -31,6 +32,12 @@ image2D.extend({
 /**
  * 挂载对象方法
  * -------------------
+ * 为了使用这里的方法，首先需要建立image2D对象：
+ *      let imageObject=image2D(selector);
+ * 然后在对象上就可以调用下面的方法了：
+ *      imageObject.XXX()
+ * image2D对象上调用的方法和静态方法的区别在于
+ * 后者只是单纯的方法，前者是针对image2D对象维护的结点进行操作
  */
 import { appendTo, prependTo, afterTo, beforeTo, remove, filter, text } from './library/xhtml/dom';
 import style from './library/xhtml/style';

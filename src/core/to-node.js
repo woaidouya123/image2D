@@ -11,6 +11,12 @@ let toNode = function (template, type) {
     if (type === 'html' || type === 'HTML') {
         frame = document.createElement("div");
         frame.innerHTML = template;
+
+        // 比如tr标签，它应该被tbody或thead包含
+        // 这里容器是div，这类标签无法生成
+        if (!/</.test(frame.innerHTML)) {
+            throw new Error('This template cannot be generated using div as a container:' + template);
+        }
     } else {
         frame = document.createElementNS(NAMESPACE.svg, 'svg');
         // 部分浏览器svg元素没有innerHTML

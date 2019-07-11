@@ -1,3 +1,1 @@
-image2D is a [Image Foundation](https://github.com/image-foundation) project and subscribes to its code of conduct.
-
-It is available at https://github.com/image-foundation.
+image2D是一个用于Web端绘图的ES库，这是一个开源项目，任何人都可以提出建议或参与其中，我们保留贡献者正当的权益。
