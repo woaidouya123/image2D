@@ -15,11 +15,11 @@ export default function (canvas) {
         canvas.style.width = width + "px";
         canvas.style.height = height + "px";
 
-        canvas.setAttribute('width', width * 2);
-        canvas.setAttribute('height', height * 2);
+        canvas.setAttribute('width', width * 6);
+        canvas.setAttribute('height', height * 6);
 
-        // 通过缩放实现0.5px模糊问题
-        painter.scale(2, 2);
+        // 通过缩放实现模糊问题
+        painter.scale(6, 6);
     }
 
     // 默认配置不应该有canvas2D对象已经存在的属性
