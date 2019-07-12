@@ -9,7 +9,7 @@
 > 本项目前身是[clay.js](https://github.com/yelloxing/clay-core)系列项目，基于现实原因，重新建立，原有项目停止更新但不会删除，请知悉！
 
 ## Documentation
-使用中可以访问[在线接口文档](https://yelloxing.github.io/image2D/)，如果想参与进来，可以访问[开发需知](https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md)，如果有改进意见，可以点击[RFC](https://github.com/image-foundation/image2D.RFC)。
+使用中可以访问[在线接口文档](https://yelloxing.github.io/image2D/)，如果想参与进来，可以访问[开发需知](https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md)，如果有改进意见，可以点击[RFC](https://github.com/image-foundation/image2D.RFC)进行交流。
 
 ## Issues
 使用的时候遇到任何问题或有好的建议，请点击进入[issue](https://github.com/yelloxing/image2D/issues)！
