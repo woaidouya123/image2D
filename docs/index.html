@@ -422,6 +422,12 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');</pre>
         <p>以(cx, cy)为圆心，半径r绘制轮廓圆形：</p>
         <pre class='prettyprint lang-js'>painter.strokeCircle(cx, cy, r);</pre>
 
+        <p>以(x, y)为左上角，宽width，高height绘制填充矩形：</p>
+        <pre class='prettyprint lang-js'>painter.fillRect(x, y, width, height);</pre>
+
+        <p>以(x, y)为左上角，宽width，高height绘制轮廓矩形：</p>
+        <pre class='prettyprint lang-js'>painter.strokeRect(x, y, width, height);</pre>
+
         <h6 class="title little">路径</h6>
         <p>
             基于路径可以绘制几乎大部分图形，这里独立一小段来说明。
