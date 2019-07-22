@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Jul 11 2019 10:54:04 GMT+0800 (GMT+08:00)
+    * Date:Thu Jul 11 2019 17:52:51 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1484,9 +1484,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    // 画矩形统一设置方法
+    var initRect = function initRect(painter, x, y, width, height) {
+        painter.beginPath();
+        painter.rect(x, y, width, height);
+        return painter;
+    };
+
     // 加强版本的画笔
     function painter_canvas2D(canvas) {
 
+        // 获取canvas2D画笔
         var painter = canvas.getContext("2d");
 
         // 如果没有针对模糊问题处理
@@ -1497,9 +1505,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 //内容+内边距
             height = canvas.clientHeight;
 
+            // 设置显示大小
             canvas.style.width = width + "px";
             canvas.style.height = height + "px";
 
+            // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
             canvas.setAttribute('width', width * 2);
             canvas.setAttribute('height', height * 2);
 
@@ -1510,10 +1520,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 默认配置不应该有canvas2D对象已经存在的属性
         // 这里是为了简化或和svg统一接口而自定义的属性
         var _config2 = {
-            "font-size": "16",
-            "font-family": "sans-serif",
-            "arc-start-cap": "butt",
-            "arc-end-cap": "butt"
+            "font-size": "16", // 文字大小
+            "font-family": "sans-serif", // 字体
+            "arc-start-cap": "butt", // 弧开始闭合方式
+            "arc-end-cap": "butt" // 弧结束闭合方式
         };
 
         // 画笔
@@ -1595,6 +1605,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeCircle": function strokeCircle(cx, cy, r) {
                 initCircle(painter, cx, cy, r).stroke();return enhancePainter;
+            },
+
+            // 矩形
+            "fillRect": function fillRect(x, y, width, height) {
+                initRect(painter, x, y, width, height).fill();return enhancePainter;
+            },
+            "strokeRect": function strokeRect(x, y, width, height) {
+                initRect(painter, x, y, width, height).stroke();return enhancePainter;
             }
 
         };
@@ -1674,6 +1692,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var initPath = function initPath(painter, path) {
         if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
         painter.attr('d', path);
+        return painter;
+    };
+
+    // 画矩形统一设置方法
+    var initRect$1 = function initRect$1(painter, x, y, width, height) {
+        if (painter[0].nodeName.toLowerCase() !== 'rect') throw new Error('Need a <rect> !');
+        painter.attr({
+            "x": x,
+            "y": y,
+            "width": width,
+            "height": height
+        });
         return painter;
     };
 
@@ -1786,6 +1816,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeCircle": function strokeCircle(cx, cy, r) {
                 initCircle$1(painter, cx, cy, r).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
+            },
+
+            // 矩形
+            "fillRect": function fillRect(x, y, width, height) {
+                initRect$1(painter, x, y, width, height).attr("fill", _config3.fillStyle);return enhancePainter;
+            },
+            "strokeRect": function strokeRect(x, y, width, height) {
+                initRect$1(painter, x, y, width, height).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
             }
 
         };

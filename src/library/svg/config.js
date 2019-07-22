@@ -90,3 +90,15 @@ export let initPath = function (painter, path) {
     painter.attr('d', path);
     return painter;
 };
+
+// 画矩形统一设置方法
+export let initRect = function (painter, x, y, width, height) {
+    if (painter[0].nodeName.toLowerCase() !== 'rect') throw new Error('Need a <rect> !');
+    painter.attr({
+        "x": x,
+        "y": y,
+        "width": width,
+        "height": height
+    });
+    return painter;
+};
