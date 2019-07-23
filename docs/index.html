@@ -653,6 +653,23 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');</pre>
             <li>begin-deg,deg:number，开始和跨越弧度（可选，如果类型是circle设置该参数有效）。</li>
         </ul>
 
+        <h4 class="title small">4.5 动画轮询</h4>
+        <p>
+            绘图的时候，为了实现动画效果，你除了可以使用画布或css天然的动画相关属性，还可以使用ES绘制每一帧的方式实现。为了方便你绘制我们提供了下面方法：
+        </p>
+        <pre class='prettyprint lang-js'>var stop=$$.animation(function(deep){
+    // deep取值0-1，表示动画进度
+}, speeds, function(deep){
+    // deep和上面一样，提供的原因是有时候结束回调是stop方法触发而不是动画结束了
+});</pre>
+        <p>
+            该方法有三个参数：分别表示画帧方法、动画时长和动画结束回调（动画时长单位毫秒，最后二个均可选）。
+        </p>
+        <p>
+            如果你希望动画立刻结束，可以调用下面的方法强行提前停止：
+        </p>
+        <pre class='prettyprint lang-js'>stop();</pre>
+
         <h2 class="title big" id='tool'>五.小工具</h2>
         <p>
             因为绘制的时候，比如canvas2D没有图层，某个数据改变可能就意味着需要全部重新绘制等，基于这些考虑，在这一章，对前面进行必要的补充。
