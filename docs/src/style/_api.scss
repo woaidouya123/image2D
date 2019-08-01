@@ -1,0 +1,26 @@
+$navWidth:1rem;
+.api {
+    font-size: 0;
+    &>* {
+        display: inline-block;
+        font-size: .16rem;
+        vertical-align: top;
+    }
+    &>ul {
+        width: $navWidth;
+        padding: .3rem .1rem;
+        &>li {
+            &>a {
+                width: 100%;
+                display: inline-block;
+                text-align: right;
+                line-height: 2em;
+                color: rgb(24, 19, 19);
+            }
+        }
+    }
+    &>div {
+        width: calc(100% - #{$navWidth});
+        padding: .1rem;
+    }
+}
