@@ -1,0 +1,38 @@
+body {
+    &>* {
+        width: 11rem;
+        margin: auto;
+    }
+    &>header {
+        --distance: .5rem;
+        --color: rgb(113, 30, 50);
+        * {
+            display: inline-block;
+        }
+        position: relative;
+        line-height: .6rem;
+        color:var(--color);
+        border-bottom: 1px solid var(--color);
+        padding-left:var(--distance);
+        h2 {
+            font-size: .2rem;
+            font-family: fantasy;
+            background-image: url('../assets/image2D.png');
+            background-position: left center;
+            background-size: .3rem auto;
+            background-repeat: no-repeat;
+            padding-left: .4rem;
+        }
+        ul {
+            padding-right: var(--distance);
+            position: absolute;
+            right: 0;
+            li {
+                padding: 0 .05rem;
+                font-size: .12rem;
+                cursor: pointer;
+            }
+        }
+    }
+    &>footer {}
+}
