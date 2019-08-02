@@ -4,15 +4,29 @@ body {
         margin: auto;
     }
     &>header {
+        &>.github {
+            position: fixed;
+            transform: rotate(45deg);
+            top: .6rem;
+            line-height: 1.6em;
+            right: -.6rem;
+            background-color: #ac2c23;
+            outline: .04rem solid #ac2c23;
+            transform-origin: 1.5rem .23rem;
+            border: .02rem dashed #d14742;
+            width: 3rem;
+            text-align: center;
+            color: #ebdbd9;
+            font-family: sans-serif;
+        }
         --distance: .5rem;
-        --color: rgb(113, 30, 50);
         * {
             display: inline-block;
         }
         position: relative;
         line-height: .6rem;
-        color:var(--color);
-        border-bottom: 1px solid var(--color);
+        color:$color;
+        border-bottom: 1px solid $color;
         padding-left:var(--distance);
         h2 {
             font-size: .2rem;
@@ -31,6 +45,12 @@ body {
                 padding: 0 .05rem;
                 font-size: .12rem;
                 cursor: pointer;
+                &[active='yes'] {
+                    color: rgb(241, 12, 12);
+                }
+                &[active='no'] {
+                    color: rgb(167, 160, 160);
+                }
             }
         }
     }
