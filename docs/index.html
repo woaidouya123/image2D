@@ -7,9 +7,22 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="./src/assets/image2D.png">
     <title>前端绘图 | image2D</title>
+    <script>
+        function doScroll() {
+            var header = document.getElementsByTagName('header')[0];
+            var toTop = document.documentElement.scrollTop || document.body.scrollTop;
+            if (toTop <= 130)
+                header.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+            else
+                header.style.backgroundColor = 'rgba(255, 255, 255, 1.0)';
+        }
+        function toTop() {
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
 </head>
 
-<body>
+<body onscroll='doScroll()'>
     <header>
         <h2>image2D</h2>
         <ul>
@@ -24,7 +37,23 @@
     </header>
     <div id='root'></div>
     <footer>
-        心叶 ©2007-2019 走一步，再走一步
+        <ul>
+            <li>
+                <a href="#/guide/">指南</a>
+            </li>
+            <li>
+                <a href="#/api/">文档</a>
+            </li>
+            <li>
+                <a href="#/source/">资源</a>
+            </li>
+            <li>
+                <a href="#/about/">关于</a>
+            </li>
+        </ul>
+        Copyright © 2007 - 2019
+        <em>走一步 再走一步</em>
+        <a href="javascriot:void(0)" onclick='toTop()'>回到顶部</a>
     </footer>
     <script src="./dist/main.js"></script>
 </body>

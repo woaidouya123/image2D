@@ -12,12 +12,11 @@ export default class Calculate extends React.Component {
     }
     render() {
         return (<div className='container'>
-            <h2 className="title big" id='calculate'>计算</h2>
             <p>
                 绘图的时候难免要进行一些比较复杂的计算，这里根据使用场景不同，提供了几种常见的辅助计算。
         </p>
 
-            <h4 className="title small">1 二维简单坐标变换</h4>
+            <h4 className="title small">二维简单坐标变换</h4>
             <p>
                 简单坐标变换分为二类：独立的变换和变换对象dot。
         </p>
@@ -58,7 +57,7 @@ export default class Calculate extends React.Component {
             <p>返回当前位置：</p>
             <pre className='prettyprint lang-js'>var p=dot.value();</pre>
 
-            <h4 className="title small">2 Matrix4三维坐标变换</h4>
+            <h4 className="title small">Matrix4三维坐标变换</h4>
             <p>
                 Matrix4是一个列主序存储的4x4矩阵，使用该矩阵对象的第一步是像下面这样获取该对象，参数initMatrix4可选，你可以传递一个初始化矩阵或默认采用单位矩阵E初始化。
         </p>
@@ -106,7 +105,7 @@ export default class Calculate extends React.Component {
                 <li>只设置三个点(设置不足六个点都认为只设置了三个点)，表示围绕从原点出发的射线旋转。</li>
             </ul>
 
-            <h4 className="title small">3 曲线插值</h4>
+            <h4 className="title small">曲线插值</h4>
             <p>
                 给定若干个不连续的点，在这些点之间插入足够的点，来使得这些点连接起来是一个平滑的曲线。求解在何处插入新的点就是这里需要解决的问题。
         </p>
@@ -136,7 +135,7 @@ export default class Calculate extends React.Component {
         </p>
             <pre className='prettyprint lang-js'>var y=cardinal(a);</pre>
 
-            <h4 className="title small">4 布局</h4>
+            <h4 className="title small">布局</h4>
             <p>
                 在绘制一些常见图形的时候，比如关系图，单个结点或连线并不难，麻烦的是位置的计算等，和图形模块不同，布局就是专门计算一些特殊图形位置的模块，用一句通俗的话说就是：决定什么元素绘制在哪里。因此，布局应该和具体的绘图方法无关，她只关心位置的计算。
         </p>
@@ -214,7 +213,7 @@ export default class Calculate extends React.Component {
                 <li>begin-deg,deg:number，开始和跨越弧度（可选，如果类型是circle设置该参数有效）。</li>
             </ul>
 
-            <h4 className="title small">5 动画轮询</h4>
+            <h4 className="title small">动画轮询</h4>
             <p>
                 绘图的时候，为了实现动画效果，你除了可以使用画布或css天然的动画相关属性，还可以使用ES绘制每一帧的方式实现。为了方便你绘制我们提供了下面方法：
         </p>

@@ -12,12 +12,11 @@ export default class Tool extends React.Component {
     }
     render() {
         return (<div className='container'>
-            <h2 className="title big" id='tool'>小工具</h2>
             <p>
                 因为绘制的时候，比如canvas2D没有图层，某个数据改变可能就意味着需要全部重新绘制等，基于这些考虑，在这一章，对前面进行必要的补充。
         </p>
 
-            <h4 className="title small">1 图层</h4>
+            <h4 className="title small">图层</h4>
             <p>
                 首先需要明确，图层服务的对象是canvas2D，svg某种意义上天生具有图层，不需要额外设计。让我们首先看看如何获取一个图层对象：
         </p>

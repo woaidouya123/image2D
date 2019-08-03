@@ -12,12 +12,11 @@ export default class Xhtml extends React.Component {
     }
     render() {
         return (<div className='container'>
-            <h2 className="title big" id='xhtml'>结点操作</h2>
             <p>
                 为了绘图的方便，我们提供了最基本的结点相关操作。因为这些操作是为了绘图而开发的，可能和纯粹的结点操作方法在设计上有所不同，请知悉。
         </p>
 
-            <h4 className="title small">1 结点对象</h4>
+            <h4 className="title small">结点对象</h4>
             <p>
                 所有的结点操作都是由结点对象提供的，因此，我们首先来看看如何创建一个结点对象：
         </p>
@@ -60,7 +59,7 @@ export default class Xhtml extends React.Component {
                 特别注意：第二个参数context除了可以是dom结点外，还有二个特殊的字符串可以作为参数"html"（或"HTML"）和"svg"（或"SVG"），如果传递这二个字符串中的某个，表示把第一个参数selector作为模板字符串生成新的结点（前者生成html结点，后者生成svg结点）。
         </p>
 
-            <h4 className="title small">2 编辑</h4>
+            <h4 className="title small">编辑</h4>
 
             <p>
                 把当前维护的结点加到目标结点内部的结尾：
@@ -95,7 +94,7 @@ export default class Xhtml extends React.Component {
         </p>
             <pre className='prettyprint lang-js'>imageObject.text([content]);</pre>
 
-            <h4 className="title small">3 样式和属性</h4>
+            <h4 className="title small">样式和属性</h4>
 
             <p>
                 修改或获取结点样式：
@@ -124,7 +123,7 @@ export default class Xhtml extends React.Component {
                 <li>(json):设置大量属性。</li>
             </ul>
 
-            <h4 className="title small">4 事件相关</h4>
+            <h4 className="title small">事件相关</h4>
 
             <p>
                 给维护的结点绑定事件：
@@ -136,7 +135,7 @@ export default class Xhtml extends React.Component {
         </p>
             <pre className='prettyprint lang-js'>imageObject.position(event);</pre>
 
-            <h4 className="title small">5 数据绑定</h4>
+            <h4 className="title small">数据绑定</h4>
             <p>
                 绘图就离不开数据，把数据和结点关联起来，会简化结点管理和数据保存问题，这里涉及四个核心方法：data、datum、enter和exit，还有一些相关方法（因为结点对象的各个方法之间不完全是独立的）。
         </p>
