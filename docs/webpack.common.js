@@ -17,7 +17,7 @@ module.exports = {
             use: [{
                 loader: "url-loader",
                 options: {
-                    name: "build/[path][name].[ext]",
+                    name: "dist/[path][name].[ext]",
                     context: "src/asset",
                     limit: 5000
                 }

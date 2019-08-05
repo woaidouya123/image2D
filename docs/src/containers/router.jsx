@@ -1,10 +1,12 @@
 import React from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import guide from './guide/index.jsx';
-import api from './api/index.jsx';
-import source from './source/index.jsx';
-import about from './about/index.jsx';
+import asyncComponent from '../lazy';
+
+const guide = asyncComponent(() => import('./guide/index.jsx'));
+const api = asyncComponent(() => import('./api/index.jsx'));
+const source = asyncComponent(() => import('./source/index.jsx'));
+const about = asyncComponent(() => import('./about/index.jsx'));
 
 export default () => (
     <HashRouter>

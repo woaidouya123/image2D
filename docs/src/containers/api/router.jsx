@@ -1,11 +1,13 @@
 import React from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import howToUse from './how-to-use.jsx';
-import xhtml from './xhtml.jsx';
-import painter from './painter.jsx';
-import calculate from './calculate.jsx';
-import tool from './tool.jsx';
+import asyncComponent from '../../lazy';
+
+const howToUse = asyncComponent(() => import('./how-to-use.jsx'));
+const xhtml = asyncComponent(() => import('./xhtml.jsx'));
+const painter = asyncComponent(() => import('./painter.jsx'));
+const calculate = asyncComponent(() => import('./calculate.jsx'));
+const tool = asyncComponent(() => import('./tool.jsx'));
 
 export default () => (
     <HashRouter>
