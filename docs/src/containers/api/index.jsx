@@ -10,7 +10,7 @@ export default class Api extends React.Component {
     }
     render() {
         return (<div className='api'>
-            <ul>
+            <ul id='api-nav'>
                 <li id='how-to-use' className='apimenu-item'><Link to='/api/how-to-use'>如何使用</Link></li>
                 <li id='xhtml' className='apimenu-item'><Link to='/api/xhtml'>结点操作</Link></li>
                 <li id='painter' className='apimenu-item'><Link to='/api/painter'>画笔</Link></li>

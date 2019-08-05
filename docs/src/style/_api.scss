@@ -9,6 +9,7 @@ $navWidth:1.2rem;
     &>ul {
         width: $navWidth;
         padding: .3rem .1rem;
+        position: relative;
         &>li {
             &>a {
                 width: 100%;
