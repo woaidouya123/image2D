@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Jul 11 2019 17:52:51 GMT+0800 (GMT+08:00)
+    * Date:Tue Aug 06 2019 10:31:30 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1576,6 +1576,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 painter.stroke();return enhancePainter;
             },
 
+            // 路径 - 贝塞尔曲线
+            "quadraticCurveTo": function quadraticCurveTo(cpx, cpy, x, y) {
+                painter.quadraticCurveTo(cpx, cpy, x, y);return enhancePainter;
+            },
+            "bezierCurveTo": function bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
+                painter.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);return enhancePainter;
+            },
+
             // 擦除画面
             "clearn": function clearn(x, y, width, height) {
                 painter.clearRect(x || 0, y || 0, width || canvas.clientWidth, height || canvas.clientHeight);return enhancePainter;
@@ -1788,6 +1796,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "stroke": function stroke() {
                 initPath(painter, path).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
                 return enhancePainter;
+            },
+
+            // 路径 - 贝塞尔曲线
+            "quadraticCurveTo": function quadraticCurveTo(cpx, cpy, x, y) {
+                path += "Q" + cpx + " " + cpy + "," + x + " " + y;return enhancePainter;
+            },
+            "bezierCurveTo": function bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
+                path += "C" + cp1x + " " + cp1y + "," + cp2x + " " + cp2y + "," + x + " " + y;return enhancePainter;
             },
 
             // 文字

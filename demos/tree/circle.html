@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>圆形树</title>
+    <link rel="shortcut icon" href="../../docs/src/assets/image2D.png">
     <script src='../../build/image2D.js'></script>
     <script src="../_datas/program.json.js"></script>
 </head>
@@ -61,20 +62,32 @@
                             "fillStyle": "#fff",
                             "strokeStyle": "red"
                         })
-                        .strokeCircle(item.left, item.top, 2)
-                        .fillCircle(item.left, item.top, 2);
+                        .strokeCircle(item.left, item.top, 3)
+                        .fillCircle(item.left, item.top, 3);
 
                     // 如果不是根结点
                     if (item.id !== tree.root) {
+                        pitem = tree.node[item.pid];
+
+                        var p0 = $$.move(350 - item.left, 350 - item.top, 3, item.left, item.top), p3;
 
                         // 画连线
-                        pitem = tree.node[item.pid];
                         painter
                             .config("strokeStyle", "#aaa")
                             .beginPath()
-                            .moveTo(item.left, item.top)
-                            .lineTo(pitem.left, pitem.top)
-                            .stroke();
+                            .moveTo(p0[0], p0[1]);
+
+                        if (item.pid === tree.root) {
+                            p3 = $$.move(item.left - pitem.left, item.top - pitem.top, 3, pitem.left, pitem.top);
+                            painter.lineTo(p3[0], p3[1]);
+                        } else {
+                            var p1 = $$.move(350 - item.left, 350 - item.top, 50, item.left, item.top);
+                            var p2 = $$.move(pitem.left - 350, pitem.top - 350, 50, pitem.left, pitem.top);
+                            p3 = $$.move(pitem.left - 350, pitem.top - 350, 3, pitem.left, pitem.top);
+                            painter.bezierCurveTo(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1]);
+                        }
+
+                        painter.stroke();
                     }
                 }
 

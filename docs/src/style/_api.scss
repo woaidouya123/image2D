@@ -31,6 +31,9 @@ $navWidth:1.2rem;
         padding: .1rem;
         .container {
             line-height: 2em;
+            &>pre{
+                font-size: .14rem;
+            }
             &>.title {
                 font-weight: 800;
                 line-height: 2em;
