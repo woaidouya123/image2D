@@ -70,9 +70,17 @@ export default function (canvas) {
         "beginPath": function () { painter.beginPath(); return enhancePainter; },
         "closePath": function () { painter.closePath(); return enhancePainter; },
         "moveTo": function (x, y) { painter.moveTo(x, y); return enhancePainter; },
-        "lineTo": function (x, y) { painter.lineTo(x, y); return enhancePainter },
-        "fill": function () { painter.fill(); return enhancePainter },
-        "stroke": function () { painter.stroke(); return enhancePainter },
+        "lineTo": function (x, y) { painter.lineTo(x, y); return enhancePainter; },
+        "fill": function () { painter.fill(); return enhancePainter; },
+        "stroke": function () { painter.stroke(); return enhancePainter; },
+
+        // 路径 - 贝塞尔曲线
+        "quadraticCurveTo": function (cpx, cpy, x, y) {
+            painter.quadraticCurveTo(cpx, cpy, x, y); return enhancePainter;
+        },
+        "bezierCurveTo": function (cp1x, cp1y, cp2x, cp2y, x, y) {
+            painter.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y); return enhancePainter;
+        },
 
         // 擦除画面
         "clearn": function (x, y, width, height) { painter.clearRect(x || 0, y || 0, width || canvas.clientWidth, height || canvas.clientHeight); return enhancePainter; },

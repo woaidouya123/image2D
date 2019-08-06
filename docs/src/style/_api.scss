@@ -1,0 +1,87 @@
+$navWidth:1.2rem;
+.api {
+    font-size: 0;
+    &>* {
+        display: inline-block;
+        font-size: .16rem;
+        vertical-align: top;
+    }
+    &>ul {
+        width: $navWidth;
+        padding: .3rem .1rem;
+        position: relative;
+        &>li {
+            &>a {
+                width: 100%;
+                display: inline-block;
+                text-align: left;
+                line-height: 3em;
+                font-size: .14rem;
+            }
+            &[active='yes']>a {
+                color: $color;
+            }
+            &[active='no']>a {
+                color: rgb(167, 160, 160);
+            }
+        }
+    }
+    &>div {
+        width: calc(100% - #{$navWidth});
+        padding: .1rem;
+        .container {
+            line-height: 2em;
+            &>pre{
+                font-size: .14rem;
+            }
+            &>.title {
+                font-weight: 800;
+                line-height: 2em;
+                padding: .4rem 0 .2rem;
+                margin-top: -.3rem;
+                &.big {
+                    font-size: .18rem;
+                    color: rgb(203, 83, 139);
+                }
+                &.small {
+                    font-size: .16rem;
+                    color: rgb(203, 83, 139);
+                }
+                &.little {
+                    font-size: .14rem;
+                    color: #85a646;
+                }
+                &.sub-little {
+                    font-size: .12rem;
+                    color: #f00;
+                }
+            }
+            &>p {
+                text-indent: 2em;
+                font-size: .14rem;
+                font-weight: 600;
+                &>a {
+                    text-indent: 0;
+                    color: #ac2c23;
+                    text-decoration: underline;
+                }
+                &.warn {
+                    background-image: url('../assets/warn.png');
+                    background-repeat: no-repeat;
+                    background-size: auto .21rem;
+                    font-size: .12rem;
+                    color: #dac305;
+                    font-weight: 400;
+                }
+            }
+            &>ul {
+                margin-left: 5em;
+                font-size: .13rem;
+                line-height: 2.4em;
+                &>li {
+                    list-style-type: decimal;
+                }
+            }
+        }
+    }
+}

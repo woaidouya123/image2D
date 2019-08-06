@@ -65,6 +65,14 @@ export default function (target, selector) {
             return enhancePainter;
         },
 
+        // 路径 - 贝塞尔曲线
+        "quadraticCurveTo": function (cpx, cpy, x, y) {
+            path += "Q" + cpx + " " + cpy + "," + x + " " + y; return enhancePainter;
+        },
+        "bezierCurveTo": function (cp1x, cp1y, cp2x, cp2y, x, y) {
+            path += "C" + cp1x + " " + cp1y + "," + cp2x + " " + cp2y + "," + x + " " + y; return enhancePainter;
+        },
+
         // 文字
         "fillText": function (text, x, y, deg) {
             initText(painter, config, x, y, deg || 0).attr("fill", config.fillStyle)[0].textContent = text;
