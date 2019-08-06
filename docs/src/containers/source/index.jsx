@@ -8,7 +8,7 @@ export default class Source extends React.Component {
     }
     render() {
         return (
-            <div>资源：设计中，敬请期待！</div>
+            <div>编辑中，敬请期待！</div>
         );
     }
 };

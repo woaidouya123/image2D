@@ -8,7 +8,7 @@ export default class About extends React.Component {
     }
     render() {
         return (
-            <div>关于：设计中，敬请期待！</div>
+            <div>编辑中，敬请期待！</div>
         );
     }
 };

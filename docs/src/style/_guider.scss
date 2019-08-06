@@ -1,0 +1,24 @@
+.guider {
+    font-size: .14rem;
+    &>.banner {
+        margin: 2em 0;
+        border-left: .04rem solid #9fc457;
+        font-weight: 600;
+        padding: 0 .15rem;
+        color: #858585;
+    }
+    &>h2 {
+        margin: .5rem 0 1.2em;
+    }
+    &>p {
+        font-size: .16rem;
+        line-height: 1.8em;
+        word-spacing: 0.05em;
+        color: #757474;
+        &>a {
+            color: #9fc457;
+            font-weight: 600;
+            margin: 0 .1rem;
+        }
+    }
+}
