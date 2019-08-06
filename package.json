@@ -4,11 +4,9 @@
   "description": "🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.",
   "main": "build/image2D.min.js",
   "scripts": {
-    "start": "npm install && cuf explain",
+    "start": "npm install && node ./task/explain.js",
     "unit": "karma start",
-    "babel": "cuf build-babel",
-    "ugligy": "cuf build-ugligy",
-    "build": "rollup -c rollup.config.js && npm run babel && npm run ugligy",
+    "build": "node ./task/module.js && node ./task/babel.js && node ./task/uglify.js",
     "support": "npx browserslist"
   },
   "keywords": [
@@ -32,7 +30,6 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^8.0.0",
-    "cuf": "^0.1.2",
     "jasmine-core": "^2.9.0",
     "karma": "^2.0.0",
     "karma-browserify": "^5.1.3",
