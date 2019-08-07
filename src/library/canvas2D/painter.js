@@ -1,4 +1,5 @@
 import { initText, initArc, initCircle, initRect } from './config';
+import { linearGradient } from './Gradient';
 
 // 加强版本的画笔
 export default function (canvas) {
@@ -113,6 +114,16 @@ export default function (canvas) {
         },
         "strokeRect": function (x, y, width, height) {
             initRect(painter, x, y, width, height).stroke(); return enhancePainter;
+        },
+
+        /**
+        * 渐变
+        * -------------
+        */
+
+        //  线性渐变
+        "createLinearGradient": function (x0, y0, x1, y1) {
+            return linearGradient(painter, x0, y0, x1, y1);
         }
 
     };

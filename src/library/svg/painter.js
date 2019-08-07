@@ -1,5 +1,6 @@
 import image2D from '../core';
 import normalConfig, { initText, initArc, initCircle, initPath, initRect } from './config';
+import { linearGradient } from './Gradient';
 
 export default function (target, selector) {
 
@@ -107,6 +108,16 @@ export default function (target, selector) {
         },
         "strokeRect": function (x, y, width, height) {
             initRect(painter, x, y, width, height).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
+        },
+
+        /**
+         * 渐变
+         * -------------
+         */
+
+        //  线性渐变
+        "createLinearGradient": function (x0, y0, x1, y1) {
+            return linearGradient(painter, target, x0, y0, x1, y1);
         }
 
     };

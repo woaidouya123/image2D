@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.1.4
+    * version 1.1.5-beta
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Aug 06 2019 22:37:19 GMT+0800 (GMT+08:00)
+    * Date:Wed Aug 07 2019 11:26:00 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1491,6 +1491,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    var linearGradient = function linearGradient(painter, x0, y0, x1, y1) {
+        var gradient = painter.createLinearGradient(x0, y0, x1, y1);
+        var enhanceGradient = {
+            "value": function value() {
+                return gradient;
+            },
+            "addColorStop": function addColorStop(stop, color) {
+                gradient.addColorStop(stop, color);
+                return enhanceGradient;
+            }
+        };
+        return enhanceGradient;
+    };
+
     // 加强版本的画笔
     function painter_canvas2D(canvas) {
 
@@ -1621,6 +1635,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeRect": function strokeRect(x, y, width, height) {
                 initRect(painter, x, y, width, height).stroke();return enhancePainter;
+            },
+
+            /**
+            * 渐变
+            * -------------
+            */
+
+            //  线性渐变
+            "createLinearGradient": function createLinearGradient(x0, y0, x1, y1) {
+                return linearGradient(painter, x0, y0, x1, y1);
             }
 
         };
@@ -1713,6 +1737,32 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "height": height
         });
         return painter;
+    };
+
+    var initDefs = function initDefs(target) {
+        var defs = target.getElementsByTagName('defs');
+        if (defs.length <= 0) {
+            defs = [toNode$1("<defs>", "SVG")];
+            target.appendChild(defs[0]);
+        }
+        return defs[0];
+    };
+
+    var linearGradient$1 = function linearGradient$1(painter, target, x0, y0, x1, y1) {
+        var defs = initDefs(target);
+        var gradientId = "image2D-lg-" + new Date().valueOf() + "-" + Math.random();
+        var gradientDom = toNode$1('<linearGradient id="' + gradientId + '" x1="' + x0 + '%" y1="' + y0 + '%" x2="' + x1 + '%" y2="' + y1 + '%"></linearGradient>');
+        target.appendChild(gradientDom);
+        var enhanceGradient = {
+            "value": function value() {
+                return "url(#" + gradientId + ")";
+            },
+            "addColorStop": function addColorStop(stop, color) {
+                gradientDom.appendChild(toNode$1('<stop offset="' + stop * 100 + '%" style="stop-color:' + color + ';" />'));
+                return enhanceGradient;
+            }
+        };
+        return enhanceGradient;
     };
 
     function painter_svg(target, selector) {
@@ -1840,6 +1890,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeRect": function strokeRect(x, y, width, height) {
                 initRect$1(painter, x, y, width, height).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
+            },
+
+            /**
+             * 渐变
+             * -------------
+             */
+
+            //  线性渐变
+            "createLinearGradient": function createLinearGradient(x0, y0, x1, y1) {
+                return linearGradient$1(painter, target, x0, y0, x1, y1);
             }
 
         };
