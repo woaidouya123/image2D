@@ -88,6 +88,18 @@
                         }
 
                         painter.stroke();
+
+
+
+                        // 文字
+                        var $p0 = $$.move(350 - item.left, 350 - item.top, -5, item.left, item.top)
+                        painter
+                            .config({
+                                'fillStyle': '#555',
+                                "font-size": '9',
+                                "textBaseline": 'middle'
+                            })
+                            .fillText(item.id, $p0[0], $p0[1], item.deg);
                     }
                 }
 

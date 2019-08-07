@@ -14,10 +14,13 @@
 <body>
     <script>
 
-        var painter = $$('<svg></svg>')
+        var painter = $$('<svg>' +
+            '<g class="node"></g>' +
+            '<g class="text"></g>'
+            + '</svg>')
             // 设置画布大小
             .attr({
-                "width": 700,
+                "width": 1200,
                 "height": 1600
             })
             // 画布添加到页面
@@ -42,7 +45,7 @@
 
             // 配置具体的类型（可以不配置）
             "type": "LR",
-            "width": 700,
+            "width": 1200,
             "height": 1600
         })
 
@@ -61,11 +64,11 @@
                         })
 
                         // 轮廓圆球
-                        .bind('<circle>').appendTo($$('svg'))
+                        .bind('<circle>').appendTo('g.node')
                         .strokeCircle(item.left, item.top, 3)
 
                         // 实心圆球
-                        .bind('<circle>').appendTo($$('svg'))
+                        .bind('<circle>').appendTo('g.node')
                         .fillCircle(item.left, item.top, 3);
 
                     // 如果不是根结点
@@ -79,7 +82,7 @@
                             .moveTo(pitem.left + 3, pitem.top);
 
                         painter
-                            .bind('<path>').appendTo($$('svg'))
+                            .bind('<path>').appendTo('g.node')
                             .bezierCurveTo(
 
                             // 第一个控制点
@@ -94,6 +97,15 @@
 
                         painter.stroke();
                     }
+
+                    // 结点描述文字
+                    painter
+                        .config({
+                            'fillStyle': '#555',
+                            "font-size": '9'
+                        })
+                        .bind('<text>').appendTo('g.text')
+                        .fillText(item.id, item.left + 5, item.top, item.deg);
                 }
 
             });
