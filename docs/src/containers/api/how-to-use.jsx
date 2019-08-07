@@ -6,9 +6,36 @@ export default class HowToUse extends React.Component {
         // 格式化代码
         prettyPrint();
 
+        let lis = document.getElementById('api-nav').getElementsByTagName('li');
+        for (let i = 0; i < lis.length; i++) {
+            lis[i].setAttribute('active', 'no');
+        }
+
         // 修改菜单状态
         $$('.apimenu-item').attr('active', 'no');
         $$('#how-to-use').attr('active', 'yes');
+
+        // 更新导航菜单信息
+        window.image2d_docs_api_navHelper = {
+            "small": [],
+            "little": [],
+            "type":"how-to-use"
+        };
+
+        let smallTitles = $$('.title.small');
+        let littleTitles = $$('.title.little');
+
+        for (let i = 0; i < smallTitles.length; i++) {
+            window.image2d_docs_api_navHelper.small[i] = {
+                "top": smallTitles[i].offsetTop
+            };
+        }
+
+        for (let i = 0; i < littleTitles.length; i++) {
+            window.image2d_docs_api_navHelper.little[i] = {
+                "top": littleTitles[i].offsetTop
+            };
+        }
     }
     render() {
         return (<div className='container'>
@@ -24,7 +51,7 @@ export default class HowToUse extends React.Component {
                 主要是在svg和canvas2D上绘图，虽然有提供比如Maritx4坐标变换等三维相关方法，这是考虑到一些潜在的需求。
         </p>
 
-            <h4 className="title small">如何使用</h4>
+            <h4 className="title small">使用</h4>
             <p>
                 如果你开发的是一个web项目，直接在页面引入打包后的文件后即可（在代码中通过image2D或$$调用）：
         </p>

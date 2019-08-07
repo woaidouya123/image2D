@@ -11,18 +11,32 @@ $navWidth:1.2rem;
         padding: .3rem .1rem;
         position: relative;
         &>li {
+            color: rgb(167, 160, 160);
             &>a {
                 width: 100%;
                 display: inline-block;
                 text-align: left;
-                line-height: 3em;
+                line-height: 2em;
                 font-size: .14rem;
+                color: inherit;
             }
             &[active='yes']>a {
                 color: $color;
             }
-            &[active='no']>a {
-                color: rgb(167, 160, 160);
+            &.item {
+                cursor: pointer;
+                line-height: 1.8em;
+                &[active='yes'] {
+                    color: $color;
+                }
+                &.level1 {
+                    padding-left: 1em;
+                    font-size: .13rem;
+                }
+                &.level2 {
+                    padding-left: 2em;
+                    font-size: .12rem;
+                }
             }
         }
     }
@@ -31,7 +45,7 @@ $navWidth:1.2rem;
         padding: .1rem;
         .container {
             line-height: 2em;
-            &>pre{
+            &>pre {
                 font-size: .14rem;
             }
             &>.title {

@@ -6,9 +6,36 @@ export default class Painter extends React.Component {
         // 格式化代码
         prettyPrint();
 
+        let lis = document.getElementById('api-nav').getElementsByTagName('li');
+        for (let i = 0; i < lis.length; i++) {
+            lis[i].setAttribute('active', 'no');
+        }
+
         // 修改菜单状态
         $$('.apimenu-item').attr('active', 'no');
         $$('#painter').attr('active', 'yes');
+
+         // 更新导航菜单信息
+         window.image2d_docs_api_navHelper = {
+            "small": [],
+            "little": [],
+            "type":"painter"
+        };
+
+        let smallTitles = $$('.title.small');
+        let littleTitles = $$('.title.little');
+
+        for (let i = 0; i < smallTitles.length; i++) {
+            window.image2d_docs_api_navHelper.small[i] = {
+                "top": smallTitles[i].offsetTop
+            };
+        }
+
+        for (let i = 0; i < littleTitles.length; i++) {
+            window.image2d_docs_api_navHelper.little[i] = {
+                "top": littleTitles[i].offsetTop
+            };
+        }
     }
     render() {
         return (<div className='container'>

@@ -25,6 +25,24 @@
                     apiNav.style.top = (toTop - 100) + 'px';
                 else
                     apiNav.style.top = '0px';
+
+                var navHelper = window.image2d_docs_api_navHelper, i, j;
+
+                // 先寻找二级菜单
+                for (i = 0; i < navHelper.small.length; i++) {
+                    if (navHelper.small[i].top > toTop + 45) {
+                        break;
+                    }
+                }
+                if (i == 0) i = 1;
+                var smallNavs = document.getElementsByName(navHelper.type + "-small");
+                for (j = 1; j <= smallNavs.length; j++) {
+                    if (j == i) {
+                        smallNavs[j - 1].setAttribute('active', 'yes');
+                    } else {
+                        smallNavs[j - 1].setAttribute('active', 'no');
+                    }
+                }
             }
         }
         function toTop() {
