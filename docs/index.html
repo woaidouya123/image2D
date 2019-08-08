@@ -35,7 +35,7 @@
                     }
                 }
                 if (i == 0) i = 1;
-                var smallNavs = document.getElementsByName(navHelper.type + "-small");
+                var smallNavs = document.getElementsByName(navHelper.type);
                 for (j = 1; j <= smallNavs.length; j++) {
                     if (j == i) {
                         smallNavs[j - 1].setAttribute('active', 'yes');
@@ -45,13 +45,29 @@
                 }
             }
         }
+
+        // 到顶部
         function toTop() {
             document.documentElement.scrollTop = 0;
+        }
+
+        function doClick(event) {
+            event = event || window.event;
+            var target = event.target;
+
+            // 如果点击了api页面的二级菜单
+            if (target.getAttribute('flag') == 'api-item') {
+                window.location.href = target.getAttribute('url');
+                window.setTimeout(function () {
+                    target.setAttribute('active', 'yes');
+                    document.documentElement.scrollTop = window.image2d_docs_api_navHelper.small[target.getAttribute('index')].top;
+                }, 200);
+            }
         }
     </script>
 </head>
 
-<body onscroll='doScroll()'>
+<body onscroll='doScroll()' onclick="doClick()">
     <header>
         <h2>image2D</h2>
         <ul>

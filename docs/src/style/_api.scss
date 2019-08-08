@@ -29,14 +29,8 @@ $navWidth:1.2rem;
                 &[active='yes'] {
                     color: $color;
                 }
-                &.level1 {
-                    padding-left: 1em;
-                    font-size: .13rem;
-                }
-                &.level2 {
-                    padding-left: 2em;
-                    font-size: .12rem;
-                }
+                padding-left: 1em;
+                font-size: .13rem;
             }
         }
     }
