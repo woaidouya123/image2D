@@ -2,14 +2,12 @@
 使用ECMAScript绘制二维图片。📊📈🎉 Drawing Two-Dimensional Pictures Using ECMAScript.
 
 <a href="https://www.travis-ci.org/yelloxing/image2D"><img src="https://www.travis-ci.org/yelloxing/image2D.svg?branch=master" alt="travis"></a>
-<a href="https://image-foundation.github.io/npm-compare/?interval=7&packages=image2d"><img src="https://img.shields.io/npm/dm/image2d.svg" alt="Downloads"></a>
+<a href="https://yelloxing.github.io/npm-downloads?interval=7&packages=image2d"><img src="https://img.shields.io/npm/dm/image2d.svg" alt="Downloads"></a>
 <a href="https://www.npmjs.com/package/image2d"><img src="https://img.shields.io/npm/v/image2d.svg" alt="Version"></a>
 <a href="https://github.com/yelloxing/image2D/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/image2d.svg" alt="License"></a>
 
-> 本项目前身是[clay.js](https://github.com/yelloxing/clay-core)系列项目，基于现实原因，重新建立，原有项目停止更新但不会删除，请知悉！
-
 ## Documentation
-使用中可以访问[在线接口文档](https://yelloxing.github.io/image2D/)，如果想参与进来，可以访问[开发需知](https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md)，如果对未来版本有自己的想法，可以点击[RFC](https://github.com/image-foundation/image2D.RFC)进行交流。
+使用中可以访问[在线接口文档](https://yelloxing.github.io/image2D/)，如果想参与进来，可以访问[开发需知](https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md)。
 
 ## Issues
 使用的时候遇到任何问题或有好的建议，请点击进入[issue](https://github.com/yelloxing/image2D/issues)！

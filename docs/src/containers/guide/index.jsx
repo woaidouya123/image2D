@@ -112,9 +112,6 @@ export default class Guide extends React.Component {
                     。在这里，你将找到所有的接口文档，包括一些必要的说明和重要的使用用例。这里还有一个方便的
                 <a href="https://github.com/yelloxing/image2D/issues">问题交流</a>
                     的部分，你可以把你使用的后的改进意见反馈给我们，或者在这里提出使用疑惑。
-                    如果你对未来版本的接口等设计上有好的想法，可以提
-                    <a href="https://github.com/image-foundation/image2D.RFC">RFC</a>
-                    进行讨论。
                 </p>
             </div>
         );
