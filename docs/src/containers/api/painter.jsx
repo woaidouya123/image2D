@@ -15,11 +15,11 @@ export default class Painter extends React.Component {
         $$('.apimenu-item').attr('active', 'no');
         $$('#painter').attr('active', 'yes');
 
-         // 更新导航菜单信息
-         window.image2d_docs_api_navHelper = {
+        // 更新导航菜单信息
+        window.image2d_docs_api_navHelper = {
             "small": [],
             "little": [],
-            "type":"painter"
+            "type": "painter"
         };
 
         let smallTitles = $$('.title.small');
@@ -84,7 +84,7 @@ export default class Painter extends React.Component {
             <pre className='prettyprint lang-js'>var base64=painter.toDataURL();</pre>
 
             <p>擦除画布上正方形大小是width*height的区域(正方形左上角坐标(x, y))，x和y默认0，width和height默认就是画布的尺寸，都是可选的：</p>
-            <pre className='prettyprint lang-js'>painter.clearn(x, y, width, height);</pre>
+            <pre className='prettyprint lang-js'>painter.clearRect(x, y, width, height);</pre>
 
             <p>把图像、画布或视频绘制到画布的指定位置上：</p>
             <pre className='prettyprint lang-js'>painter.drawImage();</pre>
@@ -195,6 +195,34 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');`}</pre>
 
             <p>把当前路径上色（轮廓线）：</p>
             <pre className='prettyprint lang-js'>painter.stroke();</pre>
+            <h4 className="title small">渐变色</h4>
+            <p>
+                除了使用纯色填充，还可以使用渐变色作为画笔的颜色，你把它看成普通的颜色使用就可以了。
+            </p>
+            <h6 className="title little">线性渐变</h6>
+            <p>
+                首先你需要使用画笔的createLinearGradient创建线性渐变对象，四个参数分别表示渐变的起点P(x1, y1)和终点P(x2, y2)：
+            </p>
+            <pre className='prettyprint lang-js'>var linearGradient = painter.createLinearGradient(x1, y1, x2, y2);</pre>
+            <p className="warn">
+                温馨提示：canvas画笔上述参数的单位是px，svg画笔上述参数是%，请一定要注意区分。
+            </p>
+            <p>
+                设置渐变范围以后，你需要在渐变范围中添加渐变色，可以添加任意多个：
+            </p>
+            <pre className='prettyprint lang-js'>linearGradient.addColorStop(deep, color);</pre>
+            <p>
+                上述deep取值为闭区间[0, 1]，color可以是任意合法的颜色值。
+            </p>
+            <p>
+                渐变如何使用，直接调用渐变的value方法即可：
+            </p>
+            <pre className='prettyprint lang-js'>{`painter.config({
+    "fillStyle": linearGradient.value()
+});`}</pre>
+            <p>
+                比如上面，我们给画笔设置填充色就是使用了我们刚刚获取的渐变色。
+            </p>
         </div>);
     }
 };
