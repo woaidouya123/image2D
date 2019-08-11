@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.1.5
+    * version 1.1.6
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sun Aug 11 2019 13:44:08 GMT+0800 (GMT+08:00)
+    * Date:Sun Aug 11 2019 20:55:35 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1515,9 +1515,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (canvas.__had_scale2_canvas__ !== 'YES') {
             canvas.__had_scale2_canvas__ = 'YES';
 
-            var width = canvas.clientWidth,
+            var width = canvas.clientWidth || canvas.getAttribute('width'),
                 //内容+内边距
-            height = canvas.clientHeight;
+            height = canvas.clientHeight || canvas.getAttribute('height');
 
             // 设置显示大小
             canvas.style.width = width + "px";
@@ -1590,6 +1590,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 painter.stroke();return enhancePainter;
             },
 
+            "save": function save() {
+                painter.save();return enhancePainter;
+            },
+            "restore": function restore() {
+                painter.restore();return enhancePainter;
+            },
+
             // 路径 - 贝塞尔曲线
             "quadraticCurveTo": function quadraticCurveTo(cpx, cpy, x, y) {
                 painter.quadraticCurveTo(cpx, cpy, x, y);return enhancePainter;
@@ -1610,7 +1617,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // image
             "drawImage": function drawImage(img, sx, sy, sw, sh, x, y, w, h) {
-                painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);return enhancePainter;
+                if (typeof sw !== 'number') {
+                    painter.drawImage(img, sx, sy);
+                } else if (typeof x !== 'number') {
+                    painter.drawImage(img, sx, sy, sw, sh);
+                } else {
+                    painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+                }
+                return enhancePainter;
             },
 
             // 弧
@@ -1933,11 +1947,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
 
         // 画笔
-        var painter = this[0].getContext("2d"),
+        var painter = this.painter(),
 
         // 图层集合
-        layer = {};
-        layer_index = [];
+        layer = {},
+            layer_index = [];
         var width = this[0].clientWidth,
             //内容+内边距
         height = this[0].clientHeight;
@@ -1980,8 +1994,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "update": function update() {
                 painter.clearRect(0, 0, width, height);
                 painter.save();
+
                 for (var i = 0; i < layer_index.length; i++) {
-                    if (layer[layer_index[i]].visible) painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width, height, 0, 0, width, height);
+                    if (layer[layer_index[i]].visible) painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width * 2, height * 2, 0, 0, width, height);
                 }
                 painter.restore();
                 return layerManager;

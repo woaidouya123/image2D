@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绘图问题</title>
+</head>
+
+<body>
+
+    <canvas width="400" height="400" style='width:200px;height:200px;' id="canvas1"></canvas>
+    <canvas width="400" height="400" style='width:200px;height:200px;' id="canvas2"></canvas>
+
+    <script>
+
+        var painter1 = document.getElementById('canvas1').getContext('2d');
+        painter1.moveTo(400, 200);
+        painter1.arc(200, 200, 200, 0, Math.PI * 2);
+        painter1.fill();
+
+        document.getElementById('canvas2').getContext('2d').drawImage(document.getElementById('canvas1'), 0, 0, 400, 400);
+
+    </script>
+
+</body>
+
+</html>

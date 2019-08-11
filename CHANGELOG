@@ -40,3 +40,7 @@ v1.1.5:
     changes:
       -  画笔橡皮擦方法名称由clearn变成clearRect
       -  线性渐变确定使用
+v1.1.6:
+    date:2019-08-11
+    changes:
+      -  修复layer图层问题

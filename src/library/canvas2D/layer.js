@@ -8,10 +8,10 @@ export default function () {
     if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
 
     // 画笔
-    let painter = this[0].getContext("2d"),
+    let painter = this.painter(),
         // 图层集合
-        layer = {};
-    layer_index = [];
+        layer = {},
+        layer_index = [];
     let width = this[0].clientWidth,//内容+内边距
         height = this[0].clientHeight;
 
@@ -53,9 +53,10 @@ export default function () {
         "update": function () {
             painter.clearRect(0, 0, width, height);
             painter.save();
+
             for (let i = 0; i < layer_index.length; i++) {
                 if (layer[layer_index[i]].visible)
-                    painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width, height, 0, 0, width, height);
+                    painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width * 2, height * 2, 0, 0, width, height);
             }
             painter.restore();
             return layerManager;

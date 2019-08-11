@@ -11,8 +11,8 @@ export default function (canvas) {
     if (canvas.__had_scale2_canvas__ !== 'YES') {
         canvas.__had_scale2_canvas__ = 'YES';
 
-        let width = canvas.clientWidth,//内容+内边距
-            height = canvas.clientHeight;
+        let width = canvas.clientWidth || canvas.getAttribute('width'),//内容+内边距
+            height = canvas.clientHeight || canvas.getAttribute('height');
 
         // 设置显示大小
         canvas.style.width = width + "px";
@@ -75,6 +75,9 @@ export default function (canvas) {
         "fill": function () { painter.fill(); return enhancePainter; },
         "stroke": function () { painter.stroke(); return enhancePainter; },
 
+        "save": function () { painter.save(); return enhancePainter; },
+        "restore": function () { painter.restore(); return enhancePainter; },
+
         // 路径 - 贝塞尔曲线
         "quadraticCurveTo": function (cpx, cpy, x, y) {
             painter.quadraticCurveTo(cpx, cpy, x, y); return enhancePainter;
@@ -90,7 +93,16 @@ export default function (canvas) {
         "toDataURL": function () { return canvas.toDataURL() },
 
         // image
-        "drawImage": function (img, sx, sy, sw, sh, x, y, w, h) { painter.drawImage(img, sx, sy, sw, sh, x, y, w, h); return enhancePainter; },
+        "drawImage": function (img, sx, sy, sw, sh, x, y, w, h) {
+            if (typeof sw !== 'number') {
+                painter.drawImage(img, sx, sy);
+            } else if (typeof x !== 'number') {
+                painter.drawImage(img, sx, sy, sw, sh);
+            } else {
+                painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+            }
+            return enhancePainter;
+        },
 
         // 弧
         "fillArc": function (cx, cy, r1, r2, beginDeg, deg) {
