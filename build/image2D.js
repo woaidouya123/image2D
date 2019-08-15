@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.1.6
+    * version 1.1.7
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sun Aug 11 2019 20:55:35 GMT+0800 (GMT+08:00)
+    * Date:Thu Aug 15 2019 16:02:10 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1607,7 +1607,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 擦除画面
             "clearRect": function clearRect(x, y, width, height) {
-                painter.clearRect(x || 0, y || 0, width || canvas.clientWidth, height || canvas.clientHeight);return enhancePainter;
+                painter.clearRect(x || 0, y || 0, width || canvas.getAttribute('width') / 2, height || canvas.getAttribute('height') / 2);return enhancePainter;
             },
 
             // 地址图片
