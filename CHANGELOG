@@ -44,3 +44,7 @@ v1.1.6:
     date:2019-08-11
     changes:
       -  修复layer图层问题
+v1.1.7:
+    date:2019-08-15
+    changes:
+      -  修复clearRect默认擦除区域问题
