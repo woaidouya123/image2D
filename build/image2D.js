@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Aug 15 2019 16:02:10 GMT+0800 (GMT+08:00)
+    * Date:Fri Aug 16 2019 17:23:22 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1617,13 +1617,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // image
             "drawImage": function drawImage(img, sx, sy, sw, sh, x, y, w, h) {
-                if (typeof sw !== 'number') {
-                    painter.drawImage(img, sx, sy);
-                } else if (typeof x !== 'number') {
-                    painter.drawImage(img, sx, sy, sw, sh);
-                } else {
-                    painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);
-                }
+                painter.drawImage(img, sx || 0, sy || 0, sw ? sw * 2 : canvas.getAttribute('width'), sh ? sh * 2 : canvas.getAttribute('height'), x || 0, y || 0, w || canvas.getAttribute('width') / 2, h || canvas.getAttribute('height') / 2);
                 return enhancePainter;
             },
 
@@ -1996,7 +1990,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 painter.save();
 
                 for (var i = 0; i < layer_index.length; i++) {
-                    if (layer[layer_index[i]].visible) painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width * 2, height * 2, 0, 0, width, height);
+                    if (layer[layer_index[i]].visible) painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width, height, 0, 0, width, height);
                 }
                 painter.restore();
                 return layerManager;

@@ -94,13 +94,7 @@ export default function (canvas) {
 
         // image
         "drawImage": function (img, sx, sy, sw, sh, x, y, w, h) {
-            if (typeof sw !== 'number') {
-                painter.drawImage(img, sx, sy);
-            } else if (typeof x !== 'number') {
-                painter.drawImage(img, sx, sy, sw, sh);
-            } else {
-                painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);
-            }
+            painter.drawImage(img, sx || 0, sy || 0, sw ? sw * 2 : canvas.getAttribute('width'), sh ? sh * 2 : canvas.getAttribute('height'), x || 0, y || 0, w || canvas.getAttribute('width') / 2, h || canvas.getAttribute('height') / 2);
             return enhancePainter;
         },
 

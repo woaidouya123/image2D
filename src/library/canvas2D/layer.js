@@ -56,7 +56,7 @@ export default function () {
 
             for (let i = 0; i < layer_index.length; i++) {
                 if (layer[layer_index[i]].visible)
-                    painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width * 2, height * 2, 0, 0, width, height);
+                    painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width, height, 0, 0, width, height);
             }
             painter.restore();
             return layerManager;
