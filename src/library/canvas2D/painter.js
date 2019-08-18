@@ -26,6 +26,10 @@ export default function (canvas) {
         painter.scale(2, 2);
     }
 
+    // 默认配置canvas2D对象已经存在的属性
+    painter.textBaseline = 'middle';
+    painter.textAlign = 'left';
+
     // 默认配置不应该有canvas2D对象已经存在的属性
     // 这里是为了简化或和svg统一接口而自定义的属性
     let config = {
@@ -130,8 +134,22 @@ export default function (canvas) {
         //  线性渐变
         "createLinearGradient": function (x0, y0, x1, y1) {
             return linearGradient(painter, x0, y0, x1, y1);
-        }
+        },
 
+        /**
+         * 变换
+         * --------------
+         */
+
+        //  移动
+        // 用来移动 canvas 的原点到指定的位置
+        "translate": function (x, y) { painter.translate(x, y); return enhancePainter; },
+
+        //  旋转
+        "rotate": function (deg) { painter.rotate(deg); return enhancePainter; },
+
+        // 缩放
+        "scale": function (x, y) { y = y || x; painter.scale(x, y); return enhancePainter; }
     };
 
     return enhancePainter;

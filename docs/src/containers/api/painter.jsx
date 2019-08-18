@@ -74,7 +74,7 @@ export default class Painter extends React.Component {
 
             <h4 className="title small">位图canvas2D</h4>
             <p>
-                除了上面列出的可配置项，因为canvas2D的配置是直接连原始画笔的（不是全部），因此其自身的2d画笔原来可配置的属性依旧可以配置，请知悉。这种绘图方法相对比较简单，下面我们来看看其特有的一些绘图方法。
+                除了上面列出的可配置项，因为canvas2D的配置是直接连原始画笔的（不是全部），因此其自身的2d画笔原来可配置的属性依旧可以配置，请知悉。这种绘图方法相对比较简单，下面我们来看看其特有的一些简单的绘图方法。
         </p>
             <p className="warn">
                 原始画笔的意思是2d上下文，不是我们抽象的painter，因此不同的painter如果管理的是同一个canvas，属性配置不是完全独立的（后面要说明的svg就是独立的）。
@@ -223,6 +223,43 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');`}</pre>
             <p>
                 比如上面，我们给画笔设置填充色就是使用了我们刚刚获取的渐变色。
             </p>
+            <h4 className="title small">变换</h4>
+            <p>
+                这里的变换指的是画笔相对画布的变换，和坐标变换不一样，前者改变的是画笔特性，或者是求解点坐标的方法。
+            </p>
+            <p>
+                在说明具体的变换方法前，我们先来看二个与之相关的基本方法。
+            </p>
+            <h6 className="title little">保存</h6>
+            <p>
+                保存当前的绘图状态：
+            </p>
+            <pre className='prettyprint lang-js'>painter.save();</pre>
+
+            <h6 className="title little">恢复</h6>
+            <p>
+                恢复之前保存的绘图状态：
+            </p>
+            <pre className='prettyprint lang-js'>painter.restore();</pre>
+
+            <p>
+                接着，我们说明几个具体的变换方法。
+            </p>
+            <h6 className="title little">移动</h6>
+            <p>
+                把绘图的原点x坐标增加dx，y增加dy：
+            </p>
+            <pre className='prettyprint lang-js'>painter.translate(dx, dy);</pre>
+            <h6 className="title little">旋转</h6>
+            <p>
+                围绕原点旋转deg：
+            </p>
+            <pre className='prettyprint lang-js'>painter.rotate(deg);</pre>
+            <h6 className="title little">缩放</h6>
+            <p>
+                x坐标和y坐标分别缩放sx和sy倍（sy缺省取sx）：
+            </p>
+            <pre className='prettyprint lang-js'>painter.scale(sx[, sy]);</pre>
         </div>);
     }
 };
