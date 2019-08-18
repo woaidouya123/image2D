@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.1.8
+    * version 1.2.0
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Aug 16 2019 17:50:03 GMT+0800 (GMT+08:00)
+    * Date:Sun Aug 18 2019 14:57:27 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1531,6 +1531,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             painter.scale(2, 2);
         }
 
+        // 默认配置canvas2D对象已经存在的属性
+        painter.textBaseline = 'middle';
+        painter.textAlign = 'left';
+
         // 默认配置不应该有canvas2D对象已经存在的属性
         // 这里是为了简化或和svg统一接口而自定义的属性
         var _config2 = {
@@ -1653,8 +1657,28 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             //  线性渐变
             "createLinearGradient": function createLinearGradient(x0, y0, x1, y1) {
                 return linearGradient(painter, x0, y0, x1, y1);
-            }
+            },
 
+            /**
+             * 变换
+             * --------------
+             */
+
+            //  移动
+            // 用来移动 canvas 的原点到指定的位置
+            "translate": function translate(x, y) {
+                painter.translate(x, y);return enhancePainter;
+            },
+
+            //  旋转
+            "rotate": function rotate(deg) {
+                painter.rotate(deg);return enhancePainter;
+            },
+
+            // 缩放
+            "scale": function scale(x, y) {
+                y = y || x;painter.scale(x, y);return enhancePainter;
+            }
         };
 
         return enhancePainter;
@@ -1803,6 +1827,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 路径(和canvas2D的类似)
         var path = "";
 
+        // 变换（和canvas2D的类似，内部维护了用于记录）
+        var transform_history = [],
+            transform_current = "";
+
         // 画笔
         var enhancePainter = {
 
@@ -1848,11 +1876,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 path += "L" + x + " " + y;return enhancePainter;
             },
             "fill": function fill() {
-                initPath(painter, path).attr("fill", _config3.fillStyle);
+                initPath(painter, path).attr('transform', transform_current).attr("fill", _config3.fillStyle);
                 return enhancePainter;
             },
             "stroke": function stroke() {
-                initPath(painter, path).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
+                initPath(painter, path).attr('transform', transform_current).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
+                return enhancePainter;
+            },
+
+            "save": function save() {
+                transform_history.push(transform_current);
+                return enhancePainter;
+            },
+            "restore": function restore() {
+                if (transform_history.length > 0) transform_current = transform_history.pop();
                 return enhancePainter;
             },
 
@@ -1866,38 +1903,38 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 文字
             "fillText": function fillText(text, x, y, deg) {
-                initText$1(painter, _config3, x, y, deg || 0).attr("fill", _config3.fillStyle)[0].textContent = text;
+                initText$1(painter, _config3, x, y, deg || 0).attr('transform', transform_current).attr("fill", _config3.fillStyle)[0].textContent = text;
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y, deg) {
-                initText$1(painter, _config3, x, y, deg || 0).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
+                initText$1(painter, _config3, x, y, deg || 0).attr('transform', transform_current).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
             },
 
             // 弧
             "fillArc": function fillArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr("fill", _config3.fillStyle);
+                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr('transform', transform_current).attr("fill", _config3.fillStyle);
                 return enhancePainter;
             },
             "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
+                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr('transform', transform_current).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
                 return enhancePainter;
             },
 
             // 圆形
             "fillCircle": function fillCircle(cx, cy, r) {
-                initCircle$1(painter, cx, cy, r).attr("fill", _config3.fillStyle);return enhancePainter;
+                initCircle$1(painter, cx, cy, r).attr('transform', transform_current).attr("fill", _config3.fillStyle);return enhancePainter;
             },
             "strokeCircle": function strokeCircle(cx, cy, r) {
-                initCircle$1(painter, cx, cy, r).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
+                initCircle$1(painter, cx, cy, r).attr('transform', transform_current).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
             },
 
             // 矩形
             "fillRect": function fillRect(x, y, width, height) {
-                initRect$1(painter, x, y, width, height).attr("fill", _config3.fillStyle);return enhancePainter;
+                initRect$1(painter, x, y, width, height).attr('transform', transform_current).attr("fill", _config3.fillStyle);return enhancePainter;
             },
             "strokeRect": function strokeRect(x, y, width, height) {
-                initRect$1(painter, x, y, width, height).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
+                initRect$1(painter, x, y, width, height).attr('transform', transform_current).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
             },
 
             /**
@@ -1908,6 +1945,30 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             //  线性渐变
             "createLinearGradient": function createLinearGradient(x0, y0, x1, y1) {
                 return linearGradient$1(painter, target, x0, y0, x1, y1);
+            },
+
+            /**
+             * 变换
+             * --------------
+             */
+
+            //  移动
+            "translate": function translate(x, y) {
+                transform_current += ' translate(' + x + ',' + y + ')';
+                return enhancePainter;
+            },
+
+            //  旋转
+            "rotate": function rotate(deg) {
+                transform_current += ' rotate(' + deg / Math.PI * 180 + 'deg)';
+                return enhancePainter;
+            },
+
+            // 缩放
+            "scale": function scale(x, y) {
+                y = y || x;
+                transform_current += ' scale(' + x + ',' + y + ')';
+                return enhancePainter;
             }
 
         };

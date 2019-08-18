@@ -48,3 +48,7 @@ v1.1.7:
     date:2019-08-15
     changes:
       -  修复clearRect默认擦除区域问题
+v1.2.0:
+    date:2019-08-18
+    changes:
+      -  添加变换（save、restore、translate、rotate和scale）

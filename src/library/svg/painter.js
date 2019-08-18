@@ -32,6 +32,9 @@ export default function (target, selector) {
     // 路径(和canvas2D的类似)
     let path = "";
 
+    // 变换（和canvas2D的类似，内部维护了用于记录）
+    let transform_history = [], transform_current = "";
+
     // 画笔
     let enhancePainter = {
 
@@ -58,11 +61,20 @@ export default function (target, selector) {
         "moveTo": function (x, y) { path += "M" + x + " " + y; return enhancePainter; },
         "lineTo": function (x, y) { path += "L" + x + " " + y; return enhancePainter; },
         "fill": function () {
-            initPath(painter, path).attr("fill", config.fillStyle);
+            initPath(painter, path).attr('transform', transform_current).attr("fill", config.fillStyle);
             return enhancePainter;
         },
         "stroke": function () {
-            initPath(painter, path).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
+            initPath(painter, path).attr('transform', transform_current).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
+            return enhancePainter;
+        },
+
+        "save": function () {
+            transform_history.push(transform_current);
+            return enhancePainter;
+        },
+        "restore": function () {
+            if (transform_history.length > 0) transform_current = transform_history.pop();
             return enhancePainter;
         },
 
@@ -76,38 +88,38 @@ export default function (target, selector) {
 
         // 文字
         "fillText": function (text, x, y, deg) {
-            initText(painter, config, x, y, deg || 0).attr("fill", config.fillStyle)[0].textContent = text;
+            initText(painter, config, x, y, deg || 0).attr('transform', transform_current).attr("fill", config.fillStyle)[0].textContent = text;
             return enhancePainter;
         },
         "strokeText": function (text, x, y, deg) {
-            initText(painter, config, x, y, deg || 0).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
+            initText(painter, config, x, y, deg || 0).attr('transform', transform_current).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
             return enhancePainter;
         },
 
         // 弧
         "fillArc": function (cx, cy, r1, r2, beginDeg, deg) {
-            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr("fill", config.fillStyle);
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr('transform', transform_current).attr("fill", config.fillStyle);
             return enhancePainter;
         },
         "strokeArc": function (cx, cy, r1, r2, beginDeg, deg) {
-            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr('transform', transform_current).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
             return enhancePainter;
         },
 
         // 圆形
         "fillCircle": function (cx, cy, r) {
-            initCircle(painter, cx, cy, r).attr("fill", config.fillStyle); return enhancePainter;
+            initCircle(painter, cx, cy, r).attr('transform', transform_current).attr("fill", config.fillStyle); return enhancePainter;
         },
         "strokeCircle": function (cx, cy, r) {
-            initCircle(painter, cx, cy, r).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
+            initCircle(painter, cx, cy, r).attr('transform', transform_current).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
         },
 
         // 矩形
         "fillRect": function (x, y, width, height) {
-            initRect(painter, x, y, width, height).attr("fill", config.fillStyle); return enhancePainter;
+            initRect(painter, x, y, width, height).attr('transform', transform_current).attr("fill", config.fillStyle); return enhancePainter;
         },
         "strokeRect": function (x, y, width, height) {
-            initRect(painter, x, y, width, height).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
+            initRect(painter, x, y, width, height).attr('transform', transform_current).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
         },
 
         /**
@@ -118,6 +130,30 @@ export default function (target, selector) {
         //  线性渐变
         "createLinearGradient": function (x0, y0, x1, y1) {
             return linearGradient(painter, target, x0, y0, x1, y1);
+        },
+
+        /**
+         * 变换
+         * --------------
+         */
+
+        //  移动
+        "translate": function (x, y) {
+            transform_current += ' translate(' + x + ',' + y + ')';
+            return enhancePainter;
+        },
+
+        //  旋转
+        "rotate": function (deg) {
+            transform_current += ' rotate(' + (deg / Math.PI * 180) + 'deg)';
+            return enhancePainter;
+        },
+
+        // 缩放
+        "scale": function (x, y) {
+            y = y || x;
+            transform_current += ' scale(' + x + ',' + y + ')';
+            return enhancePainter;
         }
 
     };

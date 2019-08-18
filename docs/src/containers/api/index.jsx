@@ -38,6 +38,7 @@ export default class Api extends React.Component {
                 <li className='item' name='painter'>矢图svg</li>
                 <li className='item' name='painter'>通用绘图方法</li>
                 <li className='item' name='painter'>渐变色</li>
+                <li className='item' name='painter'>变换</li>
                 <li id='calculate' className='apimenu-item'><Link to='/api/calculate'>计算</Link></li>
                 <li className='item' name='calculate'>二维坐标变换</li>
                 <li className='item' name='calculate'>矩阵坐标变换</li>
