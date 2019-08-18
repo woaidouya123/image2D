@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sun Aug 18 2019 14:57:27 GMT+0800 (GMT+08:00)
+    * Date:Sun Aug 18 2019 15:16:53 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
