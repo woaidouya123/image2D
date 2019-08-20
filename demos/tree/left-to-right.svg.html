@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>左到右树</title>
+    <link rel="shortcut icon" href="../../docs/src/assets/image2D.png">
+    <script src='../../build/image2D.js'></script>
+    <script src="../_datas/program.json.js"></script>
+</head>
+
+<body>
+    <script>
+
+        var painter = $$('<svg>' +
+            '<g class="node"></g>' +
+            '<g class="text"></g>'
+            + '</svg>')
+            // 设置画布大小
+            .attr({
+                "width": 1200,
+                "height": 1600
+            })
+            // 画布添加到页面
+            .prependTo('body')
+            // 获取画笔
+            .painter();
+
+        // 树图使用布局计算结点坐标
+        var layout = $$.treeLayout({
+
+            // 数据格式配置（必须的，基本配置）
+            "root": function (initTree) {
+                return initTree
+            },
+            "id": function (treedata) {
+                return treedata.name;
+            },
+            "child": function (parentTree, initTree) {
+                return parentTree.children;
+            }
+        }).config({
+
+            // 配置具体的类型（可以不配置）
+            "type": "LR",
+            "width": 1200,
+            "height": 1600
+        })
+
+            // 设置绘图方法
+            .drawer(function (tree) {
+
+                var key, item, pitem;
+                for (key in tree.node) {
+                    item = tree.node[key];
+
+                    // 画结点
+                    painter
+                        .config({
+                            "fillStyle": "#fff",
+                            "strokeStyle": "red"
+                        })
+
+                        // 轮廓圆球
+                        .bind('<circle>').appendTo('g.node')
+                        .strokeCircle(item.left, item.top, 3)
+
+                        // 实心圆球
+                        .bind('<circle>').appendTo('g.node')
+                        .fillCircle(item.left, item.top, 3);
+
+                    // 如果不是根结点
+                    if (item.id !== tree.root) {
+                        pitem = tree.node[item.pid];
+
+                        // 画连线
+                        painter
+                            .config("strokeStyle", "#aaa")
+                            .beginPath()
+                            .moveTo(pitem.left + 3, pitem.top);
+
+                        painter
+                            .bind('<path>').appendTo('g.node')
+                            .bezierCurveTo(
+
+                            // 第一个控制点
+                            pitem.left + 50, pitem.top,
+
+                            // 第二个控制点
+                            item.left - 50, item.top,
+
+                            // 终点
+                            item.left - 3, item.top
+                            );
+
+                        painter.stroke();
+                    }
+
+                    // 结点描述文字
+                    painter
+                        .config({
+                            'fillStyle': '#555',
+                            "font-size": '9'
+                        })
+                        .bind('<text>').appendTo('g.text')
+                        .fillText(item.id, item.left + 5, item.top, item.deg);
+                }
+
+            });
+
+        // 启动布局
+        layout(program.data);
+
+    </script>
+</body>
+
+</html>

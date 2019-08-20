@@ -1,0 +1,35 @@
+$color:rgb(113, 30, 50);
+/* webkit下滚动条样式 */
+
+::-webkit-scrollbar {
+    width: .07rem;
+    height: .07rem;
+    background-color: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+    height: .3rem;
+    background-color: $color;
+    border-radius: .05rem;
+}
+
+/* IE浏览器下 */
+
+* {
+    /*三角箭头的颜色*/
+    scrollbar-arrow-color: $color;
+    /*滚动条滑块按钮的颜色*/
+    scrollbar-face-color: #eeeeee;
+    /*滚动条整体颜色*/
+    scrollbar-highlight-color: #fff;
+    /*滚动条阴影*/
+    scrollbar-shadow-color: #ccc;
+    /*滚动条轨道颜色*/
+    scrollbar-track-color: #fff;
+}
+
+@import './framework.scss';
+@import './api.scss';
+@import './guider.scss';
+@import './about.scss';
+@import '../plugin/prettify.css';

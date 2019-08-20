@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.1.3
+    * version 1.2.1
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Jul 11 2019 17:52:51 GMT+0800 (GMT+08:00)
+    * Date:Tue Aug 20 2019 10:19:52 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1491,6 +1491,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    var linearGradient = function linearGradient(painter, x0, y0, x1, y1) {
+        var gradient = painter.createLinearGradient(x0, y0, x1, y1);
+        var enhanceGradient = {
+            "value": function value() {
+                return gradient;
+            },
+            "addColorStop": function addColorStop(stop, color) {
+                gradient.addColorStop(stop, color);
+                return enhanceGradient;
+            }
+        };
+        return enhanceGradient;
+    };
+
     // 加强版本的画笔
     function painter_canvas2D(canvas) {
 
@@ -1501,9 +1515,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (canvas.__had_scale2_canvas__ !== 'YES') {
             canvas.__had_scale2_canvas__ = 'YES';
 
-            var width = canvas.clientWidth,
+            var width = canvas.clientWidth || canvas.getAttribute('width'),
                 //内容+内边距
-            height = canvas.clientHeight;
+            height = canvas.clientHeight || canvas.getAttribute('height');
 
             // 设置显示大小
             canvas.style.width = width + "px";
@@ -1516,6 +1530,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 通过缩放实现模糊问题
             painter.scale(2, 2);
         }
+
+        // 默认配置canvas2D对象已经存在的属性
+        painter.textBaseline = 'middle';
+        painter.textAlign = 'left';
 
         // 默认配置不应该有canvas2D对象已经存在的属性
         // 这里是为了简化或和svg统一接口而自定义的属性
@@ -1576,9 +1594,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 painter.stroke();return enhancePainter;
             },
 
+            "save": function save() {
+                painter.save();return enhancePainter;
+            },
+            "restore": function restore() {
+                painter.restore();return enhancePainter;
+            },
+
+            // 路径 - 贝塞尔曲线
+            "quadraticCurveTo": function quadraticCurveTo(cpx, cpy, x, y) {
+                painter.quadraticCurveTo(cpx, cpy, x, y);return enhancePainter;
+            },
+            "bezierCurveTo": function bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
+                painter.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);return enhancePainter;
+            },
+
             // 擦除画面
-            "clearn": function clearn(x, y, width, height) {
-                painter.clearRect(x || 0, y || 0, width || canvas.clientWidth, height || canvas.clientHeight);return enhancePainter;
+            "clearRect": function clearRect(x, y, width, height) {
+                painter.clearRect(x || 0, y || 0, width || canvas.getAttribute('width') / 2, height || canvas.getAttribute('height') / 2);return enhancePainter;
             },
 
             // 地址图片
@@ -1588,7 +1621,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // image
             "drawImage": function drawImage(img, sx, sy, sw, sh, x, y, w, h) {
-                painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);return enhancePainter;
+                painter.drawImage(img, sx || 0, sy || 0, sw ? sw * 2 : canvas.getAttribute('width'), sh ? sh * 2 : canvas.getAttribute('height'), x || 0, y || 0, w || canvas.getAttribute('width') / 2, h || canvas.getAttribute('height') / 2);
+                return enhancePainter;
             },
 
             // 弧
@@ -1613,8 +1647,38 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             "strokeRect": function strokeRect(x, y, width, height) {
                 initRect(painter, x, y, width, height).stroke();return enhancePainter;
-            }
+            },
 
+            /**
+            * 渐变
+            * -------------
+            */
+
+            //  线性渐变
+            "createLinearGradient": function createLinearGradient(x0, y0, x1, y1) {
+                return linearGradient(painter, x0, y0, x1, y1);
+            },
+
+            /**
+             * 变换
+             * --------------
+             */
+
+            //  移动
+            // 用来移动 canvas 的原点到指定的位置
+            "translate": function translate(x, y) {
+                painter.translate(x, y);return enhancePainter;
+            },
+
+            //  旋转
+            "rotate": function rotate(deg) {
+                painter.rotate(deg);return enhancePainter;
+            },
+
+            // 缩放
+            "scale": function scale(x, y) {
+                y = y || x;painter.scale(x, y);return enhancePainter;
+            }
         };
 
         return enhancePainter;
@@ -1707,6 +1771,32 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    var initDefs = function initDefs(target) {
+        var defs = target.getElementsByTagName('defs');
+        if (defs.length <= 0) {
+            defs = [toNode$1("<defs>", "SVG")];
+            target.appendChild(defs[0]);
+        }
+        return defs[0];
+    };
+
+    var linearGradient$1 = function linearGradient$1(painter, target, x0, y0, x1, y1) {
+        var defs = initDefs(target);
+        var gradientId = "image2D-lg-" + new Date().valueOf() + "-" + Math.random();
+        var gradientDom = toNode$1('<linearGradient id="' + gradientId + '" x1="' + x0 + '%" y1="' + y0 + '%" x2="' + x1 + '%" y2="' + y1 + '%"></linearGradient>');
+        target.appendChild(gradientDom);
+        var enhanceGradient = {
+            "value": function value() {
+                return "url(#" + gradientId + ")";
+            },
+            "addColorStop": function addColorStop(stop, color) {
+                gradientDom.appendChild(toNode$1('<stop offset="' + stop * 100 + '%" style="stop-color:' + color + ';" />'));
+                return enhanceGradient;
+            }
+        };
+        return enhanceGradient;
+    };
+
     function painter_svg(target, selector) {
 
         var painter = void 0;
@@ -1737,6 +1827,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 路径(和canvas2D的类似)
         var path = "";
 
+        // 变换（和canvas2D的类似，内部维护了用于记录）
+        var transform_history = [],
+            transform_current = "";
+
         // 画笔
         var enhancePainter = {
 
@@ -1753,19 +1847,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 基础方法
             "bind": function bind(selector) {
-                painter = image2D(selector, target);return enhancePainter;
+                painter = image2D(selector, target);return this;
             },
             "appendTo": function appendTo(selector) {
-                painter.appendTo(selector, target);return enhancePainter;
+                painter.appendTo(selector || target, target);return enhancePainter;
             },
             "prependTo": function prependTo(selector) {
-                painter.prependTo(selector, target);return enhancePainter;
+                painter.prependTo(selector || target, target);return enhancePainter;
             },
             "afterTo": function afterTo(selector) {
-                painter.afterTo(selector, target);return enhancePainter;
+                painter.afterTo(selector || target, target);return enhancePainter;
             },
             "beforeTo": function beforeTo(selector) {
-                painter.beforeTo(selector, target);return enhancePainter;
+                painter.beforeTo(selector || target, target);return enhancePainter;
             },
 
             // 路径
@@ -1782,48 +1876,99 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 path += "L" + x + " " + y;return enhancePainter;
             },
             "fill": function fill() {
-                initPath(painter, path).attr("fill", _config3.fillStyle);
+                initPath(painter, path).attr('transform', transform_current).attr("fill", _config3.fillStyle);
                 return enhancePainter;
             },
             "stroke": function stroke() {
-                initPath(painter, path).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
+                initPath(painter, path).attr('transform', transform_current).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
                 return enhancePainter;
+            },
+
+            "save": function save() {
+                transform_history.push(transform_current);
+                return enhancePainter;
+            },
+            "restore": function restore() {
+                if (transform_history.length > 0) transform_current = transform_history.pop();
+                return enhancePainter;
+            },
+
+            // 路径 - 贝塞尔曲线
+            "quadraticCurveTo": function quadraticCurveTo(cpx, cpy, x, y) {
+                path += "Q" + cpx + " " + cpy + "," + x + " " + y;return enhancePainter;
+            },
+            "bezierCurveTo": function bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
+                path += "C" + cp1x + " " + cp1y + "," + cp2x + " " + cp2y + "," + x + " " + y;return enhancePainter;
             },
 
             // 文字
             "fillText": function fillText(text, x, y, deg) {
-                initText$1(painter, _config3, x, y, deg || 0).attr("fill", _config3.fillStyle)[0].textContent = text;
+                initText$1(painter, _config3, x, y, deg || 0).attr('transform', transform_current).attr("fill", _config3.fillStyle)[0].textContent = text;
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y, deg) {
-                initText$1(painter, _config3, x, y, deg || 0).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
+                initText$1(painter, _config3, x, y, deg || 0).attr('transform', transform_current).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
             },
 
             // 弧
             "fillArc": function fillArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr("fill", _config3.fillStyle);
+                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr('transform', transform_current).attr("fill", _config3.fillStyle);
                 return enhancePainter;
             },
             "strokeArc": function strokeArc(cx, cy, r1, r2, beginDeg, deg) {
-                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
+                initArc$1(painter, _config3, cx, cy, r1, r2, beginDeg, deg).attr('transform', transform_current).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });
                 return enhancePainter;
             },
 
             // 圆形
             "fillCircle": function fillCircle(cx, cy, r) {
-                initCircle$1(painter, cx, cy, r).attr("fill", _config3.fillStyle);return enhancePainter;
+                initCircle$1(painter, cx, cy, r).attr('transform', transform_current).attr("fill", _config3.fillStyle);return enhancePainter;
             },
             "strokeCircle": function strokeCircle(cx, cy, r) {
-                initCircle$1(painter, cx, cy, r).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
+                initCircle$1(painter, cx, cy, r).attr('transform', transform_current).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
             },
 
             // 矩形
             "fillRect": function fillRect(x, y, width, height) {
-                initRect$1(painter, x, y, width, height).attr("fill", _config3.fillStyle);return enhancePainter;
+                initRect$1(painter, x, y, width, height).attr('transform', transform_current).attr("fill", _config3.fillStyle);return enhancePainter;
             },
             "strokeRect": function strokeRect(x, y, width, height) {
-                initRect$1(painter, x, y, width, height).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
+                initRect$1(painter, x, y, width, height).attr('transform', transform_current).attr({ "stroke-width": _config3.lineWidth, "stroke": _config3.strokeStyle, "fill": "none" });return enhancePainter;
+            },
+
+            /**
+             * 渐变
+             * -------------
+             */
+
+            //  线性渐变
+            "createLinearGradient": function createLinearGradient(x0, y0, x1, y1) {
+                return linearGradient$1(painter, target, x0, y0, x1, y1);
+            },
+
+            /**
+             * 变换
+             * --------------
+             */
+
+            //  移动
+            "translate": function translate(x, y) {
+                transform_current += ' translate(' + x + ',' + y + ')';
+                return enhancePainter;
+            },
+
+            //  旋转
+            "rotate": function rotate(deg) {
+                transform_current += ' rotate(' + deg / Math.PI * 180 + ')';
+                return enhancePainter;
+            },
+
+            // 缩放
+            "scale": function scale(x, y) {
+                y = y || x;
+                transform_current += ' scale(' + x + ',' + y + ')';
+                return enhancePainter;
             }
 
         };
@@ -1857,11 +2002,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
 
         // 画笔
-        var painter = this[0].getContext("2d"),
+        var painter = this.painter(),
 
         // 图层集合
-        layer = {};
-        layer_index = [];
+        layer = {},
+            layer_index = [];
         var width = this[0].clientWidth,
             //内容+内边距
         height = this[0].clientHeight;
@@ -1904,6 +2049,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "update": function update() {
                 painter.clearRect(0, 0, width, height);
                 painter.save();
+
                 for (var i = 0; i < layer_index.length; i++) {
                     if (layer[layer_index[i]].visible) painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width, height, 0, 0, width, height);
                 }

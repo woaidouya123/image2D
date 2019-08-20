@@ -5,19 +5,34 @@ let file = require('fs');
 
 let tempFile = "./build/uglifyjs.new.js";
 
-// js代码压缩混淆
-module.exports = function (cuf, options) {
-    cuf.print.warn(options.entry + " → " + tempFile + " → " + options.output);
-    cuf.file.write(options.output, options.banner || "");
-    cp.exec("uglifyjs " + options.entry + " -m -o " + tempFile, function (error, data) {
-        if (error) {
-            cuf.print.error(error);
-            cuf.file.writeAppend(options.output, error);
-            cuf.print.error("\n>> uglifyjs压缩失败\n");
-        } else {
-            cuf.file.writeAppend(options.output, cuf.file.read(tempFile));
-        }
-        cuf.print.error("delete " + tempFile + "\n");
-        file.unlinkSync(tempFile);
-    });
+let $print = require('./tool/print.js');
+let $file = require('./tool/file.js');
+let banner = require('./banner.js');
+
+let options = {
+    "banner": banner(),
+    "entry": "./build/image2D.js",
+    "output": ["./build/image2D.min.js", "./docs/image2D.min.guider.js"]
 };
+
+// js代码压缩混淆
+$print.log("\n>>> node run uglify...");
+$print.warn(options.entry + " → " + tempFile + " → " + options.output);
+for (let i = 0; i < options.output.length; i++) {
+    $file.write(options.output[i], options.banner || "");
+}
+cp.exec("uglifyjs " + options.entry + " -m -o " + tempFile, function (error, data) {
+    if (error) {
+        $print.error(error);
+        for (let i = 0; i < options.output.length; i++) {
+            $file.writeAppend(options.output[i], error);
+        }
+        $print.error("\n>> uglifyjs压缩失败\n");
+    } else {
+        for (let i = 0; i < options.output.length; i++) {
+            $file.writeAppend(options.output[i], $file.read(tempFile));
+        }
+    }
+    $print.error("delete " + tempFile + "\n");
+    file.unlinkSync(tempFile);
+});

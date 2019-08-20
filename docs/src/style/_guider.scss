@@ -1,0 +1,38 @@
+.guider {
+    font-size: .14rem;
+    &>.banner {
+        margin: 2em 0;
+        border-left: .1rem solid #9fc457;
+        font-weight: 400;
+        padding: 0 .15rem;
+        background-color: #d5e2ba;
+        line-height: 3em;
+        color: #000;
+    }
+    &>h2 {
+        margin: .5rem 0 1.2em;
+    }
+    &>h4 {
+        font-size: .16rem;
+        color: #cb538b;
+    }
+    &>p {
+        font-size: .16rem;
+        line-height: 1.8em;
+        word-spacing: 0.05em;
+        color: #757474;
+        text-indent: 2em;
+        margin-bottom: .2rem;
+        margin-top: .1rem;
+        &>a {
+            color: #9fc457;
+            font-weight: 600;
+            margin: 0 .1rem;
+        }
+    }
+    .special-class-demo1{
+        background-image: url('../assets/guider-demo1.png');
+        background-position: right center;
+        background-repeat: no-repeat;
+    }
+}

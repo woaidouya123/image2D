@@ -68,4 +68,6 @@ image2D.prototype.extend({
 
 });
 
+image2D.fn = image2D.prototype;
+
 export default image2D;

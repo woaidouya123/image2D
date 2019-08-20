@@ -25,7 +25,34 @@ v1.1.3:
     date:2019-07-11
     chagnes:
       -  针对canvas画线条模糊问题进行修复(固定放大二倍绘图区域)
-v?.?.?:
-    date:?-?-?
+v1.1.4:
+    date:2019-08-06
     changes:
       -  增加新的基本绘图接口（矩形）
+      -  增加新的路径绘制方法（二次和三次基本的贝塞尔曲线）
+v1.1.5-alpha:
+    date:2019-08-07
+    changes:
+        (尝试添加一下新的功能，正式发布前提供alpha对内测试版本)
+      -  丰富画笔方法(线性渐变)
+v1.1.5:
+    date:2019-08-11
+    changes:
+      -  画笔橡皮擦方法名称由clearn变成clearRect
+      -  线性渐变确定使用
+v1.1.6:
+    date:2019-08-11
+    changes:
+      -  修复layer图层问题
+v1.1.7:
+    date:2019-08-15
+    changes:
+      -  修复clearRect默认擦除区域问题
+v1.2.0:
+    date:2019-08-18
+    changes:
+      -  添加变换（save、restore、translate、rotate和scale）
+v1.2.1:
+    date:2019-08-20
+    changes:
+      -  svg的rotate角度设置错误修改

@@ -1,0 +1,35 @@
+.about{
+    &>h2{
+        font-weight: 800;
+        line-height: 2em;
+        padding: .4rem 0 .2rem;
+        margin-top: -.3rem;
+        font-size: .2rem;
+    }
+    &>p{
+        padding:.1rem;
+        font-size: .14rem;
+        font-weight: 800;
+        &>a{
+            color: #9fc457;
+            font-weight: 600;
+            margin: 0 .1rem;
+        }
+    }
+    &>ul{
+        &>li{
+            margin-left: .3rem;
+            line-height: 2.5em;
+            margin: .1rem 0;
+            font-size: .13rem;
+            &>em{
+                background-color: #8eb844;
+                margin: 0 .1rem;
+                padding:.03rem;
+                font-size: .12rem;
+                font-style: normal;
+                color:#fefdf7;
+            }
+        }
+    }
+}

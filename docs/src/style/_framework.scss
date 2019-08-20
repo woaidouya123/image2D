@@ -1,0 +1,94 @@
+body {
+    --distance: calc(50vw - 5.5rem);
+    &>* {
+        min-width: 11rem;
+    }
+    &>header {
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        background-color: rgba(255, 255, 255, 0.4);
+        line-height: .42rem;
+        color: $color;
+        padding-left: var(--distance);
+        box-shadow: rgba(0, 0, 0, 0.1) 0 1px 2px;
+        &>.github {
+            position: fixed;
+            transform: rotate(45deg);
+            top: .6rem;
+            line-height: 1.6em;
+            right: -.6rem;
+            background-color: #ac2c23;
+            outline: .04rem solid #ac2c23;
+            transform-origin: 1.5rem .23rem;
+            border: .02rem dashed #d14742;
+            width: 3rem;
+            text-align: center;
+            color: #ebdbd9;
+            font-family: sans-serif;
+        }
+        * {
+            display: inline-block;
+        }
+        h2 {
+            font-size: .2rem;
+            font-family: fantasy;
+            background-image: url('../assets/image2D.png');
+            background-position: left center;
+            background-size: .3rem auto;
+            background-repeat: no-repeat;
+            padding-left: .4rem;
+            margin-left: .3rem;
+        }
+        ul {
+            padding-right: var(--distance);
+            position: absolute;
+            right: 1rem;
+            li {
+                padding: 0 .05rem;
+                font-size: .12rem;
+                cursor: pointer;
+                font-weight: bold;
+                &[active='yes'] {
+                    color: #f10c0c;
+                    border-bottom: 3px solid red;
+                }
+                &[active='no'] {
+                    color: rgb(3, 3, 3);
+                }
+            }
+        }
+    }
+    &>#root {
+        background-image: url('../assets/header.jpg');
+        background-repeat: no-repeat;
+        background-position: center -.1rem;
+        padding: 1.8rem var(--distance) .1rem;
+        margin-top: -.42rem;
+    }
+    &>footer {
+        padding: .4rem .1rem;
+        text-align: center;
+        background-color: #f6f9fa;
+        font-size: .12rem;
+        &>ul {
+            padding-bottom: .2rem;
+            &>li {
+                display: inline-block;
+                padding: 0 .2rem;
+                line-height: 1.2em;
+                &:not(:last-child) {
+                    border-right: 1px solid #000;
+                }
+            }
+        }
+        a {
+            font-weight: bold;
+            color: #000;
+        }
+        &>em {
+            font-style: normal;
+            font-family: cursive;
+        }
+    }
+}
