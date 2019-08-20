@@ -7,7 +7,8 @@
     "start": "npm install && node ./task/explain.js",
     "unit": "karma start",
     "build": "node ./task/module.js && node ./task/babel.js && node ./task/uglify.js",
-    "support": "npx browserslist"
+    "support": "npx browserslist",
+    "postinstall": "node ./script/postinstall.js || echo \"ignore\""
   },
   "keywords": [
     "image",
