@@ -34,9 +34,9 @@ export default class Api extends React.Component {
                 <li className='item' name='xhtml'>事件相关</li>
                 <li className='item' name='xhtml'>数据绑定</li>
                 <li id='painter' className='apimenu-item'><Link to='/api/painter'>画笔</Link></li>
-                <li className='item' name='painter'>位图canvas2D</li>
-                <li className='item' name='painter'>矢图svg</li>
-                <li className='item' name='painter'>通用绘图方法</li>
+                <li className='item' name='painter'>canvas2D</li>
+                <li className='item' name='painter'>svg</li>
+                <li className='item' name='painter'>绘图方法</li>
                 <li className='item' name='painter'>渐变色</li>
                 <li className='item' name='painter'>变换</li>
                 <li id='calculate' className='apimenu-item'><Link to='/api/calculate'>计算</Link></li>
@@ -45,7 +45,7 @@ export default class Api extends React.Component {
                 <li className='item' name='calculate'>曲线插值</li>
                 <li className='item' name='calculate'>布局</li>
                 <li className='item' name='calculate'>动画轮询</li>
-                <li id='tool' className='apimenu-item'><Link to='/api/tool'>小工具</Link></li>
+                <li id='tool' className='apimenu-item'><Link to='/api/tool'>补充</Link></li>
                 <li className='item' name='tool'>图层</li>
             </ul>
             <div>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lineTo线条粗细不一致问题</title>
+    <script src="../build/image2D.js"></script>
+</head>
+
+<body>
+
+    <script>
+
+        $$('<canvas>非常抱歉，您的浏览器不支持canvas!</canvas>')
+            .appendTo('body')
+            .attr({
+                width: 400,
+                height: 400
+            }).painter()
+
+            /**
+             * 实验开始
+             * -----------------
+            */
+            .beginPath()
+            .moveTo(201.5, 0)
+            .lineTo(0, 201.5)
+            .lineTo(201.5, 400)
+            .lineTo(400, 201.5)
+            .lineTo(201.5, 0)
+            .lineTo(201.5, 400)
+            .lineTo(350, 350)
+            .lineTo(400, 201.5)
+            .lineTo(0, 201.5)
+            .stroke();
+
+
+        $$('<svg></svg>')
+            .appendTo('body')
+            .attr({
+                width: 400,
+                height: 400
+            }).painter()
+
+            /**
+             * 实验开始
+             * 现象：屏幕缩放一定程度以后，线条粗细不一致
+             * -----------------
+            */
+            .beginPath()
+            .moveTo(201.5, 0)
+            .lineTo(0, 201.5)
+            .lineTo(201.5, 400)
+            .lineTo(400, 201.5)
+            .lineTo(201.5, 0)
+            .lineTo(201.5, 400)
+            .lineTo(350, 350)
+            .lineTo(400, 201.5)
+            .lineTo(0, 201.5)
+            .bind('<path>')
+            .appendTo()
+            .stroke();
+
+    </script>
+
+</body>
+
+</html>
