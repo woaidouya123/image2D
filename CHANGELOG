@@ -52,3 +52,7 @@ v1.2.0:
     date:2019-08-18
     changes:
       -  添加变换（save、restore、translate、rotate和scale）
+v1.2.1:
+    date:2019-08-20
+    changes:
+      -  svg的rotate角度设置错误修改

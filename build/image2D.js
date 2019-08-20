@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.2.0
+    * version 1.2.1
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sun Aug 18 2019 15:16:53 GMT+0800 (GMT+08:00)
+    * Date:Tue Aug 20 2019 10:19:52 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1847,19 +1847,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 基础方法
             "bind": function bind(selector) {
-                painter = image2D(selector, target);return enhancePainter;
+                painter = image2D(selector, target);return this;
             },
             "appendTo": function appendTo(selector) {
-                painter.appendTo(selector, target);return enhancePainter;
+                painter.appendTo(selector || target, target);return enhancePainter;
             },
             "prependTo": function prependTo(selector) {
-                painter.prependTo(selector, target);return enhancePainter;
+                painter.prependTo(selector || target, target);return enhancePainter;
             },
             "afterTo": function afterTo(selector) {
-                painter.afterTo(selector, target);return enhancePainter;
+                painter.afterTo(selector || target, target);return enhancePainter;
             },
             "beforeTo": function beforeTo(selector) {
-                painter.beforeTo(selector, target);return enhancePainter;
+                painter.beforeTo(selector || target, target);return enhancePainter;
             },
 
             // 路径
@@ -1960,7 +1960,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             //  旋转
             "rotate": function rotate(deg) {
-                transform_current += ' rotate(' + deg / Math.PI * 180 + 'deg)';
+                transform_current += ' rotate(' + deg / Math.PI * 180 + ')';
                 return enhancePainter;
             },
 

@@ -50,10 +50,10 @@ export default function (target, selector) {
 
         // 基础方法
         "bind": function (selector) { painter = image2D(selector, target); return enhancePainter; },
-        "appendTo": function (selector) { painter.appendTo(selector, target); return enhancePainter; },
-        "prependTo": function (selector) { painter.prependTo(selector, target); return enhancePainter; },
-        "afterTo": function (selector) { painter.afterTo(selector, target); return enhancePainter; },
-        "beforeTo": function (selector) { painter.beforeTo(selector, target); return enhancePainter; },
+        "appendTo": function (selector) { painter.appendTo(selector || target, target); return enhancePainter; },
+        "prependTo": function (selector) { painter.prependTo(selector || target, target); return enhancePainter; },
+        "afterTo": function (selector) { painter.afterTo(selector || target, target); return enhancePainter; },
+        "beforeTo": function (selector) { painter.beforeTo(selector || target, target); return enhancePainter; },
 
         // 路径
         "beginPath": function () { path = ""; return enhancePainter; },
@@ -145,7 +145,7 @@ export default function (target, selector) {
 
         //  旋转
         "rotate": function (deg) {
-            transform_current += ' rotate(' + (deg / Math.PI * 180) + 'deg)';
+            transform_current += ' rotate(' + (deg / Math.PI * 180) + ')';
             return enhancePainter;
         },
 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="../../../docs/src/assets/image2D.png">
+    <script src="../../../build/image2D.js"></script>
+    <title>image2D - 用例测试 - transform变换</title>
+</head>
+
+<body>
+    <script>
+
+        // 准备画布
+        var svg = $$('<svg></svg>').attr({
+            "width": 400,
+            "height": 400
+        }).appendTo('body');
+
+        // 获取并配置画笔
+        var painter = svg.painter();
+
+        /**
+         * 测试开始
+         * ----------------------------
+         */
+
+        painter
+            .bind('<rect>').appendTo()
+            .fillRect(0, 0, 100, 100)
+
+            .save()
+
+            .translate(50, 50)
+            .config('fillStyle', 'blue')
+            .bind('<rect>').appendTo()
+            .fillRect(0, 0, 100, 100)
+
+            .translate(50, 50)
+            .config('fillStyle', 'red')
+            .bind('<rect>').appendTo()
+            .fillRect(0, 0, 100, 100)
+
+            .restore()
+            .config('fillStyle', 'pink')
+            .bind('<rect>').appendTo()
+            .fillRect(10, 10, 40, 40);
+
+        painter
+            .translate(50, 50)
+
+            .save()
+
+            .rotate(Math.PI / 4)
+            .config('fillStyle', 'green')
+            .bind('<rect>').appendTo()
+            .fillRect(0, 0, 25, 50)
+
+            .restore();
+
+        painter
+
+            .scale(2)
+
+            .config('fillStyle', 'white')
+            .bind('<rect>').appendTo()
+            .fillRect(0, 0, 25, 25);
+
+    </script>
+</body>
+
+</html>
