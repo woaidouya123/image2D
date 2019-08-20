@@ -49,8 +49,5 @@
     "ie > 8",
     "chrome >= 61",
     "firefox >= 65"
-  ],
-  "dependencies": {
-    "abandon": "^0.1.4-alpha"
-  }
+  ]
 }
