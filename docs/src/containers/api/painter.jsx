@@ -72,7 +72,7 @@ export default class Painter extends React.Component {
                 <li>"arc-end-cap":圆弧结束端闭合方式，和上一个类似。</li>
             </ul>
 
-            <h4 className="title small">位图canvas2D</h4>
+            <h4 className="title small">canvas2D</h4>
             <p>
                 除了上面列出的可配置项，因为canvas2D的配置是直接连原始画笔的（不是全部），因此其自身的2d画笔原来可配置的属性依旧可以配置，请知悉。这种绘图方法相对比较简单，下面我们来看看其特有的一些简单的绘图方法。
         </p>
@@ -94,7 +94,7 @@ export default class Painter extends React.Component {
                 <li>(img, sx, sy, swidth, sheight, x, y, width, height):剪切图像，并在画布上定位被剪切的部分。</li>
             </ul>
 
-            <h4 className="title small">矢图svg</h4>
+            <h4 className="title small">svg</h4>
 
             <p>
                 这种画笔比较特殊，画笔是绑定在维护了svg结点的结点对象上的，不过具体的绘制（比如文字是text标签）却需要对应更具体的标签，因此获取painter方法的时候可以传递一个选择器selector来绑定本次绘制目标（可选）：
@@ -128,7 +128,7 @@ painter.config({
 // 绘制文字并追加到画布
 painter.fillText('Step By Step', 100, 100).appendTo('g.text');`}</pre>
 
-            <h4 className="title small">通用绘图方法</h4>
+            <h4 className="title small">绘图方法</h4>
             <p>
                 上面说明的绘图方法都是具体画笔特有的（因为不同的画笔存在差异），除此之外，大部分方法是通用的。
         </p>
