@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.2.1
+    * version 1.2.4
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sat Aug 24 2019 21:53:50 GMT+0800 (GMT+08:00)
+    * Date:Sat Aug 24 2019 21:56:42 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
