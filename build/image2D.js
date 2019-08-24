@@ -12,7 +12,7 @@
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Aug 20 2019 10:19:52 GMT+0800 (GMT+08:00)
+    * Date:Sat Aug 24 2019 21:53:50 GMT+0800 (GMT+08:00)
     */
 
 "use strict";
@@ -1847,7 +1847,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 基础方法
             "bind": function bind(selector) {
-                painter = image2D(selector, target);return this;
+                painter = image2D(selector, target);return enhancePainter;
             },
             "appendTo": function appendTo(selector) {
                 painter.appendTo(selector || target, target);return enhancePainter;
@@ -2112,6 +2112,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         layer: layer
 
     });
+
+    image2D.fn = image2D.prototype;
 
     // 判断当前环境，如果不是浏览器环境
     if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
