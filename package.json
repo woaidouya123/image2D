@@ -50,8 +50,5 @@
     "ie > 8",
     "chrome >= 61",
     "firefox >= 65"
-  ],
-  "dependencies": {
-    "@yelloxing/core.js": "0.1.0-alpha"
-  }
+  ]
 }
