@@ -3,7 +3,6 @@
         "react"
     ],
     "plugins": [
-        "babel-plugin-transform-class-properties",
         "dynamic-import-webpack"
     ]
 }
