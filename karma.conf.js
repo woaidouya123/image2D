@@ -35,7 +35,7 @@ module.exports = function (config) {
 
 
         // 测试服务器端口
-        port: 20000,
+        port: 2010,
 
 
         // 启用或禁用输出报告或者日志中的颜色

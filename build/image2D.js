@@ -5,50 +5,105 @@
     *
     * author 心叶
     *
-    * version 1.2.4
+    * version 1.3.0
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Sat Aug 24 2019 21:56:42 GMT+0800 (GMT+08:00)
+    * Date:Thu Aug 29 2019 15:01:51 GMT+0800 (GMT+08:00)
     */
 
-"use strict";
+'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function () {
     'use strict';
 
-    /**
-     * 判断传入的是不是结点
-     * @param {Any} param
-     * @return {Boolean} true:结点，false:不是结点
-     */
-
-    var isNode = function isNode(param) {
-        return param && (param.nodeType === 1 || param.nodeType === 9 || param.nodeType === 11);
-    };
+    var toString = Object.prototype.toString;
 
     /**
-     * 判断传入的元素是不是文本
-     * @param {Any} param
-     * @return {Boolean} true:文本，false:不是文本
+     * 获取一个值的类型字符串[object type]
+     *
+     * @private
+     * @param {*} value 需要返回类型的值
+     * @returns {string} 返回类型字符串
      */
-    var isText = function isText(param) {
-        return param && param.nodeType === 3;
-    };
+    function getType(value) {
+        if (value == null) {
+            return value === undefined ? '[object Undefined]' : '[object Null]';
+        }
+        return toString.call(value);
+    }
 
     /**
-     * 判断传入的元素是不是canvas2D画笔
-     * @param {Any} param
-     * @return {Boolean} true:画笔，false:不是画笔
+     * 判断一个值是不是一个朴素的'对象'
+     *
+     * @private
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是朴素的'对象'返回true，否则返回false
      */
-    var isCanvas2D = function isCanvas2D(param) {
-        return param && param.constructor === CanvasRenderingContext2D;
-    };
+
+    function isPlainObject(value) {
+        if (value === null || (typeof value === 'undefined' ? 'undefined' : _typeof(value)) !== 'object' || getType(value) != '[object Object]') {
+            return false;
+        }
+
+        // 如果原型为null
+        if (Object.getPrototypeOf(value) === null) {
+            return true;
+        }
+
+        var proto = value;
+        while (Object.getPrototypeOf(proto) !== null) {
+            proto = Object.getPrototypeOf(proto);
+        }
+        return Object.getPrototypeOf(value) === proto;
+    }
+
+    /**
+     * 判断一个值是不是结点元素。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是结点元素返回true，否则返回false
+     */
+    function isElement(value) {
+        return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && (value.nodeType === 1 || value.nodeType === 9 || value.nodeType === 11) && !isPlainObject(value);
+    }
+
+    /**
+     * 判断一个值是不是Object。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是Object返回true，否则返回false
+     */
+    function isObject(value) {
+        var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+        return value != null && (type == 'object' || type == 'function');
+    }
+
+    /**
+     * 判断一个值是不是Function。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是Function返回true，否则返回false
+     */
+    function isFunction(value) {
+        if (!isObject(value)) {
+            return false;
+        }
+
+        var type = getType(value);
+        return type == '[object Function]' || type == '[object AsyncFunction]' || type == '[object GeneratorFunction]' || type == '[object Proxy]';
+    }
 
     /**
      * 初始化配置文件
@@ -90,6 +145,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // 记录需要使用xlink命名空间常见的xml属性
     var XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];
+
+    /**
+     * 判断一个值是不是文本结点。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是结点元素返回true，否则返回false
+     */
+    function isText(value) {
+        return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.nodeType === 3 && !isPlainObject(value);
+    }
 
     /**
      * 设置svg字符串
@@ -158,7 +225,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
         childNodes = frame.childNodes;
         for (var i = 0; i < childNodes.length; i++) {
-            if (isNode(childNodes[i])) return childNodes[i];
+            if (isElement(childNodes[i])) return childNodes[i];
         }
     };
 
@@ -201,7 +268,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 如果以'<'开头表示是字符串模板
             if (typeof context == 'string' || /^</.test(selector)) {
                 var node = toNode$1(selector, context);
-                if (isNode(node)) return [node];else return [];
+                if (isElement(node)) return [node];else return [];
             }
 
             // *表示查找全部
@@ -214,7 +281,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 此选择器会忽略上下文
             if (id) {
                 var _node = document.getElementById(id[0].replace('#', ''));
-                if (isNode(_node)) return [_node];else return [];
+                if (isElement(_node)) return [_node];else return [];
             }
 
             var cls = selector.match(new RegExp('\\.' + REGEXP.identifier, 'g')),
@@ -245,7 +312,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         // 如果是结点
-        else if (isNode(selector)) {
+        else if (isElement(selector)) {
                 return [selector];
             }
 
@@ -254,7 +321,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             else if (selector && (selector.constructor === Array || selector.constructor === HTMLCollection || selector.constructor === NodeList)) {
                     var _temp = [];
                     for (var _i = 0; _i < selector.length; _i++) {
-                        if (isNode(selector[_i])) _temp.push(selector[_i]);
+                        if (isElement(selector[_i])) _temp.push(selector[_i]);
                     }
                     return _temp;
                 }
@@ -265,7 +332,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     }
 
                     // 如果是函数
-                    else if (typeof selector === 'function') {
+                    else if (isFunction(selector)) {
                             var _allNodes = context.getElementsByTagName('*'),
                                 _temp2 = [];
                             for (var _i2 = 0; _i2 < _allNodes.length; _i2++) {
@@ -378,7 +445,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             source = target;
             target = this;
         }
-        if ((typeof target === "undefined" ? "undefined" : _typeof(target)) !== "object" && typeof target !== 'function') {
+        if (!isObject(target)) {
             //如果目标不是对象或函数，则初始化为空对象
             target = {};
         }
@@ -1699,7 +1766,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     // 文字统一设置方法
     var initText$1 = function initText$1(painter, config, x, y, deg) {
-        if (!isNode(painter[0])) throw new Error('Target empty!');
+        if (!isElement(painter[0])) throw new Error('Target empty!');
         if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
         // 垂直对齐采用dy实现
@@ -1981,7 +2048,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     function painter() {
 
         // 因为绘图画布是必须的，因此在判断画布类型前，如果压根没有结点，肯定是非法的
-        if (!isNode(this[0])) throw new Error('Target empty!');
+        if (!isElement(this[0])) throw new Error('Target empty!');
 
         var target = this[0],
             nodeName = target.nodeName.toLowerCase();
@@ -1995,9 +2062,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         throw new Error('Painter is not a function!');
     }
 
+    /**
+     * 判断传入的元素是不是canvas2D画笔
+     * @param {Any} param
+     * @return {Boolean} true:画笔，false:不是画笔
+     */
+    var isCanvas2D = function isCanvas2D(param) {
+        return param && param.constructor === CanvasRenderingContext2D;
+    };
+
     function layer() {
 
-        if (!isNode(this[0])) throw new Error('Target empty!');
+        if (!isElement(this[0])) throw new Error('Target empty!');
 
         if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
 
@@ -2116,7 +2192,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     image2D.fn = image2D.prototype;
 
     // 判断当前环境，如果不是浏览器环境
-    if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    if ((typeof module === 'undefined' ? 'undefined' : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
         module.exports = image2D;
     }
     // 浏览器环境下

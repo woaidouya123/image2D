@@ -59,6 +59,7 @@
  */
 
 import sizzle from '../core/sizzle';
+import isObject from '@yelloxing/core.js/isObject';
 
 let image2D = function (selector, context) {
     return new image2D.prototype.init(selector, context);
@@ -96,7 +97,7 @@ image2D.prototype.extend = image2D.extend = function () {
         source = target;
         target = this;
     }
-    if (typeof target !== "object" && typeof target !== 'function') {
+    if (!isObject(target)) {
         //如果目标不是对象或函数，则初始化为空对象
         target = {};
     }

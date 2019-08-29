@@ -1,9 +1,10 @@
-import { isNode, isCanvas2D, isArray } from '../../core/type';
+import {isCanvas2D, isArray } from '../../core/type';
 import image2D from '../core';
+import isElement from '@yelloxing/core.js/isElement';
 
 export default function () {
 
-    if (!isNode(this[0])) throw new Error('Target empty!');
+    if (!isElement(this[0])) throw new Error('Target empty!');
 
     if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
 

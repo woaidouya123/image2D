@@ -1,5 +1,5 @@
 import { NAMESPACE, XLINK_ATTRIBUTE } from './config';
-import { isText } from './type';
+import isText from '@yelloxing/core.js/isText';
 
 /**
  * 设置svg字符串

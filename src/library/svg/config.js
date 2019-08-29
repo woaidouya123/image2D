@@ -1,4 +1,4 @@
-import { isNode } from '../../core/type';
+import isElement from '@yelloxing/core.js/isElement';
 import arc from '../calculate/graphic/arc';
 import toNode from '../../core/to-node';
 
@@ -18,7 +18,7 @@ export default function (key, value) {
 
 // 文字统一设置方法
 export let initText = function (painter, config, x, y, deg) {
-    if (!isNode(painter[0])) throw new Error('Target empty!');
+    if (!isElement(painter[0])) throw new Error('Target empty!');
     if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
     // 垂直对齐采用dy实现

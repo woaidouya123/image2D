@@ -1,6 +1,6 @@
 {
   "name": "image2d",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "description": "🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.",
   "main": "build/image2D.min.js",
   "scripts": {
@@ -40,7 +40,9 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-opera-launcher": "^1.0.0",
     "karma-safari-launcher": "^1.0.0",
-    "rollup": "^1.8.0",
+    "rollup": "^1.17.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "uglify-js": "^3.5.6",
     "watchify": "^3.9.0"
   },
@@ -50,5 +52,8 @@
     "ie > 8",
     "chrome >= 61",
     "firefox >= 65"
-  ]
+  ],
+  "dependencies": {
+    "@yelloxing/core.js": "^0.1.2"
+  }
 }
