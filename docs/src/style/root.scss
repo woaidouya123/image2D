@@ -39,3 +39,7 @@ $color:rgb(113, 30, 50);
 @import './guider.scss';
 @import './about.scss';
 @import '../plugin/prettify.css';
+
+.npmDownloads{
+     background-image:url(../assets/npm-downloads.png)
+}
