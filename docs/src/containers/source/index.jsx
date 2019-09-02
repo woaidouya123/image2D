@@ -43,14 +43,14 @@ export default class Source extends React.Component {
                             <a style={ul.li.h2.div.a} href='https://github.com/yelloxing/npm-downloads' target="_blank">代码</a>
                         </div>
                     </h2>
-                    <p class='npmDownloads' style={{
+                    <p className='npmDownloads' style={{
                         height:'1.9rem',
                         width:'100%',
                         display:"inline-block",
                         backgroundPosition:"center",
                         backgroundSize:"100% auto",
                         backgroundRepeat:'no-repeat'
-                    }} ></p>                    
+                    }} ></p>
                 </li>
             </ul>
         );
