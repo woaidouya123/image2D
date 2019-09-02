@@ -76,6 +76,10 @@ export default function (canvas) {
         "closePath": function () { painter.closePath(); return enhancePainter; },
         "moveTo": function (x, y) { painter.moveTo(x, y); return enhancePainter; },
         "lineTo": function (x, y) { painter.lineTo(x, y); return enhancePainter; },
+        "arc": function (x, y, r, beginDeg, deg) {
+            painter.arc(x, y, r, beginDeg, beginDeg + deg);
+            return enhancePainter;
+        },
         "fill": function () { painter.fill(); return enhancePainter; },
         "stroke": function () { painter.stroke(); return enhancePainter; },
 

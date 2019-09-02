@@ -178,6 +178,9 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');`}</pre>
             <p>画笔移动到点(x, y)，此时笔没有离开画布：</p>
             <pre className='prettyprint lang-js'>painter.lineTo(x, y);</pre>
 
+            <p>以(cx, cy)为圆心，半径r，从弧度beginDeg开始，跨越弧度deg画弧，此时笔没有离开画布：</p>
+            <pre className='prettyprint lang-js'>painter.arc(cx, cy, r, beginDeg, deg);</pre>
+
             <p>二次贝塞尔曲线到：</p>
             <pre className='prettyprint lang-js'>painter.quadraticCurveTo(cpx, cpy, x, y);</pre>
             <p className="warn">
