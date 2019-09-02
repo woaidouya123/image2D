@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.3.0
+    * version 1.3.1
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Aug 29 2019 15:01:51 GMT+0800 (GMT+08:00)
+    * Date:Mon Sep 02 2019 10:04:12 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -1654,6 +1654,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "lineTo": function lineTo(x, y) {
                 painter.lineTo(x, y);return enhancePainter;
             },
+            "arc": function arc(x, y, r, beginDeg, deg) {
+                painter.arc(x, y, r, beginDeg, beginDeg + deg);
+                return enhancePainter;
+            },
             "fill": function fill() {
                 painter.fill();return enhancePainter;
             },
@@ -1892,7 +1896,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
 
         // 路径(和canvas2D的类似)
-        var path = "";
+        var path = "",
+            currentPosition = [];
 
         // 变换（和canvas2D的类似，内部维护了用于记录）
         var transform_history = [],
@@ -1931,16 +1936,32 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 路径
             "beginPath": function beginPath() {
-                path = "";return enhancePainter;
+                path = "";currentPosition = [];return enhancePainter;
             },
             "closePath": function closePath() {
                 path += "Z";return enhancePainter;
             },
             "moveTo": function moveTo(x, y) {
-                path += "M" + x + " " + y;return enhancePainter;
+                path += "M" + x + " " + y;currentPosition = [x, y];return enhancePainter;
             },
             "lineTo": function lineTo(x, y) {
-                path += "L" + x + " " + y;return enhancePainter;
+                path += (path == "" ? "M" : "L") + x + " " + y;currentPosition = [x, y];return enhancePainter;
+            },
+            "arc": function arc(x, y, r, beginDeg, deg) {
+                var begPosition = _rotate2(x, y, beginDeg, x + r, y);
+                var endPosition = _rotate2(x, y, beginDeg + deg, x + r, y);
+                beginDeg = beginDeg / Math.PI * 180;
+                deg = deg / Math.PI * 180;
+                // 如果当前没有路径，说明是开始的，就移动到正确位置
+                if (path == '') {
+                    path += "M" + begPosition[0] + "," + begPosition[1];
+                }
+                // 如果当前有路径，位置不正确，应该画到正确位置（和canvas保持一致）
+                else if (begPosition[0] != currentPosition[0] || begPosition[1] != currentPosition[1]) {
+                        path += "L" + begPosition[0] + "," + begPosition[1];
+                    }
+                path += "A" + r + "," + r + " 0 " + (deg > 180 || deg < -180 ? 1 : 0) + "," + (deg > 0 ? 1 : 0) + " " + endPosition[0] + "," + endPosition[1];
+                return enhancePainter;
             },
             "fill": function fill() {
                 initPath(painter, path).attr('transform', transform_current).attr("fill", _config3.fillStyle);

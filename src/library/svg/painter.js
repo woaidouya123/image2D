@@ -1,6 +1,7 @@
 import image2D from '../core';
 import normalConfig, { initText, initArc, initCircle, initPath, initRect } from './config';
 import { linearGradient } from './Gradient';
+import { rotate } from '../calculate/transform';
 
 export default function (target, selector) {
 
@@ -30,7 +31,7 @@ export default function (target, selector) {
     };
 
     // 路径(和canvas2D的类似)
-    let path = "";
+    let path = "", currentPosition = [];
 
     // 变换（和canvas2D的类似，内部维护了用于记录）
     let transform_history = [], transform_current = "";
@@ -56,10 +57,26 @@ export default function (target, selector) {
         "beforeTo": function (selector) { painter.beforeTo(selector || target, target); return enhancePainter; },
 
         // 路径
-        "beginPath": function () { path = ""; return enhancePainter; },
+        "beginPath": function () { path = ""; currentPosition = []; return enhancePainter; },
         "closePath": function () { path += "Z"; return enhancePainter; },
-        "moveTo": function (x, y) { path += "M" + x + " " + y; return enhancePainter; },
-        "lineTo": function (x, y) { path += "L" + x + " " + y; return enhancePainter; },
+        "moveTo": function (x, y) { path += "M" + x + " " + y; currentPosition = [x, y]; return enhancePainter; },
+        "lineTo": function (x, y) { path += (path == "" ? "M" : "L") + x + " " + y; currentPosition = [x, y]; return enhancePainter; },
+        "arc": function (x, y, r, beginDeg, deg) {
+            let begPosition = rotate(x, y, beginDeg, x + r, y);
+            let endPosition = rotate(x, y, beginDeg + deg, x + r, y);
+            beginDeg = beginDeg / Math.PI * 180;
+            deg = deg / Math.PI * 180;
+            // 如果当前没有路径，说明是开始的，就移动到正确位置
+            if (path == '') {
+                path += "M" + begPosition[0] + "," + begPosition[1];
+            }
+            // 如果当前有路径，位置不正确，应该画到正确位置（和canvas保持一致）
+            else if (begPosition[0] != currentPosition[0] || begPosition[1] != currentPosition[1]) {
+                path += "L" + begPosition[0] + "," + begPosition[1];
+            }
+            path += "A" + r + "," + r + " 0 " + ((deg > 180 || deg < -180) ? 1 : 0) + "," + (deg > 0 ? 1 : 0) + " " + endPosition[0] + "," + endPosition[1];
+            return enhancePainter;
+        },
         "fill": function () {
             initPath(painter, path).attr('transform', transform_current).attr("fill", config.fillStyle);
             return enhancePainter;
