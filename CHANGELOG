@@ -60,3 +60,7 @@ v1.3.1:
     date:2019-09-02
     changes:
       -  svg和canvas路径添加arc画弧方法
+v1.3.2:
+    date:2019-09-03
+    changes:
+      -  针对svg文字控制旋转bug进行修复

@@ -27,18 +27,20 @@ export let initText = function (painter, config, x, y, deg) {
         "middle": 0,
         "bottom": -config['font-size'] * 0.5,
     }[config.textBaseline])
-        .attr("transform", "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")");
+        .css({
 
-    return painter.css({
+            // 文字对齐方式
+            "text-anchor": config.textAlign,
+            "dominant-baseline": "central",
 
-        // 文字对齐方式
-        "text-anchor": config.textAlign,
-        "dominant-baseline": "central",
+            // 文字大小和字体设置
+            "font-size": config['font-size'] + "px",
+            "font-family": config['font-family']
+        }).attr({ "x": x, "y": y });
 
-        // 文字大小和字体设置
-        "font-size": config['font-size'] + "px",
-        "font-family": config['font-family']
-    }).attr({ "x": x, "y": y });
+    return {
+        "transform": "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")"
+    };
 };
 
 // 画弧统一设置方法

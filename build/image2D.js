@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.3.1
+    * version 1.3.2
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Mon Sep 02 2019 10:04:12 GMT+0800 (GMT+08:00)
+    * Date:Tue Sep 03 2019 10:47:38 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -1778,9 +1778,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "top": config['font-size'] * 0.5,
             "middle": 0,
             "bottom": -config['font-size'] * 0.5
-        }[config.textBaseline]).attr("transform", "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")");
-
-        return painter.css({
+        }[config.textBaseline]).css({
 
             // 文字对齐方式
             "text-anchor": config.textAlign,
@@ -1790,6 +1788,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "font-size": config['font-size'] + "px",
             "font-family": config['font-family']
         }).attr({ "x": x, "y": y });
+
+        return {
+            "transform": "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")"
+        };
     };
 
     // 画弧统一设置方法
@@ -1991,11 +1993,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 文字
             "fillText": function fillText(text, x, y, deg) {
-                initText$1(painter, _config3, x, y, deg || 0).attr('transform', transform_current).attr("fill", _config3.fillStyle)[0].textContent = text;
+                var returnJSon = initText$1(painter, _config3, x, y, deg || 0);
+                painter.attr('transform', transform_current + returnJSon.transform).attr("fill", _config3.fillStyle)[0].textContent = text;
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y, deg) {
-                initText$1(painter, _config3, x, y, deg || 0).attr('transform', transform_current).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
+                var returnJSon = initText$1(painter, _config3, x, y, deg || 0);
+                painter.attr('transform', transform_current + returnJSon.transform).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
             },
 

@@ -105,11 +105,13 @@ export default function (target, selector) {
 
         // 文字
         "fillText": function (text, x, y, deg) {
-            initText(painter, config, x, y, deg || 0).attr('transform', transform_current).attr("fill", config.fillStyle)[0].textContent = text;
+            let returnJSon = initText(painter, config, x, y, deg || 0);
+            painter.attr('transform', transform_current + returnJSon.transform).attr("fill", config.fillStyle)[0].textContent = text;
             return enhancePainter;
         },
         "strokeText": function (text, x, y, deg) {
-            initText(painter, config, x, y, deg || 0).attr('transform', transform_current).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
+            let returnJSon = initText(painter, config, x, y, deg || 0);
+            painter.attr('transform', transform_current + returnJSon.transform).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
             return enhancePainter;
         },
 

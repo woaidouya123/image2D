@@ -30,11 +30,15 @@
         painter
             .fillRect(0, 0, 100, 100)
 
+            .config('fillStyle', '#000').fillText('文字测试1', 300, 300, Math.PI / 4)
+
             .save()
 
             .translate(50, 50)
             .config('fillStyle', 'blue')
             .fillRect(0, 0, 100, 100)
+
+            .config('fillStyle', '#000').fillText('文字测试2', 150, 150, Math.PI / 4)
 
             .translate(50, 50)
             .config('fillStyle', 'red')

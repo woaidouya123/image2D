@@ -31,12 +31,16 @@
             .bind('<rect>').appendTo()
             .fillRect(0, 0, 100, 100)
 
+            .config('fillStyle', '#000').bind('<text>').fillText('文字测试1', 300, 300, Math.PI / 4).appendTo(svg)
+
             .save()
 
             .translate(50, 50)
             .config('fillStyle', 'blue')
             .bind('<rect>').appendTo()
             .fillRect(0, 0, 100, 100)
+
+            .config('fillStyle', '#000').bind('<text>').fillText('文字测试2', 150, 150, Math.PI / 4).appendTo(svg)
 
             .translate(50, 50)
             .config('fillStyle', 'red')
