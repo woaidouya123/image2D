@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="../../../docs/src/assets/image2D.png">
+    <script src="../../../build/image2D.js"></script>
+    <title>image2D - 用例测试 - pie布局</title>
+</head>
+
+<body>
+
+    <script>
+
+        var painter = $$('<canvas>非常抱歉，您的浏览器不支持canvas!</canvas>')
+            .attr({
+                "width": 600,
+                "height": 600
+            })
+            .appendTo('body').painter().config({
+                'textAlign': 'center'
+            });
+
+        var colors = ['red', 'blue', 'green', 'pink', 'purple'];
+
+        $$.pieLayout({
+            // "begin-deg": 0,
+            // "deg": Math.PI*2,
+            "value": function (data, key, index) { return data.value },
+
+            "cx": 300,
+            "cy": 300,
+            "radius": [120, 140]
+        }).drawer(function (data) {
+            console.log(data);
+
+            for (var i = 0; i < data.length; i++) {
+                painter.config('fillStyle', colors[i])
+                    .fillArc(300, 300, 50, 120, data[i].beginDeg, data[i].deg)
+
+                    .beginPath()
+                    .moveTo(data[i].dots[0][0], data[i].dots[0][1])
+                    .lineTo(data[i].dots[1][0], data[i].dots[1][1])
+                    .lineTo(data[i].dots[1][0] + (data[i].dots[0][0] > 300 ? 1 : -1) * 30, data[i].dots[1][1])
+                    .stroke()
+                    .fillText(data[i].data.name, data[i].dots[1][0] + (data[i].dots[0][0] > 300 ? 1 : -1) * 70, data[i].dots[1][1] - 10)
+                    .fillText(data[i].percent + "%", data[i].dots[1][0] + (data[i].dots[0][0] > 300 ? 1 : -1) * 70, data[i].dots[1][1] + 10);
+            }
+
+        })([
+            { value: 335, name: "直接访问" },
+            { value: 310, name: "邮件营销" },
+            { value: 234, name: "联盟广告" },
+            { value: 135, name: "视频广告" },
+            { value: 1548, name: "搜索引擎" }
+        ]);
+
+    </script>
+</body>
+
+</html>

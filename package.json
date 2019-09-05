@@ -54,6 +54,6 @@
     "firefox >= 65"
   ],
   "dependencies": {
-    "@yelloxing/core.js": "^0.1.2"
+    "@yelloxing/core.js": "^0.1.3"
   }
 }

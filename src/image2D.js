@@ -6,6 +6,7 @@ import image2D from './library/core';
  * 这里挂载的方法可以通过image2D.XXX()形式直接调用
  */
 import treeLayout from './library/layout/tree';
+import pieLayout from './library/layout/pie';
 import Matrix4 from './library/Matrix4/index';
 import animation from './library/tools/animation';
 import cardinal from './library/interpolate/Cardinal';
@@ -13,7 +14,7 @@ import { rotate, move, scale, dot } from './library/calculate/transform';
 image2D.extend({
 
     // 布局
-    treeLayout,
+    treeLayout, pieLayout,
 
     // 矩阵变换
     Matrix4,

@@ -15,11 +15,11 @@ export default class Calculate extends React.Component {
         $$('.apimenu-item').attr('active', 'no');
         $$('#calculate').attr('active', 'yes');
 
-         // 更新导航菜单信息
-         window.image2d_docs_api_navHelper = {
+        // 更新导航菜单信息
+        window.image2d_docs_api_navHelper = {
             "small": [],
             "little": [],
-            "type":"calculate"
+            "type": "calculate"
         };
 
         let smallTitles = $$('.title.small');
@@ -239,6 +239,67 @@ export default class Calculate extends React.Component {
                 <li>radius:number，设置树图半径（如果类型是circle需要设置）。</li>
                 <li>begin-deg,deg:number，开始和跨越弧度（可选，如果类型是circle设置该参数有效）。</li>
             </ul>
+
+            <h6 className="title little">饼布局</h6>
+
+            <p>
+                调用pieLayout方法，传递配置config（后续也可以提供config方法来修改配置）就可以获取饼布局实例：
+        </p>
+            <pre className='prettyprint lang-js'>var pieLayout=$$.pieLayout(config);</pre>
+
+            <p>
+                config是一个键值对格式的配置json，由于原始数据格式不一定，你需要传递数据格式的配置：
+        </p>
+            <ul>
+                <li>{`"value":function(data, key, index){ /*返回结点的价值，必须是一个数字*/ }`}</li>
+                <li>{`"begin-deg":整个饼图的起点弧度`}</li>
+                <li>{`"deg":饼图的跨越弧度`}</li>
+            </ul>
+            <p className="warn">
+                value是必须的，begin-deg和deg都是可选的，有默认值，分别为：-Math.PI / 2和Math.PI * 2。
+            </p>
+            <p>
+                你还必须配置绘图方法，因为布局并不知道如何绘制：
+        </p>
+            <pre className='prettyprint lang-js'>{`pieLayout.drawer(function(data){ /*绘制*/ });`}</pre>
+            <p>
+                data是计算后带有结点坐标的数据，格式如下：
+        </p>
+
+            <pre className='prettyprint lang-js'>{`[{
+    beginDeg:number
+    data:any
+    deg:number
+    dots:Array
+    index:number
+    key:string
+    percent:number
+    value:number
+},{...},...]`}</pre>
+
+            <p>
+                可以看出来数据是一个数组，我们列出其中一项（一个饼图是由一个个弧组成的，这就是其中一个弧）说明具体有哪些。先来说明几个基本的，特殊的需要配合额外配置才有意义。
+            </p>
+            <p>
+                beginDeg和deg分别表示这个弧的起点弧度和跨越弧度，data是原始数据，index、key、value分别表示该项的序号、键和计算后的价值，percent表示该项占比（单位%）。
+            </p>
+
+            <h6 className="title sub-little">补充计算</h6>
+
+            <p>
+                我们看到上面没有对dots进行解释，为了使用这项，我们需要额外配置三项：
+            </p>
+            <pre className='prettyprint lang-js'>{`pieLayout.config({
+    // 饼图中一个瓣的中心参考半径，可以有多个[可选]
+    "radius": [number, ...],
+    // 饼图中心坐标
+    "cx": number,
+    "cy": number
+})`}</pre>
+
+            <p>
+                饼图绘制的时候，除了绘制各个弧以外，有时候我们希望添加提示文字，用折线和弧对应起来，radius是一个数组，每个项代表一个半径，我们会计算每个半径对应的小弧中心坐标，最终保存的位置就是dots。
+            </p>
 
             <h4 className="title small">动画轮询</h4>
             <p>
