@@ -64,3 +64,7 @@ v1.3.2:
     date:2019-09-03
     changes:
       -  针对svg文字控制旋转bug进行修复
+v1.3.3:
+    date:2019-09-05
+    changes:
+      -  添加pieLayout饼布局
