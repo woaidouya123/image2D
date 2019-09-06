@@ -68,3 +68,7 @@ v1.3.3:
     date:2019-09-05
     changes:
       -  添加pieLayout饼布局
+v1.4.0:
+    date:2019-09-06
+    changes:
+      -  把一些核心的计算方法提取出来，方便后期统一优化（tree、animation、Hermite和Matrix4）

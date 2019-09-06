@@ -1,4 +1,4 @@
-import treeLayout from '../../core/tree';
+import treeLayout from '@yelloxing/core.js/tools/tree';
 import { initConfig } from '../../core/config';
 import { rotate } from '../calculate/transform';
 

@@ -7,8 +7,8 @@ import image2D from './library/core';
  */
 import treeLayout from './library/layout/tree';
 import pieLayout from './library/layout/pie';
-import Matrix4 from './library/Matrix4/index';
-import animation from './library/tools/animation';
+import Matrix4 from '@yelloxing/core.js/tools/Matrix4';
+import animation from '@yelloxing/core.js/tools/animation';
 import cardinal from './library/interpolate/Cardinal';
 import { rotate, move, scale, dot } from './library/calculate/transform';
 image2D.extend({
