@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.4.0
+    * version 1.4.1
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Sep 06 2019 23:09:26 GMT+0800 (中国标准时间)
+    * Date:Fri Sep 13 2019 11:02:22 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -480,9 +480,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @since V0.2.0
      * @public
      */
-    function treeLayout() {
+    function treeLayout(_config) {
 
-        var config = {},
+        var config = _config || {},
 
         // 维护的树
         alltreedata = void 0,
