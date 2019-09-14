@@ -35,8 +35,8 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "easycss-core": "^2.0.3",
-    "image2d": "^1.2.1",
+    "@yelloxing/normalize.css": "^0.1.1",
+    "image2d": "^1.4.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-router-dom": "^4.3.1"

@@ -1,5 +1,5 @@
 import { NAMESPACE, REGEXP } from './config';
-import { isNode } from './type';
+import isElement from '@yelloxing/core.js/isElement';
 import { setSVG } from './polyfill';
 
 // 变成指定类型的结点
@@ -24,7 +24,7 @@ let toNode = function (template, type) {
     }
     childNodes = frame.childNodes;
     for (let i = 0; i < childNodes.length; i++) {
-        if (isNode(childNodes[i])) return childNodes[i];
+        if (isElement(childNodes[i])) return childNodes[i];
     }
 };
 

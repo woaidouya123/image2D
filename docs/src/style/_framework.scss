@@ -53,7 +53,8 @@ body {
                     color: #f10c0c;
                     border-bottom: 3px solid red;
                 }
-                &[active='no'] {
+                &[active='no'],
+                a {
                     color: rgb(3, 3, 3);
                 }
             }

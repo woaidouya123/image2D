@@ -35,7 +35,7 @@ module.exports = function (config) {
 
 
         // 测试服务器端口
-        port: 20000,
+        port: 2010,
 
 
         // 启用或禁用输出报告或者日志中的颜色
@@ -61,19 +61,6 @@ module.exports = function (config) {
         browsers: ['Opera', 'Chrome', 'Firefox', 'Safari']
 
     };
-
-    /**
-     * 针对travis自动化测试，调整参数
-     */
-    if (process.env.TRAVIS) {
-        configuration.customLaunchers = {
-            Chrome_travis_ci: {
-                base: 'Chrome',
-                flags: ['--no-sandbox']
-            }
-        };
-        configuration.browsers = ['Chrome_travis_ci'];
-    }
 
     config.set(configuration);
 }

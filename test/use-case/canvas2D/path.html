@@ -31,9 +31,18 @@
          */
 
         painter.beginPath()
-            .moveTo(50, 50)
             .lineTo(200, 50).lineTo(300, 100).lineTo(150, 150).lineTo(100, 200)
             .closePath()
+            .stroke();
+
+        // 测试arc
+        painter
+            .beginPath()
+            .config({
+                "strokeStyle": "blue",
+                "lineWidth": "10"
+            })
+            .arc(120, 120, 50, Math.PI / 3, Math.PI)
             .stroke();
 
     </script>

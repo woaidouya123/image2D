@@ -56,3 +56,19 @@ v1.2.1:
     date:2019-08-20
     changes:
       -  svg的rotate角度设置错误修改
+v1.3.1:
+    date:2019-09-02
+    changes:
+      -  svg和canvas路径添加arc画弧方法
+v1.3.2:
+    date:2019-09-03
+    changes:
+      -  针对svg文字控制旋转bug进行修复
+v1.3.3:
+    date:2019-09-05
+    changes:
+      -  添加pieLayout饼布局
+v1.4.0:
+    date:2019-09-06
+    changes:
+      -  把一些核心的计算方法提取出来，方便后期统一优化（tree、animation、Hermite和Matrix4）

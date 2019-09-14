@@ -98,7 +98,7 @@
 
             // 设置绘图方法
             .drawer(function (tree) {
-                painter.clearn();
+                painter.clearRect();
                 var key, item, i, child;
                 for (key in tree.node) {
                     item = tree.node[key];

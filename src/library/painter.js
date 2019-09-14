@@ -1,4 +1,4 @@
-import { isNode } from '../core/type';
+import isElement from '@yelloxing/core.js/isElement';
 import painter_canvas2D from './canvas2D/painter';
 import painter_svg from './svg/painter';
 
@@ -7,7 +7,7 @@ import painter_svg from './svg/painter';
 export default function () {
 
     // 因为绘图画布是必须的，因此在判断画布类型前，如果压根没有结点，肯定是非法的
-    if (!isNode(this[0])) throw new Error('Target empty!');
+    if (!isElement(this[0])) throw new Error('Target empty!');
 
     let target = this[0], nodeName = target.nodeName.toLowerCase();
 

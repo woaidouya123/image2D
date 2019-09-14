@@ -5,50 +5,105 @@
     *
     * author 心叶
     *
-    * version 1.2.1
+    * version 1.4.1
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Tue Aug 20 2019 10:19:52 GMT+0800 (GMT+08:00)
+    * Date:Fri Sep 13 2019 11:02:22 GMT+0800 (GMT+08:00)
     */
 
-"use strict";
+'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function () {
     'use strict';
 
-    /**
-     * 判断传入的是不是结点
-     * @param {Any} param
-     * @return {Boolean} true:结点，false:不是结点
-     */
-
-    var isNode = function isNode(param) {
-        return param && (param.nodeType === 1 || param.nodeType === 9 || param.nodeType === 11);
-    };
+    var toString = Object.prototype.toString;
 
     /**
-     * 判断传入的元素是不是文本
-     * @param {Any} param
-     * @return {Boolean} true:文本，false:不是文本
+     * 获取一个值的类型字符串[object type]
+     *
+     * @private
+     * @param {*} value 需要返回类型的值
+     * @returns {string} 返回类型字符串
      */
-    var isText = function isText(param) {
-        return param && param.nodeType === 3;
-    };
+    function getType(value) {
+        if (value == null) {
+            return value === undefined ? '[object Undefined]' : '[object Null]';
+        }
+        return toString.call(value);
+    }
 
     /**
-     * 判断传入的元素是不是canvas2D画笔
-     * @param {Any} param
-     * @return {Boolean} true:画笔，false:不是画笔
+     * 判断一个值是不是一个朴素的'对象'
+     *
+     * @private
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是朴素的'对象'返回true，否则返回false
      */
-    var isCanvas2D = function isCanvas2D(param) {
-        return param && param.constructor === CanvasRenderingContext2D;
-    };
+
+    function isPlainObject(value) {
+        if (value === null || (typeof value === 'undefined' ? 'undefined' : _typeof(value)) !== 'object' || getType(value) != '[object Object]') {
+            return false;
+        }
+
+        // 如果原型为null
+        if (Object.getPrototypeOf(value) === null) {
+            return true;
+        }
+
+        var proto = value;
+        while (Object.getPrototypeOf(proto) !== null) {
+            proto = Object.getPrototypeOf(proto);
+        }
+        return Object.getPrototypeOf(value) === proto;
+    }
+
+    /**
+     * 判断一个值是不是结点元素。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是结点元素返回true，否则返回false
+     */
+    function isElement(value) {
+        return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && (value.nodeType === 1 || value.nodeType === 9 || value.nodeType === 11) && !isPlainObject(value);
+    }
+
+    /**
+     * 判断一个值是不是Object。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是Object返回true，否则返回false
+     */
+    function isObject(value) {
+        var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+        return value != null && (type === 'object' || type === 'function');
+    }
+
+    /**
+     * 判断一个值是不是Function。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是Function返回true，否则返回false
+     */
+    function isFunction(value) {
+        if (!isObject(value)) {
+            return false;
+        }
+
+        var type = getType(value);
+        return type === '[object Function]' || type === '[object AsyncFunction]' || type === '[object GeneratorFunction]' || type === '[object Proxy]';
+    }
 
     /**
      * 初始化配置文件
@@ -90,6 +145,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // 记录需要使用xlink命名空间常见的xml属性
     var XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];
+
+    /**
+     * 判断一个值是不是文本结点。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是结点元素返回true，否则返回false
+     */
+    function isText(value) {
+        return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.nodeType === 3 && !isPlainObject(value);
+    }
 
     /**
      * 设置svg字符串
@@ -158,7 +225,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
         childNodes = frame.childNodes;
         for (var i = 0; i < childNodes.length; i++) {
-            if (isNode(childNodes[i])) return childNodes[i];
+            if (isElement(childNodes[i])) return childNodes[i];
         }
     };
 
@@ -201,7 +268,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 如果以'<'开头表示是字符串模板
             if (typeof context == 'string' || /^</.test(selector)) {
                 var node = toNode$1(selector, context);
-                if (isNode(node)) return [node];else return [];
+                if (isElement(node)) return [node];else return [];
             }
 
             // *表示查找全部
@@ -214,7 +281,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // 此选择器会忽略上下文
             if (id) {
                 var _node = document.getElementById(id[0].replace('#', ''));
-                if (isNode(_node)) return [_node];else return [];
+                if (isElement(_node)) return [_node];else return [];
             }
 
             var cls = selector.match(new RegExp('\\.' + REGEXP.identifier, 'g')),
@@ -245,7 +312,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         // 如果是结点
-        else if (isNode(selector)) {
+        else if (isElement(selector)) {
                 return [selector];
             }
 
@@ -254,7 +321,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             else if (selector && (selector.constructor === Array || selector.constructor === HTMLCollection || selector.constructor === NodeList)) {
                     var _temp = [];
                     for (var _i = 0; _i < selector.length; _i++) {
-                        if (isNode(selector[_i])) _temp.push(selector[_i]);
+                        if (isElement(selector[_i])) _temp.push(selector[_i]);
                     }
                     return _temp;
                 }
@@ -265,7 +332,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     }
 
                     // 如果是函数
-                    else if (typeof selector === 'function') {
+                    else if (isFunction(selector)) {
                             var _allNodes = context.getElementsByTagName('*'),
                                 _temp2 = [];
                             for (var _i2 = 0; _i2 < _allNodes.length; _i2++) {
@@ -378,7 +445,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             source = target;
             target = this;
         }
-        if ((typeof target === "undefined" ? "undefined" : _typeof(target)) !== "object" && typeof target !== 'function') {
+        if (!isObject(target)) {
             //如果目标不是对象或函数，则初始化为空对象
             target = {};
         }
@@ -410,11 +477,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      *  1.根结点在最左边，且上下居中
      *  2.树是从左往右生长的结构
      *  3.每个结点都是一块1*1的正方形，top和left分别表示正方形中心的位置
-     *
+     * @since V0.2.0
+     * @public
      */
-    function treeLayout() {
+    function treeLayout(_config) {
 
-        var config = {},
+        var config = _config || {},
 
         // 维护的树
         alltreedata = void 0,
@@ -735,31 +803,142 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return treeObj;
     }
 
-    // 在(a,b,c)方向位移d
+    /**
+     * 判断一个值是不是number。
+     *
+     * @since V0.1.3
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是number返回true，否则返回false
+     */
+    function isNumber(value) {
+        return typeof value === 'number' || value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && getType(value) === '[object Number]';
+    }
+
+    function pieLayout(config) {
+
+        config = initConfig({
+
+            // 饼图的开始和跨域角度[可选]
+            "begin-deg": -Math.PI / 2,
+            "deg": Math.PI * 2,
+
+            // 饼图中一个瓣的中心参考半径，可以有多个[可选]
+            "radius": []
+            // "cx": "",
+            // "cy": "",
+
+            // 设置数据结构[必选]
+            // "value": function (data, key, index) { }
+
+        }, config);
+
+        if (!isFunction(config.value)) {
+            throw new Error('config.value must be a function!');
+        }
+
+        var pieObj = function pieObj(initData) {
+
+            var i = 0,
+                innerData = [],
+                allData = 0;
+            for (var key in initData) {
+                innerData.push({
+                    "value": config.value(initData[key], key, i),
+                    "data": initData[key],
+                    "key": key,
+                    "index": i,
+                    "dots": []
+                });
+                allData += innerData[i].value;
+                i += 1;
+            }
+
+            for (i = 0; i < innerData.length; i++) {
+
+                // 起始弧度
+                innerData[i].beginDeg = i === 0 ? config['begin-deg'] : innerData[i - 1].beginDeg + innerData[i - 1].deg;
+
+                // 百分比
+                var percent = innerData[i].value / allData;
+
+                // 跨越弧度
+                innerData[i].deg = percent * config.deg;
+
+                innerData[i].percent = new Number(percent * 100).toFixed(2);
+            }
+
+            // 中心点（用于辅助绘制折线）
+            if (isNumber(config.cx) && isNumber(config.cy)) {
+                for (i = 0; i < config.radius.length; i++) {
+
+                    for (var j = 0; j < innerData.length; j++) {
+                        innerData[j].dots.push(_rotate2(config.cx, config.cy, innerData[j].beginDeg + innerData[j].deg * 0.5, config.cx + config.radius[i], config.cy));
+                    }
+                }
+            }
+
+            // 启动绘图
+            if (isFunction(config.drawer)) {
+                config.drawer(innerData);
+            }
+        };
+
+        // 配置
+        pieObj.config = function (_config) {
+            config = initConfig(config, _config);
+            return pieObj;
+        };
+
+        // 设置绘图方法
+        pieObj.drawer = function (drawerback) {
+            config.drawer = drawerback;
+            return pieObj;
+        };
+
+        return pieObj;
+    }
+
+    /**
+     * 在(a,b,c)方向位移d
+     * @private
+     */
     function _move(d, a, b, c) {
         c = c || 0;
         var sqrt = Math.sqrt(a * a + b * b + c * c);
         return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, a * d / sqrt, b * d / sqrt, c * d / sqrt, 1];
     }
 
-    // 围绕0Z轴旋转
-    // 其它的旋转可以借助transform实现
-    // 旋转角度单位采用弧度制
+    /**
+     * 围绕0Z轴旋转
+     * 其它的旋转可以借助transform实现
+     * 旋转角度单位采用弧度制
+     * 
+     * @private
+     */
     function _rotate(deg) {
         var sin = Math.sin(deg),
             cos = Math.cos(deg);
         return [cos, sin, 0, 0, -sin, cos, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
     }
 
-    // 围绕圆心x、y和z分别缩放xTimes, yTimes和zTimes倍
+    /**
+     * 围绕圆心x、y和z分别缩放xTimes, yTimes和zTimes倍
+     * 
+     * @private
+     */
     function _scale(xTimes, yTimes, zTimes, cx, cy, cz) {
         cx = cx || 0;cy = cy || 0;cz = cz || 0;
         return [xTimes, 0, 0, 0, 0, yTimes, 0, 0, 0, 0, zTimes, 0, cx - cx * xTimes, cy - cy * yTimes, cz - cz * zTimes, 1];
     }
 
-    // 针对任意射线(a1,b1,c1)->(a2,b2,c2)
-    // 计算出二个变换矩阵
-    // 分别为：任意射线变成OZ轴变换矩阵 + OZ轴变回原来的射线的变换矩阵
+    /**
+     * 针对任意射线(a1,b1,c1)->(a2,b2,c2)
+     * 计算出二个变换矩阵
+     * 分别为：任意射线变成OZ轴变换矩阵 + OZ轴变回原来的射线的变换矩阵
+     * 
+     * @private
+     */
     function _transform(a1, b1, c1, a2, b2, c2) {
 
         if (typeof a1 === 'number' && typeof b1 === 'number') {
@@ -812,6 +991,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * 4x4矩阵
      * 列主序存储
+     * @since V0.2.0
+     * @public
      */
     function Matrix4(initMatrix4) {
 
@@ -879,6 +1060,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     /**
      * 动画轮播
+     * @since V0.2.0
+     * @public
      * @param {function} doback 轮询函数，有一个形参deep，0-1，表示执行进度
      * @param {number} duration 动画时长，可选
      * @param {function} callback 动画结束回调，可选，有一个形参deep，0-1，表示执行进度
@@ -977,12 +1160,32 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     /**
+     * 初始化配置文件
+     * 
+     * @private
+     * @param {Json} init 默认值
+     * @param {Json} data
+     * @return {Json}
+     */
+    function initConfig$1(init, data) {
+        for (var key in data) {
+            try {
+                init[key] = data[key];
+            } catch (e) {
+                throw new Error("Illegal property value！");
+            }
+        }return init;
+    }
+
+    /**
      * Hermite三次插值
+     * @since V0.2.0
+     * @public
      * @param {Json} config 可选
      */
     function hermite(config) {
 
-        config = initConfig({
+        config = initConfig$1({
             // 张弛系数
             "u": 0.5
         }, config);
@@ -1587,6 +1790,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "lineTo": function lineTo(x, y) {
                 painter.lineTo(x, y);return enhancePainter;
             },
+            "arc": function arc(x, y, r, beginDeg, deg) {
+                painter.arc(x, y, r, beginDeg, beginDeg + deg);
+                return enhancePainter;
+            },
             "fill": function fill() {
                 painter.fill();return enhancePainter;
             },
@@ -1699,7 +1906,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     // 文字统一设置方法
     var initText$1 = function initText$1(painter, config, x, y, deg) {
-        if (!isNode(painter[0])) throw new Error('Target empty!');
+        if (!isElement(painter[0])) throw new Error('Target empty!');
         if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
         // 垂直对齐采用dy实现
@@ -1707,9 +1914,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "top": config['font-size'] * 0.5,
             "middle": 0,
             "bottom": -config['font-size'] * 0.5
-        }[config.textBaseline]).attr("transform", "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")");
-
-        return painter.css({
+        }[config.textBaseline]).css({
 
             // 文字对齐方式
             "text-anchor": config.textAlign,
@@ -1719,6 +1924,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             "font-size": config['font-size'] + "px",
             "font-family": config['font-family']
         }).attr({ "x": x, "y": y });
+
+        return {
+            "transform": "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")"
+        };
     };
 
     // 画弧统一设置方法
@@ -1825,7 +2034,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
 
         // 路径(和canvas2D的类似)
-        var path = "";
+        var path = "",
+            currentPosition = [];
 
         // 变换（和canvas2D的类似，内部维护了用于记录）
         var transform_history = [],
@@ -1847,7 +2057,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 基础方法
             "bind": function bind(selector) {
-                painter = image2D(selector, target);return this;
+                painter = image2D(selector, target);return enhancePainter;
             },
             "appendTo": function appendTo(selector) {
                 painter.appendTo(selector || target, target);return enhancePainter;
@@ -1864,16 +2074,32 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 路径
             "beginPath": function beginPath() {
-                path = "";return enhancePainter;
+                path = "";currentPosition = [];return enhancePainter;
             },
             "closePath": function closePath() {
                 path += "Z";return enhancePainter;
             },
             "moveTo": function moveTo(x, y) {
-                path += "M" + x + " " + y;return enhancePainter;
+                path += "M" + x + " " + y;currentPosition = [x, y];return enhancePainter;
             },
             "lineTo": function lineTo(x, y) {
-                path += "L" + x + " " + y;return enhancePainter;
+                path += (path == "" ? "M" : "L") + x + " " + y;currentPosition = [x, y];return enhancePainter;
+            },
+            "arc": function arc(x, y, r, beginDeg, deg) {
+                var begPosition = _rotate2(x, y, beginDeg, x + r, y);
+                var endPosition = _rotate2(x, y, beginDeg + deg, x + r, y);
+                beginDeg = beginDeg / Math.PI * 180;
+                deg = deg / Math.PI * 180;
+                // 如果当前没有路径，说明是开始的，就移动到正确位置
+                if (path == '') {
+                    path += "M" + begPosition[0] + "," + begPosition[1];
+                }
+                // 如果当前有路径，位置不正确，应该画到正确位置（和canvas保持一致）
+                else if (begPosition[0] != currentPosition[0] || begPosition[1] != currentPosition[1]) {
+                        path += "L" + begPosition[0] + "," + begPosition[1];
+                    }
+                path += "A" + r + "," + r + " 0 " + (deg > 180 || deg < -180 ? 1 : 0) + "," + (deg > 0 ? 1 : 0) + " " + endPosition[0] + "," + endPosition[1];
+                return enhancePainter;
             },
             "fill": function fill() {
                 initPath(painter, path).attr('transform', transform_current).attr("fill", _config3.fillStyle);
@@ -1903,11 +2129,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 文字
             "fillText": function fillText(text, x, y, deg) {
-                initText$1(painter, _config3, x, y, deg || 0).attr('transform', transform_current).attr("fill", _config3.fillStyle)[0].textContent = text;
+                var returnJSon = initText$1(painter, _config3, x, y, deg || 0);
+                painter.attr('transform', transform_current + returnJSon.transform).attr("fill", _config3.fillStyle)[0].textContent = text;
                 return enhancePainter;
             },
             "strokeText": function strokeText(text, x, y, deg) {
-                initText$1(painter, _config3, x, y, deg || 0).attr('transform', transform_current).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
+                var returnJSon = initText$1(painter, _config3, x, y, deg || 0);
+                painter.attr('transform', transform_current + returnJSon.transform).attr({ "stroke": _config3.strokeStyle, "fill": "none" })[0].textContent = text;
                 return enhancePainter;
             },
 
@@ -1981,7 +2209,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     function painter() {
 
         // 因为绘图画布是必须的，因此在判断画布类型前，如果压根没有结点，肯定是非法的
-        if (!isNode(this[0])) throw new Error('Target empty!');
+        if (!isElement(this[0])) throw new Error('Target empty!');
 
         var target = this[0],
             nodeName = target.nodeName.toLowerCase();
@@ -1995,9 +2223,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         throw new Error('Painter is not a function!');
     }
 
+    /**
+     * 判断传入的元素是不是canvas2D画笔
+     * @param {Any} param
+     * @return {Boolean} true:画笔，false:不是画笔
+     */
+    var isCanvas2D = function isCanvas2D(param) {
+        return param && param.constructor === CanvasRenderingContext2D;
+    };
+
     function layer() {
 
-        if (!isNode(this[0])) throw new Error('Target empty!');
+        if (!isElement(this[0])) throw new Error('Target empty!');
 
         if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
 
@@ -2076,7 +2313,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     image2D.extend({
 
         // 布局
-        treeLayout: treeLayout$1,
+        treeLayout: treeLayout$1, pieLayout: pieLayout,
 
         // 矩阵变换
         Matrix4: Matrix4,
@@ -2113,8 +2350,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     });
 
+    image2D.fn = image2D.prototype;
+
     // 判断当前环境，如果不是浏览器环境
-    if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    if ((typeof module === 'undefined' ? 'undefined' : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
         module.exports = image2D;
     }
     // 浏览器环境下

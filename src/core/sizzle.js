@@ -1,4 +1,5 @@
-import { isNode } from './type';
+import isElement from '@yelloxing/core.js/isElement';
+import isFunction from '@yelloxing/core.js/isFunction';
 import { REGEXP } from './config';
 import toNode from './to-node';
 import image2D from '../library/core';
@@ -23,7 +24,7 @@ export default function (selector, context) {
         // 如果以'<'开头表示是字符串模板
         if (typeof context == 'string' || /^</.test(selector)) {
             let node = toNode(selector, context);
-            if (isNode(node)) return [node];
+            if (isElement(node)) return [node];
             else return [];
         }
 
@@ -37,7 +38,7 @@ export default function (selector, context) {
         // 此选择器会忽略上下文
         if (id) {
             let node = document.getElementById(id[0].replace('#', ''));
-            if (isNode(node)) return [node];
+            if (isElement(node)) return [node];
             else return [];
         }
 
@@ -68,7 +69,7 @@ export default function (selector, context) {
     }
 
     // 如果是结点
-    else if (isNode(selector)) {
+    else if (isElement(selector)) {
         return [selector];
     }
 
@@ -77,7 +78,7 @@ export default function (selector, context) {
     else if (selector && (selector.constructor === Array || selector.constructor === HTMLCollection || selector.constructor === NodeList)) {
         let temp = [];
         for (let i = 0; i < selector.length; i++) {
-            if (isNode(selector[i])) temp.push(selector[i]);
+            if (isElement(selector[i])) temp.push(selector[i]);
         }
         return temp;
     }
@@ -88,7 +89,7 @@ export default function (selector, context) {
     }
 
     // 如果是函数
-    else if (typeof selector === 'function') {
+    else if (isFunction(selector)) {
         let allNodes = context.getElementsByTagName('*'), temp = [];
         for (let i = 0; i < allNodes.length; i++) {
             // 如果选择器函数返回true，表示当前面对的结点被接受
