@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.4.1
+    * version 1.4.2
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Sep 13 2019 11:02:22 GMT+0800 (GMT+08:00)
+    * Date:Thu Sep 19 2019 14:34:44 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -147,6 +147,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];
 
     /**
+     * 判断一个值是不是String。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是String返回true，否则返回false
+     */
+    function isString(value) {
+        var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+        return type === 'string' || type === 'object' && value != null && !Array.isArray(value) && getType(value) === '[object String]';
+    }
+
+    /**
      * 判断一个值是不是文本结点。
      *
      * @since V0.1.2
@@ -242,8 +255,35 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var mark = /<([^>]+)>.*/.exec(template)[1];
 
-        // 除了画布canvas，其余默认svg标签
+        // 画布canvas特殊知道，一定是html
         if ("canvas" === mark.toLowerCase()) type = 'HTML';
+
+        // 此外，如果没有特殊设定，给常用的html标签默认
+        if (!isString(type) && [
+
+        // 三大display元素
+        "div", "span", "p",
+
+        // 小元素
+        "em", "i",
+
+        // 关系元素
+        "table", "ul", "ol", "dl",
+
+        // 表单相关
+        "form", "input", "button", "textarea",
+
+        // H5结构元素
+        "header", "footer", "article", "section",
+
+        // 标题元素
+        "h1", "h2", "h3", "h4", "h5", "h6",
+
+        // 替换元素
+        "image", "video", "iframe", "object",
+
+        // 资源元素
+        "style", "script", "link"].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
 
         return toNode(template, type);
     }

@@ -1,5 +1,6 @@
 import { NAMESPACE, REGEXP } from './config';
 import isElement from '@yelloxing/core.js/isElement';
+import isString from '@yelloxing/core.js/isString';
 import { setSVG } from './polyfill';
 
 // 变成指定类型的结点
@@ -41,8 +42,37 @@ export default function (template, type) {
 
     let mark = /<([^>]+)>.*/.exec(template)[1];
 
-    // 除了画布canvas，其余默认svg标签
+    // 画布canvas特殊知道，一定是html
     if ("canvas" === mark.toLowerCase()) type = 'HTML';
+
+    // 此外，如果没有特殊设定，给常用的html标签默认
+    if (!isString(type) && [
+
+        // 三大display元素
+        "div", "span", "p",
+
+        // 小元素
+        "em", "i",
+
+        // 关系元素
+        "table", "ul", "ol", "dl",
+
+        // 表单相关
+        "form", "input", "button", "textarea",
+
+        // H5结构元素
+        "header", "footer", "article", "section",
+
+        // 标题元素
+        "h1", "h2", "h3", "h4", "h5", "h6",
+
+        // 替换元素
+        "image", "video", "iframe", "object",
+
+        // 资源元素
+        "style", "script", "link"
+
+    ].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
 
     return toNode(template, type);
 };

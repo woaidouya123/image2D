@@ -72,3 +72,7 @@ v1.4.0:
     date:2019-09-06
     changes:
       -  把一些核心的计算方法提取出来，方便后期统一优化（tree、animation、Hermite和Matrix4）
+v1.4.2:
+    date:2019-09-19
+    changes:
+      -  核心方法toNode针对常见的html结点，默认使用HTML命名空间而不是svg命名空间
