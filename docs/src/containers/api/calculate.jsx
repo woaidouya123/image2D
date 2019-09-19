@@ -195,12 +195,13 @@ export default class Calculate extends React.Component {
         id: string||number
         left: number
         pid: any
+        deep: number
         top: number
     },
     ...
 }, root: string||number, size: number, deep: number}`}</pre>
             <p>
-                node记录的是每个结点的信息，每个结点中的left和top就是该结点应该绘制的位置，data是结点的原始数据。
+                node记录的是每个结点的信息，每个结点中的left和top就是该结点应该绘制的位置，data是结点的原始数据，deep表示结点层次（从0开始）。
         </p>
             <p>
                 上面说明的都配置好以后，就可以启动布局计算并绘图了：
@@ -220,6 +221,7 @@ export default class Calculate extends React.Component {
     data: (2) ["油画", "手绘"];
     id: "油画";
     left: 1.5;
+    deep: 1;
     pid: "手绘";
     show: true;
     top: 1.5

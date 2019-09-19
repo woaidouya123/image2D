@@ -76,3 +76,7 @@ v1.4.2:
     date:2019-09-19
     changes:
       -  核心方法toNode针对常见的html结点，默认使用HTML命名空间而不是svg命名空间
+v1.4.3:
+    date:2019-09-19
+    changes:
+      -  tree布局计算后的结点多添加一项deep用来表示树的层次，从0开始编号

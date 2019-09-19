@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.4.2
+    * version 1.4.3
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Sep 19 2019 14:34:44 GMT+0800 (GMT+08:00)
+    * Date:Thu Sep 19 2019 17:31:24 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -778,6 +778,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 计算初始坐标
             var orgData = treeCalc(initData);
+
+            // 计算deep
+            for (var key in orgData.node) {
+                orgData.node[key].deep = orgData.node[key].left - 0.5;
+            }
 
             if (config.type === 'LR' || config.type === 'RL') {
 

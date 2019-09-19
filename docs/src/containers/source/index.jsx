@@ -51,7 +51,7 @@ export default class Source extends React.Component {
                             <a style={ul.li.h2.div.a} href='https://github.com/yelloxing/npm-downloads' target="_blank">代码</a>
                         </div>
                     </h2>
-                    <p class='npmDownloads' style={ul.li.p} ></p>                    
+                    <p class='npmDownloads' style={ul.li.p} ></p>
                 </li>
                 <li style={ul.li}>
                     <h2 style={ul.li.h2}>
