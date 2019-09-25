@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.4.3
+    * version 1.4.4
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Sep 19 2019 17:31:24 GMT+0800 (GMT+08:00)
+    * Date:Wed Sep 25 2019 10:04:34 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -1759,25 +1759,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 获取canvas2D画笔
         var painter = canvas.getContext("2d");
 
-        // 如果没有针对模糊问题处理
-        if (canvas.__had_scale2_canvas__ !== 'YES') {
-            canvas.__had_scale2_canvas__ = 'YES';
+        var width = canvas.clientWidth || canvas.getAttribute('width'),
+            //内容+内边距
+        height = canvas.clientHeight || canvas.getAttribute('height');
 
-            var width = canvas.clientWidth || canvas.getAttribute('width'),
-                //内容+内边距
-            height = canvas.clientHeight || canvas.getAttribute('height');
+        // 设置显示大小
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
 
-            // 设置显示大小
-            canvas.style.width = width + "px";
-            canvas.style.height = height + "px";
+        // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
+        canvas.setAttribute('width', width * 2);
+        canvas.setAttribute('height', height * 2);
 
-            // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
-            canvas.setAttribute('width', width * 2);
-            canvas.setAttribute('height', height * 2);
-
-            // 通过缩放实现模糊问题
-            painter.scale(2, 2);
-        }
+        // 通过缩放实现模糊问题
+        painter.scale(2, 2);
 
         // 默认配置canvas2D对象已经存在的属性
         painter.textBaseline = 'middle';
