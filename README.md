@@ -18,6 +18,37 @@
 ## Documentation
 使用中可以访问[在线接口文档](https://yelloxing.github.io/image2D/)，如果想参与进来，可以访问[开发需知](https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md)。
 
+## Issues
+使用的时候遇到任何问题或有好的建议，请点击进入[issue](https://github.com/yelloxing/image2D/issues)！
+
+另外，你可以查看[版本更新日志](https://github.com/yelloxing/image2D/blob/master/CHANGELOG)来了解每次版本更新的内容以便确定是否需要升级（请在使用的时候遇到问题的时候务必查看一下，如果升级以后依旧有问题，请提交[Error or defect design](https://github.com/yelloxing/image2D/issues/new/choose)）。
+
+## How to use?
+如果你开发的是一个web项目，直接在页面引入打包后的文件后即可（在代码中通过image2D或$$调用）：
+
+```html
+<script src="./build/image2D.min.js" type="text/javascript"></script>
+```
+
+如果你想通过npm方式管理，首先你需要通过命令行安装image2D，就像这样：
+
+```bash
+npm install --save image2d
+```
+
+安装好了以后，在需要的地方引入即可：
+
+```js
+import $$ from 'image2d';
+```
+
+或
+
+```js
+const $$ = require("image2d");
+```
+
+## Demo
 下面，我们来演示一个简单的例子，主要是帮助大家了解该库的基本用法。
 
 - Painter
@@ -82,35 +113,6 @@ $$('canvas')
 <img src='https://github.com/yelloxing/image2D/blob/master/docs/src/assets/guider-demo1.png' >
 
 怎么样？是不是很简单，虽然直接使用canvas或svg也可以实现，不过借助这个库绘图会更简单，你可以把更多的精力放在绘制出更有趣的作品上（如果借助本库开发了有趣的作品，可以联系我们，和大家一起分享）。
-
-
-## Issues
-使用的时候遇到任何问题或有好的建议，请点击进入[issue](https://github.com/yelloxing/image2D/issues)！
-
-## How to use?
-如果你开发的是一个web项目，直接在页面引入打包后的文件后即可（在代码中通过image2D或$$调用）：
-
-```html
-<script src="./build/image2D.min.js" type="text/javascript"></script>
-```
-
-如果你想通过npm方式管理，首先你需要通过命令行安装image2D，就像这样：
-
-```bash
-npm install --save image2d
-```
-
-安装好了以后，在需要的地方引入即可：
-
-```js
-import $$ from 'image2d';
-```
-
-或
-
-```js
-const $$ = require("image2d");
-```
 
 ## License
 
