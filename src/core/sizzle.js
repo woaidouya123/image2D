@@ -1,5 +1,6 @@
 import isElement from '@yelloxing/core.js/isElement';
 import isFunction from '@yelloxing/core.js/isFunction';
+import isString from '@yelloxing/core.js/isString';
 import { REGEXP } from './config';
 import toNode from './to-node';
 import image2D from '../library/core';
@@ -18,7 +19,7 @@ export default function (selector, context) {
 
     // 如果是字符串
     // context如果是字符串（应该是'html'或'svg'）表示这是生成结点，也走这条路线
-    if (typeof context == 'string' || typeof selector === 'string') {
+    if (isString(context) || isString(selector)) {
         selector = selector.trim().replace(new RegExp(REGEXP.blank, 'g'), '');
 
         // 如果以'<'开头表示是字符串模板

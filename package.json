@@ -1,6 +1,6 @@
 {
   "name": "image2d",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.",
   "main": "build/image2D.min.js",
   "scripts": {
@@ -55,6 +55,6 @@
     "firefox >= 65"
   ],
   "dependencies": {
-    "@yelloxing/core.js": "^0.2.6"
+    "@yelloxing/core.js": "^0.3.1"
   }
 }

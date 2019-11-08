@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.4.6
+    * version 1.4.7
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Thu Nov 07 2019 15:13:23 GMT+0800 (GMT+08:00)
+    * Date:Fri Nov 08 2019 16:40:00 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -106,6 +106,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     /**
+     * 判断一个值是不是String。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是String返回true，否则返回false
+     */
+    function isString(value) {
+        var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+        return type === 'string' || type === 'object' && value != null && !Array.isArray(value) && getType(value) === '[object String]';
+    }
+
+    /**
      * 初始化配置文件
      * @param {Json} init 默认值
      * @param {Json} data
@@ -147,19 +160,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];
 
     /**
-     * 判断一个值是不是String。
-     *
-     * @since V0.1.2
-     * @public
-     * @param {*} value 需要判断类型的值
-     * @returns {boolean} 如果是String返回true，否则返回false
-     */
-    function isString(value) {
-        var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
-        return type === 'string' || type === 'object' && value != null && !Array.isArray(value) && getType(value) === '[object String]';
-    }
-
-    /**
      * 判断一个值是不是文本结点。
      *
      * @since V0.1.2
@@ -178,14 +178,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     var setSVG = function setSVG(target, svgstring) {
         if ('innerHTML' in SVGElement.prototype === false || 'innerHTML' in SVGSVGElement.prototype === false) {
+
+            // 创建一个非svg结点，用例帮助解析
+            // 这样比直接解析字符串简单
             var frame = document.createElement("div");
             frame.innerHTML = svgstring;
+
             var toSvgNode = function toSvgNode(htmlNode) {
+
+                // 创建svg结点，并挂载属性
                 var svgNode = document.createElementNS(NAMESPACE.svg, htmlNode.tagName.toLowerCase());
-                var attrs = htmlNode.attributes,
-                    i = void 0;
-                for (i = 0; attrs && i < attrs.length; i++) {
+                var attrs = htmlNode.attributes;
+
+                for (var i = 0; attrs && i < attrs.length; i++) {
+
+                    // 是否是特殊属性目前靠手工登记
                     if (XLINK_ATTRIBUTE.indexOf(attrs[i].nodeName) >= 0) {
+
                         // 针对特殊的svg属性，追加命名空间
                         svgNode.setAttributeNS(NAMESPACE.xlink, 'xlink:' + attrs[i].nodeName, htmlNode.getAttribute(attrs[i].nodeName));
                     } else {
@@ -194,13 +203,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 }
                 return svgNode;
             };
+
             var rslNode = toSvgNode(frame.firstChild);
+
             (function toSVG(pnode, svgPnode) {
                 var node = pnode.firstChild;
+
+                // 如果是文本结点
                 if (isText(node)) {
                     svgPnode.textContent = pnode.innerText;
                     return;
                 }
+
+                // 不是文本结点，就拼接
                 while (node) {
                     var svgNode = toSvgNode(node);
                     svgPnode.appendChild(svgNode);
@@ -208,8 +223,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     node = node.nextSibling;
                 }
             })(frame.firstChild, rslNode);
+
+            // 拼接
             target.appendChild(rslNode);
         } else {
+
             // 如果当前浏览器提供了svg类型结点的innerHTML,我们还是使用浏览器提供的
             target.innerHTML = svgstring;
         }
@@ -302,7 +320,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         // 如果是字符串
         // context如果是字符串（应该是'html'或'svg'）表示这是生成结点，也走这条路线
-        if (typeof context == 'string' || typeof selector === 'string') {
+        if (isString(context) || isString(selector)) {
             selector = selector.trim().replace(new RegExp(REGEXP.blank, 'g'), '');
 
             // 如果以'<'开头表示是字符串模板
@@ -1473,7 +1491,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var allStyle = document.defaultView && document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(dom, null) : dom.currentStyle;
 
         // 如果没有指定属性名称，返回全部样式
-        return typeof name === 'string' ? allStyle.getPropertyValue(name) : allStyle;
+        return isString(name) ? allStyle.getPropertyValue(name) : allStyle;
     }
 
     /**
