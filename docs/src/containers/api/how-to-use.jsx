@@ -61,7 +61,7 @@ export default class HowToUse extends React.Component {
         </p>
             <pre className='prettyprint lang-js'>npm install --save image2d</pre>
             <p>
-                安装好了以后，在需要的地方引入即可：
+                安装好了以后，在需要的地方引入即可： 
         </p>
             <pre className='prettyprint lang-js'>{`// ESMAScript6+规范引入
 import $$ from 'image2d';`}</pre>
