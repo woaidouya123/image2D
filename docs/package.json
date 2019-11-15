@@ -5,7 +5,8 @@
   "main": "dist/main.js",
   "scripts": {
     "dev": "node_modules/.bin/webpack-dev-server --open --config webpack.dev.js",
-    "release": "node_modules/.bin/webpack --config webpack.prod.js",
+    "release": "cuf -d ./dist && npm run prod",
+    "prod": "node_modules/.bin/webpack --config webpack.prod.js",
     "start": "npm install && npm run dev"
   },
   "keywords": [
@@ -22,6 +23,7 @@
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^2.1.0",
+    "cuf": "^1.0.3",
     "file-loader": "^4.1.0",
     "node-sass": "^4.11.0",
     "postcss": "^7.0.14",

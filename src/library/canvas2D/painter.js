@@ -1,5 +1,5 @@
 import { initText, initArc, initCircle, initRect } from './config';
-import { linearGradient } from './Gradient';
+import { linearGradient, radialGradient} from './Gradient';
 
 // 加强版本的画笔
 export default function (canvas) {
@@ -133,6 +133,11 @@ export default function (canvas) {
         //  线性渐变
         "createLinearGradient": function (x0, y0, x1, y1) {
             return linearGradient(painter, x0, y0, x1, y1);
+        },
+
+        // 环形渐变
+        "createRadialGradient":function( cx, cy, r){
+            return radialGradient(painter, cx, cy, r);
         },
 
         /**

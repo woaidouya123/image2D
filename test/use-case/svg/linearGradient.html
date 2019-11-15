@@ -7,27 +7,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="../../../docs/src/assets/image2D.png">
     <script src="../../../build/image2D.js"></script>
-    <title>image2D - 用例测试 - Gradient渐变</title>
+    <title>image2D - 用例测试 - 线性渐变</title>
 </head>
 
 <body>
     <script>
 
         // 准备画布
-        var canvas = $$('<canvas>非常抱歉，您的浏览器不支持canvas!</canvas>').attr({
+        var svg = $$('<svg></svg>').attr({
             "width": 700,
             "height": 700
         }).appendTo('body');
 
         // 获取并配置画笔
-        var painter = canvas.painter();
+        var painter = svg.painter();
 
         /**
          * 测试开始
          * ----------------------------
          */
 
-        var linearGradient = painter.createLinearGradient(0, 0, 700, 700);
+        var linearGradient = painter.createLinearGradient(0, 0, 100, 100);
         linearGradient.addColorStop(0, '#f00');
         linearGradient.addColorStop(1, '#00f');
 
@@ -35,7 +35,7 @@
             "fillStyle": linearGradient.value()
         });
 
-        painter.fillRect(0, 0, 700, 700);
+        painter.bind('<rect>').fillRect(0, 0, 700, 700).appendTo($$('svg'));
 
     </script>
 </body>
