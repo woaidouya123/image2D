@@ -1,6 +1,6 @@
 import image2D from '../core';
 import normalConfig, { initText, initArc, initCircle, initPath, initRect } from './config';
-import { linearGradient } from './Gradient';
+import { linearGradient,radialGradient } from './Gradient';
 import { rotate } from '../calculate/transform';
 
 export default function (target, selector) {
@@ -149,6 +149,11 @@ export default function (target, selector) {
         //  线性渐变
         "createLinearGradient": function (x0, y0, x1, y1) {
             return linearGradient(painter, target, x0, y0, x1, y1);
+        },
+
+        // 环形渐变
+        "createRadialGradient":function( cx, cy, r){
+            return radialGradient(painter, target, cx, cy, r);
         },
 
         /**

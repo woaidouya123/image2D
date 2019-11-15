@@ -5,14 +5,14 @@
     *
     * author 心叶
     *
-    * version 1.4.7
+    * version 1.4.8
     *
     * build Thu Apr 11 2019
     *
     * Copyright yelloxing
     * Released under the MIT license
     *
-    * Date:Fri Nov 08 2019 16:40:00 GMT+0800 (GMT+08:00)
+    * Date:Fri Nov 15 2019 11:09:24 GMT+0800 (GMT+08:00)
     */
 
 'use strict';
@@ -1757,8 +1757,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    // 线性渐变
     var linearGradient = function linearGradient(painter, x0, y0, x1, y1) {
         var gradient = painter.createLinearGradient(x0, y0, x1, y1);
+        var enhanceGradient = {
+            "value": function value() {
+                return gradient;
+            },
+            "addColorStop": function addColorStop(stop, color) {
+                gradient.addColorStop(stop, color);
+                return enhanceGradient;
+            }
+        };
+        return enhanceGradient;
+    };
+
+    // 环形渐变
+    var radialGradient = function radialGradient(painter, cx, cy, r) {
+        var gradient = painter.createRadialGradient(cx, cy, 0, cx, cy, r);
         var enhanceGradient = {
             "value": function value() {
                 return gradient;
@@ -1924,6 +1940,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 return linearGradient(painter, x0, y0, x1, y1);
             },
 
+            // 环形渐变
+            "createRadialGradient": function createRadialGradient(cx, cy, r) {
+                return radialGradient(painter, cx, cy, r);
+            },
+
             /**
              * 变换
              * --------------
@@ -2047,10 +2068,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return defs[0];
     };
 
+    // 线性渐变
     var linearGradient$1 = function linearGradient$1(painter, target, x0, y0, x1, y1) {
         var defs = initDefs(target);
         var gradientId = "image2D-lg-" + new Date().valueOf() + "-" + Math.random();
         var gradientDom = toNode$1('<linearGradient id="' + gradientId + '" x1="' + x0 + '%" y1="' + y0 + '%" x2="' + x1 + '%" y2="' + y1 + '%"></linearGradient>');
+        target.appendChild(gradientDom);
+        var enhanceGradient = {
+            "value": function value() {
+                return "url(#" + gradientId + ")";
+            },
+            "addColorStop": function addColorStop(stop, color) {
+                gradientDom.appendChild(toNode$1('<stop offset="' + stop * 100 + '%" style="stop-color:' + color + ';" />'));
+                return enhanceGradient;
+            }
+        };
+        return enhanceGradient;
+    };
+
+    // 环形渐变
+    var radialGradient$1 = function radialGradient$1(painter, target, cx, cy, r) {
+        var defs = initDefs(target);
+        var gradientId = "image2D-rg-" + new Date().valueOf() + "-" + Math.random();
+        var gradientDom = toNode$1('<radialGradient id="' + gradientId + '" cx="' + cx + '%" cy="' + cy + '%" r="' + r + '%"></radialGradient>');
         target.appendChild(gradientDom);
         var enhanceGradient = {
             "value": function value() {
@@ -2231,6 +2271,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             //  线性渐变
             "createLinearGradient": function createLinearGradient(x0, y0, x1, y1) {
                 return linearGradient$1(painter, target, x0, y0, x1, y1);
+            },
+
+            // 环形渐变
+            "createRadialGradient": function createRadialGradient(cx, cy, r) {
+                return radialGradient$1(painter, target, cx, cy, r);
             },
 
             /**

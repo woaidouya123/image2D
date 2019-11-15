@@ -208,8 +208,17 @@ painter.fillText('Step By Step', 100, 100).appendTo('g.text');`}</pre>
             </p>
             <pre className='prettyprint lang-js'>var linearGradient = painter.createLinearGradient(x1, y1, x2, y2);</pre>
             <p className="warn">
-                温馨提示：canvas画笔上述参数的单位是px，svg画笔上述参数是%，请一定要注意区分。
+                温馨提示：canvas画笔上述参数的单位是px，svg画笔上述参数是%，请一定要注意区分（下同）。
             </p>
+            <h6 className="title little">环形渐变</h6>
+            <p>
+                同样的，你需要使用画笔的createRadialGradient创建环形渐变对象，三个参数分别表示渐变的圆心P(cx, cy)和半径r：
+            </p>
+            <pre className='prettyprint lang-js'>var radialGradient = painter.createRadialGradient(cx, cy, r);</pre>
+            <p className="warn">
+                温馨提示：渐变的起点是圆心。
+            </p>
+            <h6 className="title little">设置与使用</h6>
             <p>
                 设置渐变范围以后，你需要在渐变范围中添加渐变色，可以添加任意多个：
             </p>
