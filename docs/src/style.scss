@@ -6,7 +6,6 @@ body {
     font-size: .16rem;
 }
 
-$color:rgb(113, 30, 50);
 /* webkit下滚动条样式 */
 
 ::-webkit-scrollbar {
@@ -17,7 +16,7 @@ $color:rgb(113, 30, 50);
 
 ::-webkit-scrollbar-thumb {
     height: .3rem;
-    background-color: $color;
+    background-color: rgb(113, 30, 50);
     border-radius: .05rem;
 }
 
@@ -25,7 +24,7 @@ $color:rgb(113, 30, 50);
 
 * {
     /*三角箭头的颜色*/
-    scrollbar-arrow-color: $color;
+    scrollbar-arrow-color: rgb(113, 30, 50);
     /*滚动条滑块按钮的颜色*/
     scrollbar-face-color: #eeeeee;
     /*滚动条整体颜色*/
