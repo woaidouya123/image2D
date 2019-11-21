@@ -1,19 +1,18 @@
-
-    /*!
-    * image2D - 🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.
-    * git+https://github.com/yelloxing/image2D.git
-    *
-    * author 心叶
-    *
-    * version 1.4.8
-    *
-    * build Thu Apr 11 2019
-    *
-    * Copyright yelloxing
-    * Released under the MIT license
-    *
-    * Date:Fri Nov 15 2019 11:09:24 GMT+0800 (GMT+08:00)
-    */
+/*!
+* image2D - 🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.
+* git+https://github.com/yelloxing/image2D.git
+*
+* author 心叶
+*
+* version 1.4.8
+*
+* build Thu Apr 11 2019
+*
+* Copyright yelloxing
+* Released under the MIT license
+*
+* Date:Thu Nov 21 2019 20:51:09 GMT+0800 (GMT+08:00)
+*/
 
 'use strict';
 

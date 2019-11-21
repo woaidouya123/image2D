@@ -7,13 +7,20 @@ module.exports = merge(common, {
         contentBase: './',
         compress: true,
         host: 'localhost',
-        port: '20001',
+        port: '20000',
         hot: true,
         inline: true,
-        historyApiFallback: true
+        historyApiFallback: true,
+        disableHostCheck: true,
+        watchOptions: {
+            poll: true,
+            ignored: /node_modules/,
+            aggregateTimeout: 300
+        }
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin()
     ],
     mode: 'development'
 });
