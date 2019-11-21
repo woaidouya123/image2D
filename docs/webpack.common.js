@@ -1,15 +1,20 @@
+const { VueLoaderPlugin } = require('vue-loader');
+
 module.exports = {
-    entry: ['./src/main.jsx'],
+    entry: ['./src/entry.js'],
     output: {
         path: __dirname,
         filename: 'dist/main.js'
     },
     module: {
         rules: [{
-            test: /\.(css|scss)$/,
-            use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+            test: /\.vue$/,
+            use: ['vue-loader']
         }, {
-            test: /\.(js|jsx)$/,
+            test: /\.(css|scss)$/,
+            use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+        }, {
+            test: /\.js$/,
             use: 'babel-loader',
             exclude: /node_modules/
         }, {
@@ -17,11 +22,14 @@ module.exports = {
             use: [{
                 loader: "url-loader",
                 options: {
-                    name: "dist/[name].[ext]",
+                    name: "dist/[path][name].[ext]",
                     context: "src/asset",
                     limit: 5000
                 }
             }]
         }]
-    }
+    },
+    plugins: [
+        new VueLoaderPlugin()
+    ]
 };

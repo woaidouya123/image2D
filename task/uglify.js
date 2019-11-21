@@ -12,7 +12,7 @@ let banner = require('./banner.js');
 let options = {
     "banner": banner(),
     "entry": "./build/image2D.js",
-    "output": ["./build/image2D.min.js", "./docs/image2D.min.guider.js"]
+    "output": ["./build/image2D.min.js", "./docs/src/assets/image2D.download.js"]
 };
 
 // js代码压缩混淆

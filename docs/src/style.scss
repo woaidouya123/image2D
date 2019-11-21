@@ -1,9 +1,11 @@
-html{
+html {
     font-size: 100px;
 }
-body{
+
+body {
     font-size: .16rem;
 }
+
 $color:rgb(113, 30, 50);
 /* webkit下滚动条样式 */
 
@@ -32,17 +34,4 @@ $color:rgb(113, 30, 50);
     scrollbar-shadow-color: #ccc;
     /*滚动条轨道颜色*/
     scrollbar-track-color: #fff;
-}
-
-@import './framework.scss';
-@import './api.scss';
-@import './guider.scss';
-@import './about.scss';
-@import '../plugin/prettify.css';
-
-.npmDownloads{
-    background-image:url(../assets/npm-downloads.png);
-}
-.imageDemos{
-    background-image:url(../assets/Image-Demo.png)
 }
