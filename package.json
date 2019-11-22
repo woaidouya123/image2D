@@ -6,10 +6,11 @@
   "scripts": {
     "start": "npm install && npm run build",
     "init": "cuf --config ./cuf.config.js init",
+    "end": "cuf --config ./cuf.config.js end",
     "bundle": "cuf --config ./cuf.config.js bundle",
     "babel": "cuf --config ./cuf.config.js babel",
     "uglifyjs": "cuf --config ./cuf.config.js uglifyjs",
-    "build": "npm run init && npm run bundle && npm run babel && npm run uglifyjs",
+    "build": "npm run init && npm run bundle && npm run babel && npm run uglifyjs && npm run end",
     "support": "npx browserslist"
   },
   "keywords": [

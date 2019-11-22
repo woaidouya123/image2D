@@ -41,20 +41,33 @@ module.exports = {
             // 如果打包后的文件存在
             if (fs.existsSync('./build')) cuf.deleteSync('./build');
 
+            cuf.log("\n-----------------------\n环境整理完毕，开始打包！\n-----------------------\n");
+
+        },
+
+        end(cuf) {
+
+            cuf.log("\n-----------------------\n打包完毕！\n-----------------------\n");
+
         },
 
         /**
          * 第一步：模块打包
          * ----------------------
          */
-        bundle() {
+        bundle(cuf) {
             async function build(inputOptions, outputOptions) {
                 const bundle = await rollup.rollup(inputOptions);
                 await bundle.write(outputOptions);
+
+                cuf.error('模块打包完毕');
             }
+
+            cuf.log("\n模块打包:./build/module.new.js\n");
+
             build({
                 input: 'src/index.js',
-                "plugins": [
+                plugins: [
 
                     // 帮助 Rollup 查找外部模块，然后安装
                     rollupPluginNodeResolve({
@@ -72,7 +85,7 @@ module.exports = {
                 ]
             }, {
                 format: 'iife',
-                "name": "temp",
+                name: "temp",
                 file: './build/module.new.js'
             });
         },
@@ -82,11 +95,16 @@ module.exports = {
          * ----------------------
          */
         babel(cuf, pkg) {
+
+            cuf.log("\nbabel转义:./build/module.new.js → ./build/image2D.js\n");
+
             babel.transformFile("./build/module.new.js", {}, function (err, result) {
                 if (!err) {
                     fs.writeFileSync("./build/image2D.js", banner(pkg));
                     fs.appendFileSync("./build/image2D.js", result.code);
                     cuf.deleteSync("./build/module.new.js");
+
+                    cuf.error('转义完毕');
                 } else {
                     console.log(err);
                 }
@@ -98,7 +116,10 @@ module.exports = {
          * ----------------------
          */
         uglifyjs(cuf, pkg) {
-            cp.exec("uglifyjs ./build/image2D.js -m -o ./build/uglifyjs.new.js", function (error, data) {
+
+            cuf.log("\nbabel转义:./build/image2D.js → ./build/image2D.min.js + ./docs/src/assets/image2D.download.js\n");
+
+            cp.exec("uglifyjs ./build/image2D.js -m -o ./build/uglifyjs.new.js", function (error) {
                 if (error) {
                     console.log(error);
                 } else {
@@ -108,6 +129,8 @@ module.exports = {
 
                     // 复制一份用于文档
                     cuf.copySync("./build/image2D.min.js", "./docs/src/assets/image2D.download.js");
+
+                    cuf.error('压缩完毕');
                 }
                 cuf.deleteSync("./build/uglifyjs.new.js");
             });
