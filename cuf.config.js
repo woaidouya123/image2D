@@ -36,18 +36,22 @@ module.exports = {
     // 定义任务
     task: {
 
-        init(cuf) {
+        init(cuf, pkg) {
+
+            cuf.print(pkg.name + "@" + pkg.version + " " + pkg.description);
 
             // 如果打包后的文件存在
             if (fs.existsSync('./build')) cuf.deleteSync('./build');
 
-            cuf.log("\n-----------------------\n环境整理完毕，开始打包！\n-----------------------\n");
+            cuf.log("\n-----------------------\n环境整理完毕，开始打包！\n-----------------------");
+            cuf.print("Date : " + new Date() + "\n");
 
         },
 
         end(cuf) {
 
-            cuf.log("\n-----------------------\n打包完毕！\n-----------------------\n");
+            cuf.log("\n-----------------------\n打包完毕！\n-----------------------");
+            cuf.print("Date : " + new Date() + "\n");
 
         },
 
@@ -63,7 +67,7 @@ module.exports = {
                 cuf.error('模块打包完毕');
             }
 
-            cuf.log("\n模块打包:./build/module.new.js\n");
+            cuf.log("\n[1]模块打包:./build/module.new.js\n");
 
             build({
                 input: 'src/index.js',
@@ -96,7 +100,7 @@ module.exports = {
          */
         babel(cuf, pkg) {
 
-            cuf.log("\nbabel转义:./build/module.new.js → ./build/image2D.js\n");
+            cuf.log("\n[2]babel转义:./build/module.new.js → ./build/image2D.js\n");
 
             babel.transformFile("./build/module.new.js", {}, function (err, result) {
                 if (!err) {
@@ -117,7 +121,7 @@ module.exports = {
          */
         uglifyjs(cuf, pkg) {
 
-            cuf.log("\nbabel转义:./build/image2D.js → ./build/image2D.min.js + ./docs/src/assets/image2D.download.js\n");
+            cuf.log("\n[3]babel转义:./build/image2D.js → ./build/image2D.min.js + ./docs/src/assets/image2D.download.js\n");
 
             cp.exec("uglifyjs ./build/image2D.js -m -o ./build/uglifyjs.new.js", function (error) {
                 if (error) {

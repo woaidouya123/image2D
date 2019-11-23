@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.4.9
+* version 1.4.10
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Sat Nov 23 2019 01:15:37 GMT+0800 (GMT+08:00)
+* Date:Sat Nov 23 2019 11:43:54 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -2072,7 +2072,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var defs = initDefs(target);
         var gradientId = "image2D-lg-" + new Date().valueOf() + "-" + Math.random();
         var gradientDom = toNode$1('<linearGradient id="' + gradientId + '" x1="' + x0 + '%" y1="' + y0 + '%" x2="' + x1 + '%" y2="' + y1 + '%"></linearGradient>');
-        target.appendChild(gradientDom);
+        defs.appendChild(gradientDom);
         var enhanceGradient = {
             "value": function value() {
                 return "url(#" + gradientId + ")";
@@ -2090,7 +2090,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var defs = initDefs(target);
         var gradientId = "image2D-rg-" + new Date().valueOf() + "-" + Math.random();
         var gradientDom = toNode$1('<radialGradient id="' + gradientId + '" cx="' + cx + '%" cy="' + cy + '%" r="' + r + '%"></radialGradient>');
-        target.appendChild(gradientDom);
+        defs.appendChild(gradientDom);
         var enhanceGradient = {
             "value": function value() {
                 return "url(#" + gradientId + ")";

@@ -1,16 +1,16 @@
 {
   "name": "image2d",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "description": "🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.",
   "main": "build/image2D.min.js",
   "scripts": {
     "start": "npm install && npm run build",
-    "init": "cuf --config ./cuf.config.js init",
-    "end": "cuf --config ./cuf.config.js end",
-    "bundle": "cuf --config ./cuf.config.js bundle",
-    "babel": "cuf --config ./cuf.config.js babel",
-    "uglifyjs": "cuf --config ./cuf.config.js uglifyjs",
-    "build": "npm run init && npm run bundle && npm run babel && npm run uglifyjs && npm run end",
+    "build": "npm run build:init && npm run build:bundle && npm run build:babel && npm run build:uglifyjs && npm run build:end",
+    "build:init": "cuf --config ./cuf.config.js init",
+    "build:end": "cuf --config ./cuf.config.js end",
+    "build:bundle": "cuf --config ./cuf.config.js bundle",
+    "build:babel": "cuf --config ./cuf.config.js babel",
+    "build:uglifyjs": "cuf --config ./cuf.config.js uglifyjs",
     "support": "npx browserslist"
   },
   "keywords": [
