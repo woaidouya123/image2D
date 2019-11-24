@@ -14,6 +14,12 @@
           onclick='window.location.href="#/api/"'
           id='api'
         >文档</li>
+        <li>
+          <a
+            href="https://yelloxing.github.io/Image-Demo/index.html"
+            target="_blank"
+          >例子</a>
+        </li>
         <li
           onclick='window.location.href="#/about/"'
           id='about'
@@ -42,6 +48,12 @@
         </li>
         <li>
           <a href="#/api/">文档</a>
+        </li>
+        <li>
+          <a
+            href="https://yelloxing.github.io/Image-Demo/index.html"
+            target="_blank"
+          >例子</a>
         </li>
         <li>
           <a href="#/about/">关于</a>
