@@ -27,10 +27,10 @@
 另外，你可以查看[版本更新日志](https://github.com/yelloxing/image2D/blob/master/CHANGELOG)来了解每次版本更新的内容以便确定是否需要升级（请在使用的时候遇到问题的时候务必查看一下，如果升级以后依旧有问题，请提交[Error or defect design](https://github.com/yelloxing/image2D/issues/new/choose)）。
 
 ## How to use?
-如果你开发的是一个web项目，直接在页面引入打包后的文件后即可（在代码中通过image2D或$$调用）：
+如果你开发的是一个web项目，可以通过CDN引入（请选择对应的版本），在代码中通过image2D或$$调用：
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/image2d@1.4.10/build/image2D.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/image2d@1.4.10/build/image2D.min.js"></script>
 ```
 
 如果你想通过npm方式管理，首先你需要通过命令行安装image2D，就像这样：
@@ -121,4 +121,4 @@ $$('canvas')
 
 [MIT](https://github.com/yelloxing/image2D/blob/master/LICENSE)
 
-Copyright (c) 2007夏-present 走一步 再走一步
+Copyright (c) 2007-2019 走一步 再走一步
