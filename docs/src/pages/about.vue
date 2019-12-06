@@ -22,7 +22,9 @@
         <em>
           建议或参与讨论
         </em>
-        使用等过程中发现的问题或需要改进的部分，包括好的建议和疑惑，都可以提issue进行讨论。
+        使用等过程中发现的问题或需要改进的部分，包括好的建议和疑惑，都可以提
+        <a href="https://github.com/yelloxing/image2D/issues">issue</a>
+        进行讨论。
       </li>
       <li>
         <em>
@@ -40,7 +42,11 @@
         <em>
           用例或作品
         </em>
-        你可以在项目的demos下添加一些简单的用例，或者建立新的项目开发一个有趣的作品并告知我们。
+        你可以在项目的demos下添加一些简单的用例，或者在
+        <a href="https://yelloxing.github.io/Image-Demo/index.html#/menu">例子</a>
+        项目中
+        <a href="https://github.com/yelloxing/Image-Demo">添加用例</a>
+        。
       </li>
     </ul>
   </div>
@@ -81,6 +87,11 @@ div {
       line-height: 2.5em;
       margin: 0.1rem 0;
       font-size: 0.13rem;
+      & > a {
+        color: #9fc457;
+        font-weight: 600;
+        margin: 0 0.1rem;
+      }
       & > em {
         background-color: #8eb844;
         margin: 0 0.1rem;
