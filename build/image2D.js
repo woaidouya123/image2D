@@ -1,19 +1,18 @@
-
-    /*!
-    * image2D - 🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.
-    * git+https://github.com/yelloxing/image2D.git
-    *
-    * author 心叶
-    *
-    * version 1.4.1
-    *
-    * build Thu Apr 11 2019
-    *
-    * Copyright yelloxing
-    * Released under the MIT license
-    *
-    * Date:Fri Sep 13 2019 11:02:22 GMT+0800 (GMT+08:00)
-    */
+/*!
+* image2D - 🍇 使用ECMAScript绘制二维图片。Drawing Two-Dimensional Pictures Using ECMAScript.
+* git+https://github.com/yelloxing/image2D.git
+*
+* author 心叶
+*
+* version 1.4.11
+*
+* build Thu Apr 11 2019
+*
+* Copyright yelloxing
+* Released under the MIT license
+*
+* Date:Fri Dec 06 2019 22:26:22 GMT+0800 (GMT+08:00)
+*/
 
 'use strict';
 
@@ -106,6 +105,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     /**
+     * 判断一个值是不是String。
+     *
+     * @since V0.1.2
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @returns {boolean} 如果是String返回true，否则返回false
+     */
+    function isString(value) {
+        var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+        return type === 'string' || type === 'object' && value != null && !Array.isArray(value) && getType(value) === '[object String]';
+    }
+
+    /**
      * 初始化配置文件
      * @param {Json} init 默认值
      * @param {Json} data
@@ -165,14 +177,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     var setSVG = function setSVG(target, svgstring) {
         if ('innerHTML' in SVGElement.prototype === false || 'innerHTML' in SVGSVGElement.prototype === false) {
+
+            // 创建一个非svg结点，用例帮助解析
+            // 这样比直接解析字符串简单
             var frame = document.createElement("div");
             frame.innerHTML = svgstring;
+
             var toSvgNode = function toSvgNode(htmlNode) {
+
+                // 创建svg结点，并挂载属性
                 var svgNode = document.createElementNS(NAMESPACE.svg, htmlNode.tagName.toLowerCase());
-                var attrs = htmlNode.attributes,
-                    i = void 0;
-                for (i = 0; attrs && i < attrs.length; i++) {
+                var attrs = htmlNode.attributes;
+
+                for (var i = 0; attrs && i < attrs.length; i++) {
+
+                    // 是否是特殊属性目前靠手工登记
                     if (XLINK_ATTRIBUTE.indexOf(attrs[i].nodeName) >= 0) {
+
                         // 针对特殊的svg属性，追加命名空间
                         svgNode.setAttributeNS(NAMESPACE.xlink, 'xlink:' + attrs[i].nodeName, htmlNode.getAttribute(attrs[i].nodeName));
                     } else {
@@ -181,13 +202,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 }
                 return svgNode;
             };
+
             var rslNode = toSvgNode(frame.firstChild);
+
             (function toSVG(pnode, svgPnode) {
                 var node = pnode.firstChild;
+
+                // 如果是文本结点
                 if (isText(node)) {
                     svgPnode.textContent = pnode.innerText;
                     return;
                 }
+
+                // 不是文本结点，就拼接
                 while (node) {
                     var svgNode = toSvgNode(node);
                     svgPnode.appendChild(svgNode);
@@ -195,8 +222,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     node = node.nextSibling;
                 }
             })(frame.firstChild, rslNode);
+
+            // 拼接
             target.appendChild(rslNode);
         } else {
+
             // 如果当前浏览器提供了svg类型结点的innerHTML,我们还是使用浏览器提供的
             target.innerHTML = svgstring;
         }
@@ -242,8 +272,35 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var mark = /<([^>]+)>.*/.exec(template)[1];
 
-        // 除了画布canvas，其余默认svg标签
+        // 画布canvas特殊知道，一定是html
         if ("canvas" === mark.toLowerCase()) type = 'HTML';
+
+        // 此外，如果没有特殊设定，给常用的html标签默认
+        if (!isString(type) && [
+
+        // 三大display元素
+        "div", "span", "p",
+
+        // 小元素
+        "em", "i",
+
+        // 关系元素
+        "table", "ul", "ol", "dl",
+
+        // 表单相关
+        "form", "input", "button", "textarea",
+
+        // H5结构元素
+        "header", "footer", "article", "section",
+
+        // 标题元素
+        "h1", "h2", "h3", "h4", "h5", "h6",
+
+        // 替换元素
+        "image", "video", "iframe", "object",
+
+        // 资源元素
+        "style", "script", "link"].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
 
         return toNode(template, type);
     }
@@ -262,7 +319,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         // 如果是字符串
         // context如果是字符串（应该是'html'或'svg'）表示这是生成结点，也走这条路线
-        if (typeof context == 'string' || typeof selector === 'string') {
+        if (isString(context) || isString(selector)) {
             selector = selector.trim().replace(new RegExp(REGEXP.blank, 'g'), '');
 
             // 如果以'<'开头表示是字符串模板
@@ -738,6 +795,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // 计算初始坐标
             var orgData = treeCalc(initData);
+
+            // 计算deep
+            for (var key in orgData.node) {
+                orgData.node[key].deep = orgData.node[key].left - 0.5;
+            }
 
             if (config.type === 'LR' || config.type === 'RL') {
 
@@ -1428,7 +1490,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var allStyle = document.defaultView && document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(dom, null) : dom.currentStyle;
 
         // 如果没有指定属性名称，返回全部样式
-        return typeof name === 'string' ? allStyle.getPropertyValue(name) : allStyle;
+        return isString(name) ? allStyle.getPropertyValue(name) : allStyle;
     }
 
     /**
@@ -1694,8 +1756,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return painter;
     };
 
+    // 线性渐变
     var linearGradient = function linearGradient(painter, x0, y0, x1, y1) {
         var gradient = painter.createLinearGradient(x0, y0, x1, y1);
+        var enhanceGradient = {
+            "value": function value() {
+                return gradient;
+            },
+            "addColorStop": function addColorStop(stop, color) {
+                gradient.addColorStop(stop, color);
+                return enhanceGradient;
+            }
+        };
+        return enhanceGradient;
+    };
+
+    // 环形渐变
+    var radialGradient = function radialGradient(painter, cx, cy, r) {
+        var gradient = painter.createRadialGradient(cx, cy, 0, cx, cy, r);
         var enhanceGradient = {
             "value": function value() {
                 return gradient;
@@ -1714,25 +1792,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 获取canvas2D画笔
         var painter = canvas.getContext("2d");
 
-        // 如果没有针对模糊问题处理
-        if (canvas.__had_scale2_canvas__ !== 'YES') {
-            canvas.__had_scale2_canvas__ = 'YES';
+        var width = canvas.clientWidth || canvas.getAttribute('width'),
+            //内容+内边距
+        height = canvas.clientHeight || canvas.getAttribute('height');
 
-            var width = canvas.clientWidth || canvas.getAttribute('width'),
-                //内容+内边距
-            height = canvas.clientHeight || canvas.getAttribute('height');
+        // 设置显示大小
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
 
-            // 设置显示大小
-            canvas.style.width = width + "px";
-            canvas.style.height = height + "px";
+        // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
+        canvas.setAttribute('width', width * 2);
+        canvas.setAttribute('height', height * 2);
 
-            // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
-            canvas.setAttribute('width', width * 2);
-            canvas.setAttribute('height', height * 2);
-
-            // 通过缩放实现模糊问题
-            painter.scale(2, 2);
-        }
+        // 通过缩放实现模糊问题
+        painter.scale(2, 2);
 
         // 默认配置canvas2D对象已经存在的属性
         painter.textBaseline = 'middle';
@@ -1866,6 +1939,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 return linearGradient(painter, x0, y0, x1, y1);
             },
 
+            // 环形渐变
+            "createRadialGradient": function createRadialGradient(cx, cy, r) {
+                return radialGradient(painter, cx, cy, r);
+            },
+
             /**
              * 变换
              * --------------
@@ -1989,11 +2067,30 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return defs[0];
     };
 
+    // 线性渐变
     var linearGradient$1 = function linearGradient$1(painter, target, x0, y0, x1, y1) {
         var defs = initDefs(target);
         var gradientId = "image2D-lg-" + new Date().valueOf() + "-" + Math.random();
         var gradientDom = toNode$1('<linearGradient id="' + gradientId + '" x1="' + x0 + '%" y1="' + y0 + '%" x2="' + x1 + '%" y2="' + y1 + '%"></linearGradient>');
-        target.appendChild(gradientDom);
+        defs.appendChild(gradientDom);
+        var enhanceGradient = {
+            "value": function value() {
+                return "url(#" + gradientId + ")";
+            },
+            "addColorStop": function addColorStop(stop, color) {
+                gradientDom.appendChild(toNode$1('<stop offset="' + stop * 100 + '%" style="stop-color:' + color + ';" />'));
+                return enhanceGradient;
+            }
+        };
+        return enhanceGradient;
+    };
+
+    // 环形渐变
+    var radialGradient$1 = function radialGradient$1(painter, target, cx, cy, r) {
+        var defs = initDefs(target);
+        var gradientId = "image2D-rg-" + new Date().valueOf() + "-" + Math.random();
+        var gradientDom = toNode$1('<radialGradient id="' + gradientId + '" cx="' + cx + '%" cy="' + cy + '%" r="' + r + '%"></radialGradient>');
+        defs.appendChild(gradientDom);
         var enhanceGradient = {
             "value": function value() {
                 return "url(#" + gradientId + ")";
@@ -2173,6 +2270,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             //  线性渐变
             "createLinearGradient": function createLinearGradient(x0, y0, x1, y1) {
                 return linearGradient$1(painter, target, x0, y0, x1, y1);
+            },
+
+            // 环形渐变
+            "createRadialGradient": function createRadialGradient(cx, cy, r) {
+                return radialGradient$1(painter, target, cx, cy, r);
             },
 
             /**

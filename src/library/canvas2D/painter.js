@@ -1,5 +1,5 @@
 import { initText, initArc, initCircle, initRect } from './config';
-import { linearGradient } from './Gradient';
+import { linearGradient, radialGradient} from './Gradient';
 
 // 加强版本的画笔
 export default function (canvas) {
@@ -7,24 +7,19 @@ export default function (canvas) {
     // 获取canvas2D画笔
     let painter = canvas.getContext("2d");
 
-    // 如果没有针对模糊问题处理
-    if (canvas.__had_scale2_canvas__ !== 'YES') {
-        canvas.__had_scale2_canvas__ = 'YES';
+    let width = canvas.clientWidth || canvas.getAttribute('width'),//内容+内边距
+        height = canvas.clientHeight || canvas.getAttribute('height');
 
-        let width = canvas.clientWidth || canvas.getAttribute('width'),//内容+内边距
-            height = canvas.clientHeight || canvas.getAttribute('height');
+    // 设置显示大小
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
 
-        // 设置显示大小
-        canvas.style.width = width + "px";
-        canvas.style.height = height + "px";
+    // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
+    canvas.setAttribute('width', width * 2);
+    canvas.setAttribute('height', height * 2);
 
-        // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
-        canvas.setAttribute('width', width * 2);
-        canvas.setAttribute('height', height * 2);
-
-        // 通过缩放实现模糊问题
-        painter.scale(2, 2);
-    }
+    // 通过缩放实现模糊问题
+    painter.scale(2, 2);
 
     // 默认配置canvas2D对象已经存在的属性
     painter.textBaseline = 'middle';
@@ -138,6 +133,11 @@ export default function (canvas) {
         //  线性渐变
         "createLinearGradient": function (x0, y0, x1, y1) {
             return linearGradient(painter, x0, y0, x1, y1);
+        },
+
+        // 环形渐变
+        "createRadialGradient":function( cx, cy, r){
+            return radialGradient(painter, cx, cy, r);
         },
 
         /**

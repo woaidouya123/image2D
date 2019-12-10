@@ -28,6 +28,11 @@ export default function (config) {
         // 计算初始坐标
         let orgData = treeCalc(initData);
 
+        // 计算deep
+        for (let key in orgData.node) {
+            orgData.node[key].deep = orgData.node[key].left - 0.5;
+        }
+
         if (config.type === 'LR' || config.type === 'RL') {
 
             // 每层间隔

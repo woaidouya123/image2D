@@ -6,107 +6,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="./src/assets/image2D.png">
-    <title>前端绘图 | image2D</title>
+    <title>手册 | image2D</title>
+    <meta name="Keywords" content="image2D canvas svg docs api" />
+    <meta name="author" content="心叶" />
+    <meta name="email" content="yelloxing@gmail.com" />
+    <script src="./src/plugin/prettify.js"></script>
+    <link rel="stylesheet" href="./src/plugin/prettify.css">
     <script>
-        function doScroll() {
-            var toTop = document.documentElement.scrollTop || document.body.scrollTop;
-
-            // 控制标题头
-            var header = document.getElementsByTagName('header')[0];
-            if (toTop <= 130)
-                header.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
-            else
-                header.style.backgroundColor = 'rgba(255, 255, 255, 1.0)';
-
-            // 控制api菜单
-            var apiNav = document.getElementById('api-nav');
-            if (apiNav) {
-                if (toTop > 70)
-                    apiNav.style.top = (toTop - 70) + 'px';
-                else
-                    apiNav.style.top = '0px';
-
-                var navHelper = window.image2d_docs_api_navHelper, i, j;
-
-                // 先寻找二级菜单
-                for (i = 0; i < navHelper.small.length; i++) {
-                    if (navHelper.small[i].top > toTop + 45) {
-                        break;
-                    }
-                }
-                if (i == 0) i = 1;
-                var smallNavs = document.getElementsByName(navHelper.type);
-                for (j = 1; j <= smallNavs.length; j++) {
-                    if (j == i) {
-                        smallNavs[j - 1].setAttribute('active', 'yes');
-                    } else {
-                        smallNavs[j - 1].setAttribute('active', 'no');
-                    }
-                }
-            }
-        }
-
-        // 到顶部
-        function toTop() {
-            document.documentElement.scrollTop = 0;
-        }
-
-        function doClick(event) {
-            event = event || window.event;
-            var target = event.target;
-
-            // 如果点击了api页面的二级菜单
-            if (target.getAttribute('flag') == 'api-item') {
-                window.location.href = target.getAttribute('url');
-                window.setTimeout(function () {
-                    target.setAttribute('active', 'yes');
-                    document.documentElement.scrollTop = window.image2d_docs_api_navHelper.small[target.getAttribute('index')].top;
-                }, 200);
-            }
-        }
+        console.log('\u001B[92m👉   Thank you for using (\u001B[94m https://github.com/yelloxing/image2D \u001B[92m) as the Image2D Library! 🍇\u001B[0m\n');;
     </script>
 </head>
 
-<body onscroll='doScroll()' onclick="doClick()">
-    <header>
-        <h2>image2D</h2>
-        <ul>
-            <li id='guide' class='topmenu-item' onclick='window.location.href="#/guide/"'>开始</li>
-            <li id='api' class='topmenu-item' onclick='window.location.href="#/api/"'>文档</li>
-            <li id='source' class='topmenu-item' onclick='window.location.href="#/source/"'>资源</li>
-            <li id='about' class='topmenu-item' onclick='window.location.href="#/about/"'>关于</li>
-            <li class='topmenu-item'>
-                <a href="https://github.com/yelloxing/image2D/issues" target="_blank">帮助</a>
-            </li>
-        </ul>
-        <a href="https://github.com/yelloxing/image2D" class="github" target="_blank">
-            Fork me on Github
-        </a>
-    </header>
-    <div id='root'></div>
-    <footer>
-        <ul>
-            <li>
-                <a href="#/guide/">开始</a>
-            </li>
-            <li>
-                <a href="#/api/">文档</a>
-            </li>
-            <li>
-                <a href="#/source/">资源</a>
-            </li>
-            <li>
-                <a href="#/about/">关于</a>
-            </li>
-            <li>
-                <a href="https://github.com/yelloxing/image2D/issues" target="_blank">帮助</a>
-            </li>
-        </ul>
-        Copyright © 2007 - 2019
-        <em>走一步 再走一步</em>
-        <a href="javascriot:void(0)" onclick='toTop()'>回到顶部</a>
-    </footer>
+<body>
+
+    <!-- 如果浏览器不支持js提示 -->
+    <noscript>
+        <strong>
+            很抱歉，如果没有 JavaScript 支持，image2D文档 将不能正常工作。请启用浏览器的 JavaScript 然后继续。
+        </strong>
+    </noscript>
+
+    <!-- 挂载结点 -->
+    <div id="root">
+
+        <a href="https://yelloxing.github.io/image2D/#/guide/">开始</a>
+        <a href="https://yelloxing.github.io/image2D/#/api/how-to-use">文档</a>
+        <a href="https://yelloxing.github.io/image2D/#/about/">关于</a>
+        <a href="https://github.com/yelloxing/image2D/issues">帮助</a>
+        <a href="https://github.com/yelloxing/image2D/issues/18">RFC</a>
+
+        <h2>
+            Guider
+        </h2>
+        <p>
+            开发这个库的初衷是希望越来越多的人可以更自由的发挥自己的创意，感受绘图的乐趣，并把积累的经验分享出来，推动库本身的发展，从而不断优化！因此，这个库永远都是自由、开源、讨论和进步的。
+        </p>
+        <p>
+            我们欢迎任何人的加入，具体的内容你可以通过访问<a
+                href='https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md'>贡献指南</a>来找到你可以参与的部分。当然，任何时候，特别是遇到疑惑，提<a
+                href='https://github.com/yelloxing/image2D/issues'>issue</a>都是不错的选择！
+        </p>
+
+        <h2>
+            Info
+        </h2>
+        <p>
+            目前项目处于RFC阶段，对未来版本有任何改进意见的，都可以在<a href='https://github.com/yelloxing/image2D/issues/18'>RFC
+                issue</a>中讨论交流，如果你想使用image2D绘制一些图形和别人分享（比如RFC中希望引用例子），你可以在<a
+                href='https://github.com/yelloxing/Image-Demo'>Image
+                Demo</a>中参与用例开发，用例的在线访问地址是<a href='https://yelloxing.github.io/Image-Demo/index.html#/menu'>Image Demo
+                Inline</a>。
+        </p>
+        <p>
+            另外，本项目加入了<a href='https://www.oschina.net/p/image2d'>开源中国</a>并在其开源，欢迎大家关注。
+        </p>
+
+    </div>
+
+    <!-- 打包文件 -->
     <script src="./dist/main.js"></script>
+
 </body>
 
 <!--

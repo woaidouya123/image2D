@@ -1,4 +1,4 @@
-import {isCanvas2D, isArray } from '../../core/type';
+import {isCanvas2D } from '../../core/type';
 import image2D from '../core';
 import isElement from '@yelloxing/core.js/isElement';
 

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>重新获取画笔缩放问题</title>
+    <script src="../build/image2D.js"></script>
+</head>
+
+<body>
+
+    <script>
+
+        var canvas = $$('<canvas>非常抱歉，您的浏览器不支持canvas!</canvas>')
+            .appendTo('body')
+            .css('border', '1px solid blue')
+            .attr({
+                width: 400,
+                height: 400
+            })[0];
+
+        /**
+         * 实验开始
+         * -----------------
+        */
+        var painter = canvas.getContext("2d");
+
+        var width = 400, height = 400;
+
+        // 设置显示大小
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+
+        // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
+        canvas.setAttribute('width', width * 2);
+        canvas.setAttribute('height', height * 2);
+
+        // 通过缩放实现模糊问题
+        painter.scale(2, 2);
+
+        painter.fillRect(50, 100, 100, 200);
+
+        // var painter = canvas.getContext("2d");
+
+        var width = 400, height = 400;
+
+        // 设置显示大小
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+
+        // 设置画布大小（画布大小设置为显示的二倍，使得显示的时候更加清晰）
+        // 从新设置这二个属性以后，原来的画笔会重置
+        canvas.setAttribute('width', width * 2);
+        // canvas.setAttribute('height', height * 2);
+
+        // 通过缩放实现模糊问题
+        // painter.scale(2, 2);
+
+        painter.fillRect(250, 100, 100, 200);
+
+    </script>
+
+</body>
+
+</html>
