@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.4.11
+* version 1.4.12-alpha
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Fri Dec 06 2019 22:26:22 GMT+0800 (GMT+08:00)
+* Date:Wed Dec 18 2019 20:40:35 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -240,13 +240,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var frame = void 0,
             childNodes = void 0;
         if (type === 'html' || type === 'HTML') {
-            frame = document.createElement("div");
+            if (/^<tr>/.test(template)) {
+                frame = document.createElement("tbody");
+            } else if (/^<th>/.test(template) || /^<td>/.test(template)) {
+                frame = document.createElement("tr");
+            } else if (/^<thead>/.test(template) || /^<tbody>/.test(template)) {
+                frame = document.createElement("table");
+            } else {
+                frame = document.createElement("div");
+            }
             frame.innerHTML = template;
 
             // 比如tr标签，它应该被tbody或thead包含
             // 这里容器是div，这类标签无法生成
             if (!/</.test(frame.innerHTML)) {
-                throw new Error('This template cannot be generated using div as a container:' + template);
+                throw new Error('This template cannot be generated using div as a container:' + template + "\nPlease contact us: https://github.com/yelloxing/image2D/issues");
             }
         } else {
             frame = document.createElementNS(NAMESPACE.svg, 'svg');
@@ -300,7 +308,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         "image", "video", "iframe", "object",
 
         // 资源元素
-        "style", "script", "link"].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
+        "style", "script", "link",
+
+        // table系列
+        "tr", "td", "th", "tbody", "thead"].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
 
         return toNode(template, type);
     }
