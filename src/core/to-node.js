@@ -1,7 +1,12 @@
-import { NAMESPACE, REGEXP } from './config';
+import {
+    NAMESPACE,
+    REGEXP
+} from './config';
 import isElement from '@yelloxing/core.js/isElement';
 import isString from '@yelloxing/core.js/isString';
-import { setSVG } from './polyfill';
+import {
+    setSVG
+} from './polyfill';
 
 // 变成指定类型的结点
 // type可以取：
@@ -10,13 +15,21 @@ import { setSVG } from './polyfill';
 let toNode = function (template, type) {
     let frame, childNodes;
     if (type === 'html' || type === 'HTML') {
-        frame = document.createElement("div");
+        if (/^<tr>/.test(template)) {
+            frame = document.createElement("tbody");
+        } else if (/^<th>/.test(template) || /^<td>/.test(template)) {
+            frame = document.createElement("tr");
+        } else if (/^<thead>/.test(template) || /^<tbody>/.test(template)) {
+            frame = document.createElement("table");
+        } else {
+            frame = document.createElement("div");
+        }
         frame.innerHTML = template;
 
         // 比如tr标签，它应该被tbody或thead包含
         // 这里容器是div，这类标签无法生成
         if (!/</.test(frame.innerHTML)) {
-            throw new Error('This template cannot be generated using div as a container:' + template);
+            throw new Error('This template cannot be generated using div as a container:' + template + "\nPlease contact us: https://github.com/yelloxing/image2D/issues");
         }
     } else {
         frame = document.createElementNS(NAMESPACE.svg, 'svg');
@@ -48,31 +61,34 @@ export default function (template, type) {
     // 此外，如果没有特殊设定，给常用的html标签默认
     if (!isString(type) && [
 
-        // 三大display元素
-        "div", "span", "p",
+            // 三大display元素
+            "div", "span", "p",
 
-        // 小元素
-        "em", "i",
+            // 小元素
+            "em", "i",
 
-        // 关系元素
-        "table", "ul", "ol", "dl",
+            // 关系元素
+            "table", "ul", "ol", "dl",
 
-        // 表单相关
-        "form", "input", "button", "textarea",
+            // 表单相关
+            "form", "input", "button", "textarea",
 
-        // H5结构元素
-        "header", "footer", "article", "section",
+            // H5结构元素
+            "header", "footer", "article", "section",
 
-        // 标题元素
-        "h1", "h2", "h3", "h4", "h5", "h6",
+            // 标题元素
+            "h1", "h2", "h3", "h4", "h5", "h6",
 
-        // 替换元素
-        "image", "video", "iframe", "object",
+            // 替换元素
+            "image", "video", "iframe", "object",
 
-        // 资源元素
-        "style", "script", "link"
+            // 资源元素
+            "style", "script", "link",
 
-    ].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
+            // table系列
+            "tr", "td", "th", "tbody", "thead"
+
+        ].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
 
     return toNode(template, type);
 };

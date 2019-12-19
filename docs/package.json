@@ -1,11 +1,12 @@
 {
   "name": "image2d.doc",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "🍇 前端绘图工具库image2d官方文档",
   "main": "dist/main.js",
   "scripts": {
     "dev": "node_modules/.bin/webpack-dev-server --open --config webpack.dev.js",
-    "release": "cuf -d ./dist && npm run prod",
+    "clean": "cuf -d ./dist",
+    "release": "npm run clean && npm run prod",
     "prod": "node_modules/.bin/webpack --config webpack.prod.js",
     "start": "npm install && npm run dev"
   },
@@ -23,6 +24,7 @@
     "babel-preset-env": "^1.7.0",
     "css-loader": "^2.1.1",
     "cuf": "^1.1.3",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^4.2.0",
     "node-sass": "^4.13.0",
     "postcss": "^7.0.21",
