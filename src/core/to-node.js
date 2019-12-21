@@ -15,11 +15,11 @@ import {
 let toNode = function (template, type) {
     let frame, childNodes;
     if (type === 'html' || type === 'HTML') {
-        if (/^<tr>/.test(template)) {
+        if (/^<tr[> ]/.test(template)) {
             frame = document.createElement("tbody");
-        } else if (/^<th>/.test(template) || /^<td>/.test(template)) {
+        } else if (/^<th[> ]/.test(template) || /^<td[> ]/.test(template)) {
             frame = document.createElement("tr");
-        } else if (/^<thead>/.test(template) || /^<tbody>/.test(template)) {
+        } else if (/^<thead[> ]/.test(template) || /^<tbody[> ]/.test(template)) {
             frame = document.createElement("table");
         } else {
             frame = document.createElement("div");

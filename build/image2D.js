@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.5.0
+* version 1.5.1
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Sat Dec 21 2019 18:59:56 GMT+0800 (GMT+08:00)
+* Date:Sat Dec 21 2019 23:50:06 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -240,11 +240,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var frame = void 0,
             childNodes = void 0;
         if (type === 'html' || type === 'HTML') {
-            if (/^<tr>/.test(template)) {
+            if (/^<tr[> ]/.test(template)) {
                 frame = document.createElement("tbody");
-            } else if (/^<th>/.test(template) || /^<td>/.test(template)) {
+            } else if (/^<th[> ]/.test(template) || /^<td[> ]/.test(template)) {
                 frame = document.createElement("tr");
-            } else if (/^<thead>/.test(template) || /^<tbody>/.test(template)) {
+            } else if (/^<thead[> ]/.test(template) || /^<tbody[> ]/.test(template)) {
                 frame = document.createElement("table");
             } else {
                 frame = document.createElement("div");
