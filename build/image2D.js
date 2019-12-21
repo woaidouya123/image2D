@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.4.13-beta
+* version 1.5.0
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Sat Dec 21 2019 13:24:52 GMT+0800 (GMT+08:00)
+* Date:Sat Dec 21 2019 18:59:56 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -278,7 +278,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 把传递元素类型和标记进行统一处理
         if (new RegExp("^" + REGEXP.identifier + "$").test(template)) template = "<" + template + "></" + template + ">";
 
-        var mark = /<([^>]+)>.*/.exec(template)[1];
+        var mark = /^<([^(>| )]+)/.exec(template)[1];
 
         // 画布canvas特殊知道，一定是html
         if ("canvas" === mark.toLowerCase()) type = 'HTML';
@@ -1911,8 +1911,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
 
             // image
+            // v1.5.0开始，做了参数调整（非向下兼容）
             "drawImage": function drawImage(img, sx, sy, sw, sh, x, y, w, h) {
-                painter.drawImage(img, sx || 0, sy || 0, sw ? sw * 2 : canvas.getAttribute('width'), sh ? sh * 2 : canvas.getAttribute('height'), x || 0, y || 0, w || canvas.getAttribute('width') / 2, h || canvas.getAttribute('height') / 2);
+                sx = sx || 0;
+                sy = sy || 0;
+                x = x || 0;
+                y = y || 0;
+                w = w ? w * 2 : canvas.getAttribute('width');
+                h = h ? h * 2 : canvas.getAttribute('height');
+
+                if (img.nodeName == 'CANVAS') {
+                    // 我们不考虑别的canvas，我们认为我们面对的canvas都是自己控制的
+                    // 如果有必要，未来可以对任意canvas进行向下兼容
+                    w = w / 2;
+                    h = h / 2;
+                    sw = sw ? sw * 2 : canvas.getAttribute('width');
+                    sh = sh ? sh * 2 : canvas.getAttribute('height');
+                } else {
+                    // 默认类型是图片
+                    sw = (sw || img.width) * 2;
+                    sh = (sh || img.height) * 2;
+                }
+
+                painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);
                 return enhancePainter;
             },
 

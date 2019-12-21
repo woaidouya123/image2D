@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="../../../docs/src/assets/image2D.png">
+    <script src="../../../build/image2D.js"></script>
+    <title>image2D - 用例测试 - drawImage</title>
+</head>
+
+<body>
+    <script>
+
+        // 获取画笔
+        var painter = $$('<canvas id="canvas1">非常抱歉，您的浏览器不支持canvas!</canvas>').attr({
+            "width": 300,
+            "height": 300
+        }).appendTo('body').painter();
+
+        var img = new Image();
+        img.onload = function () {
+            painter.drawImage(img);
+            // painter.drawImage(img, 0, 250, 500, 500, 0, 0);
+            // painter.drawImage(img, 0, 0, 500, 500);
+            // painter.drawImage(img, 0, 0, 500, 500, 0, 0, 500, 500);
+
+            drawCanvas();
+        };
+        img.src = '../_image/yelloxing.jpg';
+
+        /*
+        如果图片是canvas
+        -----------------
+        */
+        var drawCanvas = function () {
+            var painter2 = $$('<canvas>非常抱歉，您的浏览器不支持canvas!</canvas>').attr({
+                "width": 400,
+                "height": 400
+            }).appendTo('body').painter();
+
+            painter2.drawImage($$('#canvas1')[0]);
+        };
+
+    </script>
+</body>
+
+</html>

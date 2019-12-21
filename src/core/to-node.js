@@ -53,7 +53,7 @@ export default function (template, type) {
     // 把传递元素类型和标记进行统一处理
     if (new RegExp("^" + REGEXP.identifier + "$").test(template)) template = "<" + template + "></" + template + ">";
 
-    let mark = /<([^>]+)>.*/.exec(template)[1];
+    let mark = /^<([^(>| )]+)/.exec(template)[1];
 
     // 画布canvas特殊知道，一定是html
     if ("canvas" === mark.toLowerCase()) type = 'HTML';
@@ -61,34 +61,34 @@ export default function (template, type) {
     // 此外，如果没有特殊设定，给常用的html标签默认
     if (!isString(type) && [
 
-            // 三大display元素
-            "div", "span", "p",
+        // 三大display元素
+        "div", "span", "p",
 
-            // 小元素
-            "em", "i",
+        // 小元素
+        "em", "i",
 
-            // 关系元素
-            "table", "ul", "ol", "dl",
+        // 关系元素
+        "table", "ul", "ol", "dl",
 
-            // 表单相关
-            "form", "input", "button", "textarea",
+        // 表单相关
+        "form", "input", "button", "textarea",
 
-            // H5结构元素
-            "header", "footer", "article", "section",
+        // H5结构元素
+        "header", "footer", "article", "section",
 
-            // 标题元素
-            "h1", "h2", "h3", "h4", "h5", "h6",
+        // 标题元素
+        "h1", "h2", "h3", "h4", "h5", "h6",
 
-            // 替换元素
-            "image", "video", "iframe", "object",
+        // 替换元素
+        "image", "video", "iframe", "object",
 
-            // 资源元素
-            "style", "script", "link",
+        // 资源元素
+        "style", "script", "link",
 
-            // table系列
-            "tr", "td", "th", "tbody", "thead"
+        // table系列
+        "tr", "td", "th", "tbody", "thead"
 
-        ].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
+    ].indexOf(mark.toLowerCase()) >= 0) type = 'HTML';
 
     return toNode(template, type);
 };
