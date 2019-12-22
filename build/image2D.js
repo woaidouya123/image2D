@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.4.12-alpha
+* version 1.5.1
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Wed Dec 18 2019 20:40:35 GMT+0800 (GMT+08:00)
+* Date:Sat Dec 21 2019 23:50:06 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -240,11 +240,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var frame = void 0,
             childNodes = void 0;
         if (type === 'html' || type === 'HTML') {
-            if (/^<tr>/.test(template)) {
+            if (/^<tr[> ]/.test(template)) {
                 frame = document.createElement("tbody");
-            } else if (/^<th>/.test(template) || /^<td>/.test(template)) {
+            } else if (/^<th[> ]/.test(template) || /^<td[> ]/.test(template)) {
                 frame = document.createElement("tr");
-            } else if (/^<thead>/.test(template) || /^<tbody>/.test(template)) {
+            } else if (/^<thead[> ]/.test(template) || /^<tbody[> ]/.test(template)) {
                 frame = document.createElement("table");
             } else {
                 frame = document.createElement("div");
@@ -278,7 +278,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 把传递元素类型和标记进行统一处理
         if (new RegExp("^" + REGEXP.identifier + "$").test(template)) template = "<" + template + "></" + template + ">";
 
-        var mark = /<([^>]+)>.*/.exec(template)[1];
+        var mark = /^<([^(>| )]+)/.exec(template)[1];
 
         // 画布canvas特殊知道，一定是html
         if ("canvas" === mark.toLowerCase()) type = 'HTML';
@@ -1165,7 +1165,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             //开启唯一的定时器timerId
             "start": function start() {
                 if (!$timerId) {
-                    $timerId = window.setInterval(clock.tick, $interval);
+                    $timerId = setInterval(clock.tick, $interval);
                 }
             },
 
@@ -1208,7 +1208,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             //停止定时器，重置timerId=null
             "stop": function stop() {
                 if ($timerId) {
-                    window.clearInterval($timerId);
+                    clearInterval($timerId);
                     $timerId = null;
                 }
             }
@@ -1911,8 +1911,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
 
             // image
+            // v1.5.0开始，做了参数调整（非向下兼容）
             "drawImage": function drawImage(img, sx, sy, sw, sh, x, y, w, h) {
-                painter.drawImage(img, sx || 0, sy || 0, sw ? sw * 2 : canvas.getAttribute('width'), sh ? sh * 2 : canvas.getAttribute('height'), x || 0, y || 0, w || canvas.getAttribute('width') / 2, h || canvas.getAttribute('height') / 2);
+                sx = sx || 0;
+                sy = sy || 0;
+                x = x || 0;
+                y = y || 0;
+                w = w ? w * 2 : canvas.getAttribute('width');
+                h = h ? h * 2 : canvas.getAttribute('height');
+
+                if (img.nodeName == 'CANVAS') {
+                    // 我们不考虑别的canvas，我们认为我们面对的canvas都是自己控制的
+                    // 如果有必要，未来可以对任意canvas进行向下兼容
+                    w = w / 2;
+                    h = h / 2;
+                    sw = sw ? sw * 2 : canvas.getAttribute('width');
+                    sh = sh ? sh * 2 : canvas.getAttribute('height');
+                } else {
+                    // 默认类型是图片
+                    sw = (sw || img.width) * 2;
+                    sh = (sh || img.height) * 2;
+                }
+
+                painter.drawImage(img, sx, sy, sw, sh, x, y, w, h);
                 return enhancePainter;
             },
 
