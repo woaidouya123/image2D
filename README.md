@@ -27,7 +27,7 @@
 另外，你可以查看[版本更新日志](https://github.com/yelloxing/image2D/blob/master/CHANGELOG)来了解每次版本更新的内容以便确定是否需要升级（请在使用的时候遇到问题的时候务必查看一下，如果升级以后依旧有问题，请提交[Error or defect design](https://github.com/yelloxing/image2D/issues/new/choose)）。
 
 ## How to use?
-如果你开发的是一个web项目，可以通过CDN引入（请选择对应的版本），在代码中通过image2D或$$调用：
+如果你开发的是一个web项目，可以通过CDN引入（请选择对应的[版本](https://github.com/yelloxing/image2D/blob/master/CHANGELOG)），在代码中通过image2D或$$调用：
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/image2d@1.5.1/build/image2D.min.js"></script>
