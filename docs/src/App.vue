@@ -1,80 +1,49 @@
 <template>
   <div>
-    <header
-      ref='header'
-      id='topHeader'
-    >
+    <header ref="header" id="topHeader">
       <h2>image2D</h2>
       <ul>
-        <li
-          onclick='window.location.href="#/guide/"'
-          id='guide'
-        >开始</li>
-        <li
-          onclick='window.location.href="#/api/"'
-          id='api'
-        >文档</li>
+        <li @click="$router.push('/guide')" id="guide">开始</li>
+        <li @click="$router.push('/api/how-to-use')" id="api">文档</li>
         <li>
-          <a
-            href="https://yelloxing.github.io/Image-Demo/index.html"
-            target="_blank"
-          >例子</a>
+          <a href="https://yelloxing.github.io/Image-Demo/index.html" target="_blank">例子</a>
         </li>
-        <li
-          onclick='window.location.href="#/about/"'
-          id='about'
-        >关于</li>
+        <li @click="$router.push('/about')" id="about">关于</li>
         <li>
-          <a
-            href="https://github.com/yelloxing/image2D/issues"
-            target="_blank"
-          >帮助</a>
+          <a href="https://github.com/yelloxing/image2D/issues" target="_blank">帮助</a>
         </li>
       </ul>
       <a
         href="https://github.com/yelloxing/image2D"
         class="github"
         target="_blank"
-      >Fork me on Github
-      </a>
+      >Fork me on Github</a>
     </header>
     <section>
-      <div
-        id='editor'
-        @click="openEdit()"
-      >编辑</div>
+      <div id="editor" @click="openEdit()">编辑</div>
       <router-view></router-view>
     </section>
     <footer>
       <ul>
         <li>
-          <a href="#/guide/">开始</a>
+          <a href="javascript:void(0)" @click="$router.push('/guide')">开始</a>
         </li>
         <li>
-          <a href="#/api/">文档</a>
+          <a href="javascript:void(0)" @click="$router.push('/api/how-to-use')">文档</a>
         </li>
         <li>
-          <a
-            href="https://yelloxing.github.io/Image-Demo/index.html"
-            target="_blank"
-          >例子</a>
+          <a href="https://yelloxing.github.io/Image-Demo/index.html" target="_blank">例子</a>
         </li>
         <li>
-          <a href="#/about/">关于</a>
+          <a href="javascript:void(0)" @click="$router.push('/about')">关于</a>
         </li>
         <li>
-          <a
-            href="https://github.com/yelloxing/image2D/issues"
-            target="_blank"
-          >帮助</a>
+          <a href="https://github.com/yelloxing/image2D/issues" target="_blank">帮助</a>
         </li>
       </ul>
       <a href="https://github.com/yelloxing/image2D/blob/dev/LICENSE">Copyright &copy; 2018 - 2020</a>
-      <a href='https://yelloxing.github.io/notebook/'>走一步 再走一步</a>
-      <a
-        href="javascriot:void(0)"
-        @click='toTop()'
-      >回到顶部</a>
+      <a href="https://yelloxing.github.io/notebook/">走一步 再走一步</a>
+      <a href="javascriot:void(0)" @click="toTop()">回到顶部</a>
     </footer>
   </div>
 </template>
@@ -117,8 +86,6 @@ export default {
 
 <style lang="scss" scoped>
 div {
-  --distance: calc(50vw - 5.5rem);
-
   & > * {
     min-width: 11rem;
   }
@@ -131,7 +98,7 @@ div {
     background-color: rgba(255, 255, 255, 0.4);
     line-height: 0.42rem;
     color: rgb(113, 30, 50);
-    padding-left: var(--distance);
+    padding-left: calc(50vw - 5.5rem);
     box-shadow: rgba(0, 0, 0, 0.1) 0 1px 2px;
 
     & > .github {
@@ -166,7 +133,7 @@ div {
     }
 
     ul {
-      padding-right: var(--distance);
+      padding-right: calc(50vw - 5.5rem);
       position: absolute;
       right: 1rem;
 
@@ -194,7 +161,7 @@ div {
     background-image: url("./assets/header.jpg");
     background-repeat: no-repeat;
     background-position: center -0.1rem;
-    padding: 1.8rem var(--distance) 0.1rem;
+    padding: 1.8rem calc(50vw - 5.5rem) 0.1rem;
     margin-top: -0.42rem;
     // 编辑按钮
     & > #editor {
@@ -203,7 +170,7 @@ div {
       height: 0.5rem;
       background-image: url("./assets/edit.png");
       position: fixed;
-      right: var(--distance);
+      right: calc(50vw - 5.5rem);
       margin-right: 0.4rem;
       top: 0.7rem;
       background-size: 100% auto;
