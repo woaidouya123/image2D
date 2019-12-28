@@ -121,7 +121,7 @@ module.exports = {
          */
         uglifyjs(cuf, pkg) {
 
-            cuf.log("\n[3]babel转义:./build/image2D.js → ./build/image2D.min.js + ./docs/src/assets/image2D.download.js\n");
+            cuf.log("\n[3]babel转义:./build/image2D.js → ./build/image2D.min.js\n");
 
             cp.exec("uglifyjs ./build/image2D.js -m -o ./build/uglifyjs.new.js", function (error) {
                 if (error) {
@@ -130,9 +130,6 @@ module.exports = {
 
                     fs.writeFileSync("./build/image2D.min.js", banner(pkg));
                     fs.appendFileSync("./build/image2D.min.js", fs.readFileSync("./build/uglifyjs.new.js"));
-
-                    // 复制一份用于文档
-                    cuf.copySync("./build/image2D.min.js", "./docs/src/assets/image2D.download.js");
 
                     cuf.error('压缩完毕');
                 }

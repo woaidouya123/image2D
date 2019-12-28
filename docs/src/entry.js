@@ -15,10 +15,6 @@ import '@yelloxing/normalize.css';
 // 引入公共样式
 import './style.scss';
 
-// 添加水印
-let watermark = resolve => require(['./service/watermark'], resolve);
-new Promise(resolve => watermark(resolve)).then(callback => callback.default("请求提意见"));
-
 //根对象
 window.vm = new Vue({
 
