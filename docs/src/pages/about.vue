@@ -42,8 +42,8 @@
         <em>
           用例或作品
         </em>
-        你可以在项目的demos下添加一些简单的用例，或者在
-        <a href="https://yelloxing.github.io/Image-Demo/index.html#/menu">例子</a>
+        你可以在
+        <a href="https://yelloxing.github.io/Image-Demo/index.html#/menu">Image Demo</a>
         项目中
         <a href="https://github.com/yelloxing/Image-Demo">添加用例</a>
         。
@@ -58,6 +58,7 @@ import update from "../service/update";
 export default {
   mounted() {
     update("about");
+     document.getElementsByTagName('title')[0].innerText='关于 | image2D';
   }
 };
 </script>
