@@ -107,7 +107,7 @@ $$('canvas')
 
 <img src='https://github.com/yelloxing/image2D/blob/master/docs/src/assets/guider-demo1.png' >
 
-怎么样？是不是很简单，虽然直接使用canvas或svg也可以实现，不过借助这个库绘图会更简单，你可以把更多的精力放在绘制出更有趣的作品上。开发中如果根据有功能需要提供，可以点击进入[RFC issue](https://github.com/yelloxing/image2D/issues/18)进行补充。
+怎么样？是不是很简单，虽然直接使用canvas或svg也可以实现，不过借助这个库绘图会更简单，你可以把更多的精力放在绘制出更有趣的作品上。开发中如果有新功能需要提供，可以点击进入[RFC issue](https://github.com/yelloxing/image2D/issues/18)告知我们，我们会尽快反馈给你结果！
 
 ## 开源协议
 

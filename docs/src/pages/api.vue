@@ -1,134 +1,40 @@
 <template>
   <div>
-    <ul
-      id='api-nav'
-      ref='apiNav'
-    >
-      <li
-        id='how-to-use'
-        class='apimenu-item'
-      >
-        <router-link to='/api/how-to-use'>如何使用</router-link>
+    <ul id="api-nav" ref="apiNav">
+      <li id="how-to-use" class="apimenu-item">
+        <router-link to="/api/how-to-use">如何使用</router-link>
       </li>
-      <li
-        class='item'
-        @click='goItem($event.target,1)'
-        name='how-to-use'
-      >关注的问题</li>
-      <li
-        class='item'
-        @click='goItem($event.target,2)'
-        name='how-to-use'
-      >使用</li>
-      <li
-        class='item'
-        @click='goItem($event.target,3)'
-        name='how-to-use'
-      >获取帮助</li>
-      <li
-        id='xhtml'
-        class='apimenu-item'
-      >
-        <router-link to='/api/xhtml'>结点操作</router-link>
+      <li class="item" @click="goItem($event.target,1)" name="how-to-use">关注的问题</li>
+      <li class="item" @click="goItem($event.target,2)" name="how-to-use">使用</li>
+      <li class="item" @click="goItem($event.target,3)" name="how-to-use">获取帮助</li>
+      <li id="xhtml" class="apimenu-item">
+        <router-link to="/api/xhtml">结点操作</router-link>
       </li>
-      <li
-        class='item'
-        @click='goItem($event.target,1)'
-        name='xhtml'
-      >结点对象</li>
-      <li
-        class='item'
-        @click='goItem($event.target,2)'
-        name='xhtml'
-      >编辑</li>
-      <li
-        class='item'
-        @click='goItem($event.target,3)'
-        name='xhtml'
-      >样式和属性</li>
-      <li
-        class='item'
-        @click='goItem($event.target,4)'
-        name='xhtml'
-      >事件相关</li>
-      <li
-        class='item'
-        @click='goItem($event.target,5)'
-        name='xhtml'
-      >数据绑定</li>
-      <li
-        id='painter'
-        class='apimenu-item'
-      >
-        <router-link to='/api/painter'>画笔</router-link>
+      <li class="item" @click="goItem($event.target,1)" name="xhtml">结点对象</li>
+      <li class="item" @click="goItem($event.target,2)" name="xhtml">编辑</li>
+      <li class="item" @click="goItem($event.target,3)" name="xhtml">样式和属性</li>
+      <li class="item" @click="goItem($event.target,4)" name="xhtml">事件相关</li>
+      <li class="item" @click="goItem($event.target,5)" name="xhtml">数据绑定</li>
+      <li id="painter" class="apimenu-item">
+        <router-link to="/api/painter">画笔</router-link>
       </li>
-      <li
-        class='item'
-        @click='goItem($event.target,1)'
-        name='painter'
-      >canvas2D</li>
-      <li
-        class='item'
-        @click='goItem($event.target,2)'
-        name='painter'
-      >svg</li>
-      <li
-        class='item'
-        @click='goItem($event.target,3)'
-        name='painter'
-      >绘图方法</li>
-      <li
-        class='item'
-        @click='goItem($event.target,4)'
-        name='painter'
-      >渐变色</li>
-      <li
-        class='item'
-        @click='goItem($event.target,5)'
-        name='painter'
-      >变换</li>
-      <li
-        id='calculate'
-        class='apimenu-item'
-      >
-        <router-link to='/api/calculate'>计算</router-link>
+      <li class="item" @click="goItem($event.target,1)" name="painter">canvas2D</li>
+      <li class="item" @click="goItem($event.target,2)" name="painter">svg</li>
+      <li class="item" @click="goItem($event.target,3)" name="painter">绘图方法</li>
+      <li class="item" @click="goItem($event.target,4)" name="painter">渐变色</li>
+      <li class="item" @click="goItem($event.target,5)" name="painter">变换</li>
+      <li id="calculate" class="apimenu-item">
+        <router-link to="/api/calculate">计算</router-link>
       </li>
-      <li
-        class='item'
-        @click='goItem($event.target,1)'
-        name='calculate'
-      >二维坐标变换</li>
-      <li
-        class='item'
-        @click='goItem($event.target,2)'
-        name='calculate'
-      >矩阵坐标变换</li>
-      <li
-        class='item'
-        @click='goItem($event.target,3)'
-        name='calculate'
-      >曲线插值</li>
-      <li
-        class='item'
-        @click='goItem($event.target,4)'
-        name='calculate'
-      >布局</li>
-      <li
-        class='item'
-        @click='goItem($event.target,5)'
-        name='calculate'
-      >动画轮询</li>
-      <li
-        id='tool'
-        class='apimenu-item'
-      >
-        <router-link to='/api/tool'>补充</router-link>
+      <li class="item" @click="goItem($event.target,1)" name="calculate">二维坐标变换</li>
+      <li class="item" @click="goItem($event.target,2)" name="calculate">矩阵坐标变换</li>
+      <li class="item" @click="goItem($event.target,3)" name="calculate">曲线插值</li>
+      <li class="item" @click="goItem($event.target,4)" name="calculate">布局</li>
+      <li class="item" @click="goItem($event.target,5)" name="calculate">动画轮询</li>
+      <li id="tool" class="apimenu-item">
+        <router-link to="/api/tool">补充</router-link>
       </li>
-      <li
-        class='item'
-        @click='goItem($event.target,1)'
-        name='tool'
-      >图层</li>
+      <li class="item" @click="goItem($event.target,1)" name="tool">图层</li>
     </ul>
     <div>
       <router-view></router-view>
@@ -153,7 +59,7 @@ export default {
     goItem(target, index) {
       // 先切换大菜单
       $$("li.item", this.$refs.apiNav).attr("active", "no");
-      window.location.href = "#/api/" + $$(target).attr("name");
+      this.$router.push("/api/" + $$(target).attr("name"));
 
       // 稍等片刻，触发滚动
       window.setTimeout(function() {
