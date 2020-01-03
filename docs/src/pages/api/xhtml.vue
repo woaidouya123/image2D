@@ -27,7 +27,7 @@
             任何合法的选择器都应该是下列中的某一种：
         </p>
         <ul>
-            <li>模板字符串（除canvas外，生成的默认都是svg标签），比如'&lt;g&gt;'、'&lt;canvas&gt;非常抱歉，您的浏览器不支持canvas!&lt;/canvas&gt;'等。</li>
+            <li>模板字符串，比如'&lt;g&gt;'、'&lt;canvas&gt;非常抱歉，您的浏览器不支持canvas!&lt;/canvas&gt;'等。</li>
             <li>ID选择器，比如'#demo'会选中id是'demo'的第一个标签。</li>
             <li>class和标签选择器，比如'.cls'、'div'、'div.cls'和'g.info.warn'等。</li>
             <li>全部选择器，也就是字符串'*'，会选中全部结点。</li>
