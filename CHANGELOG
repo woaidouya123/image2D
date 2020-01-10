@@ -113,3 +113,8 @@ v1.5.1:
     date:2019-12-21
     changes:
       -  优化对特殊标签的兼容（tr、td、th、thead和tbody等系列标签有特殊结构层次）
+v1.5.2:
+    date:2020-01-10
+    changes:
+      -  animation轮询动画添加进度控制timing
+      -  文档打包中去掉了css提取插件（该插件存在严重bug并无法修复）

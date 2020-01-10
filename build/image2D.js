@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.5.1
+* version 1.5.2
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Sat Dec 21 2019 23:50:06 GMT+0800 (GMT+08:00)
+* Date:Fri Jan 10 2020 17:34:16 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -1232,6 +1232,65 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     }
 
+    var MAX_SAFE_INTEGER = 9007199254740991;
+
+    /**
+     * 判断是不是一个可以作为长度的整数（比如数组下标）
+     *
+     * @private
+     * @param {any} value 需要判断的值
+     * @returns {boolean} 如果是返回true，否则返回false
+     */
+
+    function isLength(value) {
+
+        return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+    }
+
+    /**
+     * 判断是不是一个类似数组的对象，是否可以通过length迭代
+     *
+     *
+     * @private
+     * @param {any} value 需要判断的值
+     * @returns {boolean} 如果是返回true，否则返回false
+     */
+
+    function isArrayLike(value) {
+
+        return value != null && typeof value != 'function' && isLength(value.length);
+    }
+
+    /**
+     * 和isArrayLike类似，不过特别排除以下类型：
+     *  1.字符串
+     *
+     * @private
+     * @param {any} value 需要判断的值
+     * @returns {boolean} 如果是返回true，否则返回false
+     */
+
+    function isArraySpec(value) {
+
+        return isArrayLike(value) && !isString(value);
+    }
+
+    /**
+     * 判断一个值是不是数组。
+     *
+     * @since V0.3.1
+     * @public
+     * @param {*} value 需要判断类型的值
+     * @param {boolean} notStrict 是否不严格检查类型（默认false，如果为true表示判断是不是一个类似数组的类型）
+     * @returns {boolean} 如果是数组返回true，否则返回false
+     */
+    function isArray(value, notStrict) {
+        if (notStrict) {
+            return isArraySpec(value);
+        }
+        return Array.isArray(value);
+    }
+
     /**
      * 初始化配置文件
      * 
@@ -1310,6 +1369,48 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
 
         return hermite;
+    }
+
+    /**
+     * 轮询动画
+     * @param {function} doback 轮询触发方法
+     * @param {number} time 动画时长，可选
+     * @param {function} callback 动画结束回调，可选
+     * @param {array|string} timing 动画进度控制参数，可选
+     *
+     * @return {function} stop函数，可以提前停止动画
+     */
+    function animation$1(doback, time, callback, timing) {
+
+        if (!isFunction(callback)) {
+            timing = callback;
+            callback = false;
+        }
+
+        // 获取插值计算参数
+        var transition_timing = {
+            "ease": [0.25, 0.1, 0.5, 1],
+            "ease-in": [0.5, 0.0, 0.75, 0.6],
+            "ease-in-out": [0.43, 0.01, 0.58, 1],
+            "ease-out": [0.25, 0.6, 0.5, 1],
+            "linear": "default"
+        }[timing] || timing;
+
+        var transition_timing_function = function transition_timing_function(deep) {
+            return deep;
+        };
+        if (transition_timing && isArray(transition_timing) && transition_timing.length == 4) {
+            transition_timing_function = hermite({
+                "u": 1
+            }).setP(0, 0, 1, 1, transition_timing[1] / transition_timing[0], (1 - transition_timing[3]) / (1 - transition_timing[2]));
+        }
+
+        return animation(function (deep) {
+            doback(transition_timing_function(deep));
+        }, time, function (deep) {
+            if (deep != 1) deep = transition_timing_function(deep);
+            doback(deep);
+        });
     }
 
     /**
@@ -2456,7 +2557,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         rotate: _rotate2, move: _move2, scale: _scale2, dot: dot,
 
         // 工具类
-        animation: animation,
+        animation: animation$1,
 
         // 插值类计算
         cardinal: cardinal

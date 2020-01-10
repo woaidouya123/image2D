@@ -37,6 +37,58 @@
             stop();
         }, 1000);
     </script>
+
+    <span>ease</span>
+    <span>ease-in</span>
+    <span>ease-in-out</span>
+    <span>ease-out</span>
+    <span>linear</span>
+    <span>[0.1, 0.9, 0.9, 0.1]</span>
+
+    <script>
+
+        var spans = $$('span');
+
+        $$.animation(function (deep) {
+            spans[0].style.width = (deep * 1000) + "px";
+        }, 10000, "ease");
+
+        $$.animation(function (deep) {
+            spans[1].style.width = (deep * 1000) + "px";
+        }, 10000, "ease-in");
+
+        $$.animation(function (deep) {
+            spans[2].style.width = (deep * 1000) + "px";
+        }, 10000, "ease-in-out");
+
+        $$.animation(function (deep) {
+            spans[3].style.width = (deep * 1000) + "px";
+        }, 10000, "ease-out");
+
+        $$.animation(function (deep) {
+            spans[4].style.width = (deep * 1000) + "px";
+        }, 10000, "linear");
+
+        $$.animation(function (deep) {
+            spans[5].style.width = (deep * 1000) + "px";
+        }, 10000, [0.1, 0.9, 0.9, 0.1]);
+
+    </script>
+
 </body>
+
+<style>
+    span {
+        display: block;
+        width: 0px;
+        height: 30px;
+        line-height: 30px;
+        background-color: rgb(255, 115, 0);
+        margin: 10px;
+        white-space: nowrap;
+        color: aliceblue;
+        text-indent: 2em;
+    }
+</style>
 
 </html>
