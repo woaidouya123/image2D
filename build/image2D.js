@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.5.2
+* version 1.5.3
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Fri Jan 10 2020 17:34:16 GMT+0800 (GMT+08:00)
+* Date:Tue Jan 21 2020 18:30:21 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -1409,7 +1409,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             doback(transition_timing_function(deep));
         }, time, function (deep) {
             if (deep != 1) deep = transition_timing_function(deep);
-            doback(deep);
+            callback(deep);
         });
     }
 

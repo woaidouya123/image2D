@@ -118,3 +118,7 @@ v1.5.2:
     changes:
       -  animation轮询动画添加进度控制timing
       -  文档打包中去掉了css提取插件（该插件存在严重bug并无法修复）
+v1.5.3:
+    date:2020-01-21
+    changes:
+      -  修复animation轮询动画结束回调问题

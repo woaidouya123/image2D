@@ -39,7 +39,7 @@ export default function (doback, time, callback, timing) {
         doback(transition_timing_function(deep));
     }, time, deep => {
         if (deep != 1) deep = transition_timing_function(deep);
-        doback(deep);
+        callback(deep);
     });
 
 };
