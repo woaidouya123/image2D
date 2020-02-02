@@ -31,6 +31,7 @@
   },
   "homepage": "https://yelloxing.github.io/image2D",
   "devDependencies": {
+    "@yelloxing/core.js": "^0.3.7",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
@@ -47,8 +48,5 @@
     "ie > 8",
     "chrome >= 61",
     "firefox >= 65"
-  ],
-  "dependencies": {
-    "@yelloxing/core.js": "^0.3.7"
-  }
+  ]
 }
