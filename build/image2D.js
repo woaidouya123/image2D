@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.5.3
+* version 1.5.4
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Sun Feb 02 2020 15:27:58 GMT+0800 (GMT+08:00)
+* Date:Sun Feb 09 2020 02:42:37 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -1408,8 +1408,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return animation(function (deep) {
             doback(transition_timing_function(deep));
         }, time, function (deep) {
-            if (deep != 1) deep = transition_timing_function(deep);
-            callback(deep);
+            if (isFunction(callback)) {
+                if (deep != 1) deep = transition_timing_function(deep);
+                callback(deep);
+            }
         });
     }
 

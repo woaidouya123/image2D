@@ -38,8 +38,10 @@ export default function (doback, time, callback, timing) {
     return animation(deep => {
         doback(transition_timing_function(deep));
     }, time, deep => {
-        if (deep != 1) deep = transition_timing_function(deep);
-        callback(deep);
+        if (isFunction(callback)) {
+            if (deep != 1) deep = transition_timing_function(deep);
+            callback(deep);
+        }
     });
 
 };

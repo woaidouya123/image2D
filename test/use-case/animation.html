@@ -70,6 +70,7 @@
         }, 10000, "linear");
 
         $$.animation(function (deep) {
+            console.log(deep);
             spans[5].style.width = (deep * 1000) + "px";
         }, 10000, [0.1, 0.9, 0.9, 0.1]);
 

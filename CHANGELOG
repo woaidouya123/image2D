@@ -122,3 +122,7 @@ v1.5.3:
     date:2020-01-21
     changes:
       -  修复animation轮询动画结束回调问题
+v1.5.4:
+    date:2020-02-09
+    changes:
+      -  修复animation轮询动画结束回调问题(再次修复)
