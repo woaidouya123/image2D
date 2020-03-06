@@ -182,8 +182,8 @@
             loop方法会把传递的绘图方法在当前结点对象维护的每一个结点上应用一次，具体的绘图方法可以根据当前面对的结点绑定的数据来绘制。
         </p>
         <p class='nav-footer'>
-            <a href="#/api/how-to-use" class="pre">如何使用</a>
-            <a href="#/api/painter" class="next">画笔</a>
+            <a href="#/api/how-to-use" onclick='document.documentElement.scrollTop = 0;' class="pre">如何使用</a>
+            <a href="#/api/painter"  onclick='document.documentElement.scrollTop = 0;' class="next">画笔</a>
         </p>
     </div>
 </template>
