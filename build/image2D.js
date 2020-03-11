@@ -4,14 +4,14 @@
 *
 * author 心叶
 *
-* version 1.5.4
+* version 1.6.0
 *
 * build Thu Apr 11 2019
 *
 * Copyright yelloxing
 * Released under the MIT license
 *
-* Date:Sun Feb 09 2020 02:42:37 GMT+0800 (GMT+08:00)
+* Date:Wed Mar 11 2020 20:56:33 GMT+0800 (GMT+08:00)
 */
 
 'use strict';
@@ -1906,9 +1906,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // 获取canvas2D画笔
         var painter = canvas.getContext("2d");
 
-        var width = canvas.clientWidth || canvas.getAttribute('width'),
+        var isLayer = canvas.__image2D__layer__ == 'yes';
+
+        // 图层是内部的，明确获取方法
+        // 对外的一律使用clientXXX，区分是否显示
+        var width = isLayer ? canvas.getAttribute('width') : canvas.clientWidth,
             //内容+内边距
-        height = canvas.clientHeight || canvas.getAttribute('height');
+        height = isLayer ? canvas.getAttribute('height') : canvas.clientHeight;
+
+        if (width == 0 || height == 0) {
+            throw new Error('Canvas is hidden or size is zero!');
+        }
 
         // 设置显示大小
         canvas.style.width = width + "px";
@@ -2498,6 +2506,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     // 设置大小才会避免莫名其妙的错误
                     layer[id].canvas.setAttribute('width', width);
                     layer[id].canvas.setAttribute('height', height);
+
+                    // 标记是图层
+                    layer[id].canvas.__image2D__layer__ = 'yes';
 
                     layer[id].painter = image2D(layer[id].canvas).painter();
 

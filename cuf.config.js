@@ -51,7 +51,30 @@ module.exports = {
         end(cuf) {
 
             cuf.log("\n-----------------------\n打包完毕！\n-----------------------");
-            cuf.print("Date : " + new Date() + "\n");
+            cuf.print("Date : " + new Date() + "\n\n");
+
+            // 打印文件大小
+            const printFileSize = function (index, url) {
+
+                fs.stat(url, (err, stats) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        let size = (bytes => {
+                            if (bytes < 1024) return bytes + " Bytes";
+                            else if (bytes < 1048576) return (bytes / 1024).toFixed(3) + " KB";
+                            else if (bytes < 1073741824) return (bytes / 1048576).toFixed(3) + " MB";
+                            else return (bytes / 1073741824).toFixed(3) + " GB";
+                        })(stats.size);
+
+                        cuf.log("[" + index + "]    " + url + "    " + size);
+                    }
+
+                });
+            };
+
+            printFileSize(1, './build/image2D.js');
+            printFileSize(2, './build/image2D.min.js');
 
         },
 

@@ -2,6 +2,7 @@
   <div class="container">
     <p>画笔是image2D的主体部分，根据当前绑定的结点不同，获取的是不同类型的画笔，目前支持svg和canvas2D画笔：</p>
     <pre class="prettyprint lang-js">var painter=imageObject.painter();</pre>
+    <p class="warn">canvas2D画布如果大小为0或者被隐藏（比如设置display:none）会获取失败并抛错。</p>
     <p>如果维护的第一个结点是canvas，返回的就是专门在canvas上绘图的位图画笔，svg等别的类似。</p>
     <p>获取画笔后就可以调用painter上的方法进行绘图了，不过在这之前，你还可以对画笔进行属性（文字大小，颜色等）配置：</p>
     <pre class="prettyprint lang-js">painter.config();</pre>

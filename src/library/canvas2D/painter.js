@@ -7,8 +7,16 @@ export default function (canvas) {
     // 获取canvas2D画笔
     let painter = canvas.getContext("2d");
 
-    let width = canvas.clientWidth || canvas.getAttribute('width'),//内容+内边距
-        height = canvas.clientHeight || canvas.getAttribute('height');
+    let isLayer = canvas.__image2D__layer__ == 'yes';
+
+    // 图层是内部的，明确获取方法
+    // 对外的一律使用clientXXX，区分是否显示
+    let width = isLayer ? canvas.getAttribute('width') : canvas.clientWidth,//内容+内边距
+        height = isLayer ? canvas.getAttribute('height') : canvas.clientHeight;
+
+    if (width == 0 || height == 0) {
+        throw new Error('Canvas is hidden or size is zero!');
+    }
 
     // 设置显示大小
     canvas.style.width = width + "px";

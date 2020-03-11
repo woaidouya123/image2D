@@ -30,6 +30,9 @@ export default function () {
                 layer[id].canvas.setAttribute('width', width);
                 layer[id].canvas.setAttribute('height', height);
 
+                // 标记是图层
+                layer[id].canvas.__image2D__layer__='yes';
+
                 layer[id].painter = image2D(layer[id].canvas).painter();
 
                 layer_index.push(id);

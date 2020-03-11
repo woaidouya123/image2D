@@ -13,7 +13,7 @@
 <body>
 
     <h5>
-        Tips:请打开F12查看，如果二个canvas的尺寸都是100X100就表示测试通过！
+        Tips:请打开F12查看，应该会提示错误！
     </h5>
 
     <div style='display:none'>
@@ -31,6 +31,8 @@
          * ----------------------------
          */
 
+        console.log($$('canvas'));
+
         //  画笔
         $$('#testPainter').painter();
         $$('#testPainter').painter();
@@ -38,7 +40,6 @@
         // 图层
         $$('#testLayer').layer();
         $$('#testLayer').layer();
-
 
     </script>
 </body>
