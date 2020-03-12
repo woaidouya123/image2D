@@ -109,6 +109,10 @@ $$('canvas')
 
 怎么样？是不是很简单，虽然直接使用canvas或svg也可以实现，不过借助这个库绘图会更简单，你可以把更多的精力放在绘制出更有趣的作品上。开发中如果有新功能需要提供，可以点击进入[RFC issue](https://github.com/yelloxing/image2D/issues/18)告知我们，我们会尽快反馈给你结果！
 
+## 图表组件
+
+此外，我们还鼓励你参与基于image2D的图表组件的开发，这样可以加速日常开发并促进交流和推动本项目的改进，具体细节请[点击此处](https://github.com/image2D)进行查看！
+
 ## 开源协议
 
 [MIT](https://github.com/yelloxing/image2D/blob/master/LICENSE)

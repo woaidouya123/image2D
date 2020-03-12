@@ -12,7 +12,8 @@
     "build:babel": "cuf --config ./cuf.config.js babel",
     "build:uglifyjs": "cuf --config ./cuf.config.js uglifyjs",
     "support": "npx browserslist",
-    "server": "cuf --server 30000"
+    "server": "cuf --server 30000",
+    "test-cli":"node ./bin/cli -i demo"
   },
   "bin": {
     "image2d-cli": "bin/cli"

@@ -9,6 +9,7 @@ const cuf = require('cuf');
 const options = require('./options').config;
 const help = require('./options').help;
 const pkg = require('../package.json');
+const path = require('path');
 
 // 组装好缩写和全写的映射
 let shortHands = {};
@@ -51,6 +52,21 @@ else if (__.isArray(parsed.version)) {
 
 // 初始化组件项目
 else if (__.isArray(parsed.init)) {
+
+    // 组件名称
+    let componentName = "image2d-contrib-" + (parsed.init[0] || 'default');
+
+    // 主体文件和目标文件地址
+    let codeUrl = path.join(__dirname, '../contrib');
+    let targetUrl = path.join(process.cwd(), './' + componentName);
+
+    // 复制主体文件
+    cuf.copySync(codeUrl, targetUrl);
+
+    // 生成一些不确定的文件
+    require('./_package.json.js')(path.join(targetUrl, 'package.json'), componentName);
+    require('./_ignore.js')(path.join(targetUrl, '.npmignore'), path.join(targetUrl, '.gitignore'));
+
 
 }
 
