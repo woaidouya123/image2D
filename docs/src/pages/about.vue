@@ -46,7 +46,9 @@
         <a href="https://yelloxing.github.io/Image-Demo/index.html#/menu">Image Demo</a>
         项目中
         <a href="https://github.com/yelloxing/Image-Demo">添加用例</a>
-        。
+        ，或者在
+        <a href="https://github.com/image2D">图表组件</a>
+        中添加你的作品。
       </li>
     </ul>
   </div>
