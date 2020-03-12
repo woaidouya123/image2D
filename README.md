@@ -15,7 +15,7 @@
 我们欢迎任何人的加入，具体的内容你可以通过访问[贡献指南](https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md)来找到你可以参与的部分。当然，任何时候，特别是遇到疑惑，提[issue](https://github.com/yelloxing/image2D/issues)都是不错的选择！
 
 ## 文档和例子
-使用中可以访问[在线接口文档](https://yelloxing.github.io/image2D/)，如果想参与进来，可以访问[开发需知](https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md)。
+使用中可以访问[在线接口文档](https://yelloxing.github.io/image2D/index.html)，如果想参与进来，可以访问[开发需知](https://github.com/yelloxing/image2D/blob/master/CONTRIBUTING.md)。
 
 此外，我们还维护了[用例项目](https://github.com/yelloxing/Image-Demo)，你可以访问[在线地址](https://yelloxing.github.io/Image-Demo/index.html)，练习的话，一些有趣的例子可以添加进去。
 
@@ -73,7 +73,7 @@ painter.config({
 });
 
 ```
-具体的配置选项请查看[画笔](https://yelloxing.github.io/image2D/#/api/painter)一节。
+具体的配置选项请查看[画笔](https://yelloxing.github.io/image2D/index.html#/api/painter)一节。
 
 - 使用画笔绘制
 
