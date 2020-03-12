@@ -8,6 +8,7 @@ const __ = require('@yelloxing/core.js');
 const cuf = require('cuf');
 const options = require('./options').config;
 const help = require('./options').help;
+const pkg = require('../package.json');
 
 // 组装好缩写和全写的映射
 let shortHands = {};
@@ -20,11 +21,31 @@ const parsed = cuf.option(shortHands, process.argv);
 
 // 打印帮助信息
 if (__.isArray(parsed.help)) {
+    // 打印具体的配置提示
+    if (parsed.help.length > 0) {
+        let help0 = parsed.help[0];
 
+        // 缩写转全拼
+        if (help0.length == 1) help0 = shortHands["-" + help0];
+
+        if (help0) {
+            help0 = help0.replace(/^--/, "");
+
+            // 根据需要帮助的命令获取对应的信息
+            const help0Option = options[help0];
+            if (help0Option) {
+                cuf.log("\n" + help0Option.demo + `         ` + help0Option.info + "\n");
+                return;
+            }
+        }
+    }
+    cuf.log(help);
 }
 
 // 打印版本信息
 else if (__.isArray(parsed.version)) {
+
+    cuf.log("\nv" + pkg.version + "\n");
 
 }
 
@@ -35,5 +56,21 @@ else if (__.isArray(parsed.init)) {
 
 // 打印统一提示
 else {
+
+    cuf.log(`
+    ` + pkg.name + `@v` + pkg.version + `:` + pkg.description + `
+
+
+    【1】干什么的？
+    --------------------------------------------------------
+    辅助你开发基于image2D.js <`+ pkg.repository.url + `> 的图形组件。
+
+
+    【2】如何升级？
+    --------------------------------------------------------
+    直接执行安装命令即可：npm install -g image2d
+`);
+
     cuf.log(help);
+
 }
