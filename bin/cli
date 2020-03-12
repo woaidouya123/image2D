@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+
+'use strict';
+
+process.title = 'image2d-cli';
+
+const __ = require('@yelloxing/core.js');
+const cuf = require('cuf');
+const options = require('./options').config;
+const help = require('./options').help;
+
+// 组装好缩写和全写的映射
+let shortHands = {};
+for (let key in options) {
+    if (options[key].short) shortHands["-" + options[key].short] = "--" + key;
+}
+
+// 命令行传递的参数
+const parsed = cuf.option(shortHands, process.argv);
+
+// 打印帮助信息
+if (__.isArray(parsed.help)) {
+
+}
+
+// 打印版本信息
+else if (__.isArray(parsed.version)) {
+
+}
+
+// 初始化组件项目
+else if (__.isArray(parsed.init)) {
+
+}
+
+// 打印统一提示
+else {
+    cuf.log(help);
+}
