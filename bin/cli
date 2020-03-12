@@ -66,7 +66,7 @@ else if (__.isArray(parsed.init)) {
     // 生成一些不确定的文件
     require('./_package.json.js')(path.join(targetUrl, 'package.json'), componentName);
     require('./_ignore.js')(path.join(targetUrl, '.npmignore'), path.join(targetUrl, '.gitignore'));
-
+    require('./_README.md.js')(path.join(targetUrl, 'README.md'), componentName);
 
 }
 
