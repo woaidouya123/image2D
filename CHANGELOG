@@ -134,3 +134,7 @@ v1.6.4:
     date:2020-03-12
     changes:
       -  开发用于辅助图表组件开发的image2d-cli命令
+v1.6.5
+    date:2020-03-14
+    changes:
+      -  把图表组件相关事宜[ https://github.com/image2D/README ]剥离除了，本项目定位依旧是提供最基础的绘图接口
