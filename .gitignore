@@ -3,3 +3,4 @@
 .project
 node_modules
 image2d-contrib-*
+.babel-cache
