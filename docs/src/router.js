@@ -1,35 +1,42 @@
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
 // 配置路由
-export default {
+const router = new VueRouter({
     routes: [{
-        path: 'guide',
-        component: () => import("./pages/guide.iCrush")
+        path: '/guide',
+        component: resolve => require(['./pages/guide.vue'], resolve)
     }, {
-        path: 'api',
-        component: () => import("./pages/api.iCrush"),
+        path: '/api',
+        component: resolve => require(['./pages/api.vue'], resolve),
         children: [{
             path: 'how-to-use',
-            component: () => import("./pages/api/how-to-use.iCrush")
+            component: resolve => require(['./pages/api/how-to-use.vue'], resolve)
         }, {
             path: 'xhtml',
-            component: () => import("./pages/api/xhtml.iCrush")
+            component: resolve => require(['./pages/api/xhtml.vue'], resolve)
         }, {
             path: 'painter',
-            component: () => import("./pages/api/painter.iCrush")
+            component: resolve => require(['./pages/api/painter.vue'], resolve)
         }, {
             path: 'calculate',
-            component: () => import("./pages/api/calculate.iCrush")
+            component: resolve => require(['./pages/api/calculate.vue'], resolve)
         }, {
             path: 'tool',
-            component: () => import("./pages/api/tool.iCrush")
+            component: resolve => require(['./pages/api/tool.vue'], resolve)
         }, {
             path: '*',
             redirect: 'how-to-use'
         }]
     }, {
-        path: 'about',
-        component: () => import("./pages/about.iCrush")
+        path: '/about',
+        component: resolve => require(['./pages/about.vue'], resolve)
     }, {
-        path: '*',
+        path: '/*',
         redirect: 'guide'
     }]
-};
+});
+
+export default router;

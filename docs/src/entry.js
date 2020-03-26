@@ -1,21 +1,29 @@
-import iCrush from 'icrush';
+import Vue from 'vue';
+
+// 兼容文件
+import 'promise-polyfill/src/polyfill';
 
 // 引入启动界面
-import App from './App.iCrush';
+import App from './App.vue';
 
-// 引入样式
+// 引入路由文件
+import router from './router';
+
+// 引入基础样式
 import '@yelloxing/normalize.css';
-import './styles/style.scss';
 
-// 删除提示内容
-document.getElementById('root').innerHTML = "<!-- image2D: https://github.com/yelloxing/image2D -->";
+// 引入公共样式
+import './style.scss';
 
 //根对象
-window.icrush = new iCrush({
+window.vm = new Vue({
 
     //挂载点
     el: document.getElementById('root'),
 
-    // 启动iCrush
+    // 启用路由
+    router,
+
+    // 启动vue
     render: createElement => createElement(App)
 });
