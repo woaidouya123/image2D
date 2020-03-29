@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="../../../docs/src/assets/image2D.png">
+    <script src="../../../build/image2D.js"></script>
+    <title>image2D - 用例测试 - disolay:none</title>
+</head>
+
+<body>
+
+    <h5>
+        Tips:请打开F12查看，应该会提示错误！
+    </h5>
+
+    <div style='display:none'>
+        <canvas id='testPainter' style='width:100px;height:100px'>非常抱歉，您的浏览器不支持canvas!</canvas>
+    </div>
+
+    <div style='display:none'>
+        <canvas id='testLayer' style='width:100px;height:100px'>非常抱歉，您的浏览器不支持canvas!</canvas>
+    </div>
+
+    <script>
+
+        /**
+         * 测试开始
+         * ----------------------------
+         */
+
+        console.log($$('canvas'));
+
+        //  画笔
+        $$('#testPainter').painter();
+        $$('#testPainter').painter();
+
+        // 图层
+        $$('#testLayer').layer();
+        $$('#testLayer').layer();
+
+    </script>
+</body>
+
+</html>

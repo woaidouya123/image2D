@@ -1,17 +1,18 @@
-import { isNode, isCanvas2D, isArray } from '../../core/type';
+import { isCanvas2D } from '../../core/type';
 import image2D from '../core';
+import isElement from '@yelloxing/core.js/isElement';
 
 export default function () {
 
-    if (!isNode(this[0])) throw new Error('Target empty!');
+    if (!isElement(this[0])) throw new Error('Target empty!');
 
     if (this[0].nodeName.toLowerCase() !== 'canvas') throw new Error('Layer is not a function!');
 
     // 画笔
-    let painter = this[0].getContext("2d"),
+    let painter = this.painter(),
         // 图层集合
-        layer = {};
-    layer_index = [];
+        layer = {},
+        layer_index = [];
     let width = this[0].clientWidth,//内容+内边距
         height = this[0].clientHeight;
 
@@ -23,10 +24,14 @@ export default function () {
                 // 初始化的图层都可见
                 layer[id] = { "visible": true };
 
+                // 后期可以考虑使用离线画布offScreenCanvas提高效率
                 layer[id].canvas = document.createElement('canvas');
                 // 设置大小才会避免莫名其妙的错误
                 layer[id].canvas.setAttribute('width', width);
                 layer[id].canvas.setAttribute('height', height);
+
+                // 标记是图层
+                layer[id].canvas.__image2D__layer__='yes';
 
                 layer[id].painter = image2D(layer[id].canvas).painter();
 
@@ -52,6 +57,7 @@ export default function () {
         "update": function () {
             painter.clearRect(0, 0, width, height);
             painter.save();
+
             for (let i = 0; i < layer_index.length; i++) {
                 if (layer[layer_index[i]].visible)
                     painter.drawImage(layer[layer_index[i]].canvas, 0, 0, width, height, 0, 0, width, height);

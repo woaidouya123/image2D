@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图层导致的绘制图片问题思考</title>
+    <script src="../build/image2D.js"></script>
+    <style>
+        canvas {
+            background-color: gray;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 原生测试 -->
+    <canvas width="400" height="400" style='width:200px;height:200px;' id="canvas1"></canvas>
+    <canvas width="400" height="400" style='width:200px;height:200px;' id="canvas2"></canvas>
+
+    <script>
+
+        var painter1 = document.getElementById('canvas1').getContext('2d');
+        painter1.scale(2, 2);
+        painter1.moveTo(200, 100);
+        painter1.fillStyle = 'blue';
+        painter1.arc(100, 100, 100, 0, Math.PI * 2);
+        painter1.fill();
+
+        var painter2 = document.getElementById('canvas2').getContext('2d');
+        painter2.scale(2, 2);
+
+        // 由于缩放了，这里的参数和原生的写法有点区别
+        painter2.drawImage(document.getElementById('canvas1'), 0, 0, 400, 400, 0, 0, 200, 200);
+
+    </script>
+
+    <!-- 库测试 -->
+    <canvas width="200" height="200" id="canvas3"></canvas>
+    <canvas width="200" height="200" id="canvas4"></canvas>
+
+    <script>
+
+        var painter3 = $$('#canvas3').painter();
+        var painter4 = $$('#canvas4').painter();
+
+        // 库兼容了原有的写法，保证使用者更容易学习
+        painter3.config('fillStyle', 'red').fillCircle(100, 100, 100);
+
+        painter4.drawImage(document.getElementById('canvas3'));
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="../../../docs/src/assets/image2D.png">
+    <script src="../../../build/image2D.js"></script>
+    <title>image2D - 用例测试 - bezier</title>
+</head>
+
+<body>
+    <script>
+
+        // 准备画布
+        var svg = $$('<svg></svg>').attr({
+            "width": 400,
+            "height": 400
+        }).appendTo('body');
+
+        // 获取并配置画笔
+        var painter = svg.painter();
+
+        /**
+         * 测试开始
+         * ----------------------------
+         */
+
+        painter.bind("<path>").moveTo(20, 20).quadraticCurveTo(20, 100, 200, 20).appendTo(svg).stroke();
+        painter.bind("<path>").beginPath().moveTo(20, 120).bezierCurveTo(20, 200, 200, 200, 200, 120).appendTo(svg).stroke();
+
+    </script>
+</body>
+
+</html>

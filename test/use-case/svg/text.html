@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" href="../../../docs/image2D.png">
+    <link rel="shortcut icon" href="../../../docs/src/assets/image2D.png">
     <script src="../../../build/image2D.js"></script>
     <title>image2D - 用例测试 - text文字</title>
 </head>
@@ -42,7 +42,7 @@
 
         painter.bind('<text>').config({
             "textAlign": "center"
-        }).fillText('[中间]', 200, 200).appendTo(svg);
+        }).fillText('[中间]', 200, 200, Math.PI / 4).appendTo(svg);
 
         painter.bind('<text>').config({
             "textBaseline": "top"
@@ -55,7 +55,7 @@
         // 文字颜色，大小等零碎测试
         painter.config("textBaseline", "middle");
         painter.config('fillStyle', 'red').bind('<text>').fillText('红色', 100, 100).appendTo(svg);
-        painter.bind('<text>').config('font-size', '30').strokeText('30px', 300, 100).appendTo(svg);
+        painter.bind('<text>').config('font-size', '30').strokeText('30px', 300, 100, Math.PI / -4).appendTo(svg);
 
     </script>
 </body>

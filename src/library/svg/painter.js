@@ -1,5 +1,7 @@
 import image2D from '../core';
-import normalConfig, { initText, initArc, initCircle } from './config';
+import normalConfig, { initText, initArc, initCircle, initPath, initRect } from './config';
+import { linearGradient,radialGradient } from './Gradient';
+import { rotate } from '../calculate/transform';
 
 export default function (target, selector) {
 
@@ -16,7 +18,7 @@ export default function (target, selector) {
 
         // 文字对齐方式
         "textAlign": "start",
-        "textBaseline": normalConfig("textBaseline", "middle"),
+        "textBaseline": "middle",
 
         // 文字设置
         "font-size": "16",
@@ -27,6 +29,12 @@ export default function (target, selector) {
         "arc-end-cap": "butt"
 
     };
+
+    // 路径(和canvas2D的类似)
+    let path = "", currentPosition = [];
+
+    // 变换（和canvas2D的类似，内部维护了用于记录）
+    let transform_history = [], transform_current = "";
 
     // 画笔
     let enhancePainter = {
@@ -43,37 +51,133 @@ export default function (target, selector) {
 
         // 基础方法
         "bind": function (selector) { painter = image2D(selector, target); return enhancePainter; },
-        "appendTo": function (selector) { painter.appendTo(selector, target); return enhancePainter; },
-        "prependTo": function (selector) { painter.prependTo(selector, target); return enhancePainter; },
-        "afterTo": function (selector) { painter.afterTo(selector, target); return enhancePainter; },
-        "beforeTo": function (selector) { painter.beforeTo(selector, target); return enhancePainter; },
+        "appendTo": function (selector) { painter.appendTo(selector || target, target); return enhancePainter; },
+        "prependTo": function (selector) { painter.prependTo(selector || target, target); return enhancePainter; },
+        "afterTo": function (selector) { painter.afterTo(selector || target, target); return enhancePainter; },
+        "beforeTo": function (selector) { painter.beforeTo(selector || target, target); return enhancePainter; },
 
-        // 文字
-        "fillText": function (text, x, y) {
-            initText(painter, config, x, y).attr("fill", config.fillStyle)[0].textContent = text;
+        // 路径
+        "beginPath": function () { path = ""; currentPosition = []; return enhancePainter; },
+        "closePath": function () { path += "Z"; return enhancePainter; },
+        "moveTo": function (x, y) { path += "M" + x + " " + y; currentPosition = [x, y]; return enhancePainter; },
+        "lineTo": function (x, y) { path += (path == "" ? "M" : "L") + x + " " + y; currentPosition = [x, y]; return enhancePainter; },
+        "arc": function (x, y, r, beginDeg, deg) {
+            let begPosition = rotate(x, y, beginDeg, x + r, y);
+            let endPosition = rotate(x, y, beginDeg + deg, x + r, y);
+            beginDeg = beginDeg / Math.PI * 180;
+            deg = deg / Math.PI * 180;
+            // 如果当前没有路径，说明是开始的，就移动到正确位置
+            if (path == '') {
+                path += "M" + begPosition[0] + "," + begPosition[1];
+            }
+            // 如果当前有路径，位置不正确，应该画到正确位置（和canvas保持一致）
+            else if (begPosition[0] != currentPosition[0] || begPosition[1] != currentPosition[1]) {
+                path += "L" + begPosition[0] + "," + begPosition[1];
+            }
+            path += "A" + r + "," + r + " 0 " + ((deg > 180 || deg < -180) ? 1 : 0) + "," + (deg > 0 ? 1 : 0) + " " + endPosition[0] + "," + endPosition[1];
             return enhancePainter;
         },
-        "strokeText": function (text, x, y) {
-            initText(painter, config, x, y).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
+        "fill": function () {
+            initPath(painter, path).attr('transform', transform_current).attr("fill", config.fillStyle);
+            return enhancePainter;
+        },
+        "stroke": function () {
+            initPath(painter, path).attr('transform', transform_current).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
+            return enhancePainter;
+        },
+
+        "save": function () {
+            transform_history.push(transform_current);
+            return enhancePainter;
+        },
+        "restore": function () {
+            if (transform_history.length > 0) transform_current = transform_history.pop();
+            return enhancePainter;
+        },
+
+        // 路径 - 贝塞尔曲线
+        "quadraticCurveTo": function (cpx, cpy, x, y) {
+            path += "Q" + cpx + " " + cpy + "," + x + " " + y; return enhancePainter;
+        },
+        "bezierCurveTo": function (cp1x, cp1y, cp2x, cp2y, x, y) {
+            path += "C" + cp1x + " " + cp1y + "," + cp2x + " " + cp2y + "," + x + " " + y; return enhancePainter;
+        },
+
+        // 文字
+        "fillText": function (text, x, y, deg) {
+            let returnJSon = initText(painter, config, x, y, deg || 0);
+            painter.attr('transform', transform_current + returnJSon.transform).attr("fill", config.fillStyle)[0].textContent = text;
+            return enhancePainter;
+        },
+        "strokeText": function (text, x, y, deg) {
+            let returnJSon = initText(painter, config, x, y, deg || 0);
+            painter.attr('transform', transform_current + returnJSon.transform).attr({ "stroke": config.strokeStyle, "fill": "none" })[0].textContent = text;
             return enhancePainter;
         },
 
         // 弧
         "fillArc": function (cx, cy, r1, r2, beginDeg, deg) {
-            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr("fill", config.fillStyle);
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr('transform', transform_current).attr("fill", config.fillStyle);
             return enhancePainter;
         },
         "strokeArc": function (cx, cy, r1, r2, beginDeg, deg) {
-            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
+            initArc(painter, config, cx, cy, r1, r2, beginDeg, deg).attr('transform', transform_current).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" });
             return enhancePainter;
         },
 
         // 圆形
         "fillCircle": function (cx, cy, r) {
-            initCircle(painter, cx, cy, r).attr("fill", config.fillStyle); return enhancePainter;
+            initCircle(painter, cx, cy, r).attr('transform', transform_current).attr("fill", config.fillStyle); return enhancePainter;
         },
         "strokeCircle": function (cx, cy, r) {
-            initCircle(painter, cx, cy, r).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
+            initCircle(painter, cx, cy, r).attr('transform', transform_current).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
+        },
+
+        // 矩形
+        "fillRect": function (x, y, width, height) {
+            initRect(painter, x, y, width, height).attr('transform', transform_current).attr("fill", config.fillStyle); return enhancePainter;
+        },
+        "strokeRect": function (x, y, width, height) {
+            initRect(painter, x, y, width, height).attr('transform', transform_current).attr({ "stroke-width": config.lineWidth, "stroke": config.strokeStyle, "fill": "none" }); return enhancePainter;
+        },
+
+        /**
+         * 渐变
+         * -------------
+         */
+
+        //  线性渐变
+        "createLinearGradient": function (x0, y0, x1, y1) {
+            return linearGradient(painter, target, x0, y0, x1, y1);
+        },
+
+        // 环形渐变
+        "createRadialGradient":function( cx, cy, r){
+            return radialGradient(painter, target, cx, cy, r);
+        },
+
+        /**
+         * 变换
+         * --------------
+         */
+
+        //  移动
+        "translate": function (x, y) {
+            transform_current += ' translate(' + x + ',' + y + ')';
+            return enhancePainter;
+        },
+
+        //  旋转
+        "rotate": function (deg) {
+            transform_current += ' rotate(' + (deg / Math.PI * 180) + ')';
+            return enhancePainter;
+        },
+
+        // 缩放
+        "scale": function (x, y) {
+            y = y || x;
+            transform_current += ' scale(' + x + ',' + y + ')';
+            return enhancePainter;
         }
 
     };

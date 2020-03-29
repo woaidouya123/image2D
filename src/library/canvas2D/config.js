@@ -1,7 +1,10 @@
 import arc from '../calculate/graphic/arc';
 
 // 文字统一设置方法
-export let initText = function (painter, config) {
+export let initText = function (painter, config, x, y, deg) {
+    painter.beginPath();
+    painter.translate(x, y);
+    painter.rotate(deg);
     painter.font = config['font-size'] + "px " + config['font-family'];
     return painter;
 };
@@ -42,5 +45,12 @@ export let initCircle = function (painter, cx, cy, r) {
     painter.beginPath();
     painter.moveTo(cx + r, cy);
     painter.arc(cx, cy, r, 0, Math.PI * 2);
+    return painter;
+};
+
+// 画矩形统一设置方法
+export let initRect = function (painter, x, y, width, height) {
+    painter.beginPath();
+    painter.rect(x, y, width, height);
     return painter;
 };

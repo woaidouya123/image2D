@@ -1,0 +1,140 @@
+v1.0.0:
+    date:2019-06-15
+    changes:
+      -  初始化版本
+      -  ESMAScript6+规范引入（import / export，编译时加载）和script标签全局引入方式
+      -  查询文档，常规方法，karma单元测试，用例测试和基准测试
+v1.0.1:
+    date:2019-06-18
+    changes:
+      -  模板字符串类型判断调整（只有canvas可以默认，其余html标签必须指定类型）
+v1.0.2:
+    date:2019-06-22
+    changes:
+      -  添加travis.yml集成测试（对应的karma.conf.js进行了调整和优化）
+v1.1.0:
+    date:2019-06-27
+    chagnes:
+      -  添加对CommonJS / AMD规范引入方式的支持（require / exports，运行时加载）
+      -  添加了作者和邮箱信息、代码贡献需知等信息类文件
+v1.1.1:
+    date:2019-07-05
+    chagnes:
+      -  针对toNode生成html结点方法，添加了是否成功判断（比如tr标签，它应该被tbody或thead包含，这里容器是div，这类标签无法生成）
+v1.1.3:
+    date:2019-07-11
+    chagnes:
+      -  针对canvas画线条模糊问题进行修复(固定放大二倍绘图区域)
+v1.1.4:
+    date:2019-08-06
+    changes:
+      -  增加新的基本绘图接口（矩形）
+      -  增加新的路径绘制方法（二次和三次基本的贝塞尔曲线）
+v1.1.5:
+    date:2019-08-11
+    changes:
+      -  画笔橡皮擦方法名称由clearn变成clearRect
+      -  线性渐变
+v1.1.6:
+    date:2019-08-11
+    changes:
+      -  修复layer图层问题
+v1.1.7:
+    date:2019-08-15
+    changes:
+      -  修复clearRect默认擦除区域问题
+v1.2.0:
+    date:2019-08-18
+    changes:
+      -  添加变换（save、restore、translate、rotate和scale）
+v1.2.1:
+    date:2019-08-20
+    changes:
+      -  svg的rotate角度设置错误修改
+v1.3.1:
+    date:2019-09-02
+    changes:
+      -  svg和canvas路径添加arc画弧方法
+v1.3.2:
+    date:2019-09-03
+    changes:
+      -  针对svg文字控制旋转bug进行修复
+v1.3.3:
+    date:2019-09-05
+    changes:
+      -  添加pieLayout饼布局
+v1.4.0:
+    date:2019-09-06
+    changes:
+      -  把一些核心的计算方法提取出来，方便后期统一优化（tree、animation、Hermite和Matrix4）
+v1.4.2:
+    date:2019-09-19
+    changes:
+      -  核心方法toNode针对常见的html结点，默认使用HTML命名空间而不是svg命名空间
+v1.4.3:
+    date:2019-09-19
+    changes:
+      -  tree布局计算后的结点多添加一项deep用来表示树的层次，从0开始编号
+v1.4.4:
+    date:2019-09-25
+    changes:
+      -  针对canvas画笔大小调整以后重新获取画笔问题进行优化（小bug）
+v1.4.7:
+    date:2019-11-08
+    changes:
+      -  随着相关项目的升级，修改对应功能
+      -  代码整体优化（增加可读性）
+v1.4.8:
+    date:2019-11-15
+    changes:
+      -  增加新功能：环形渐变
+v1.4.9:
+    date:2019-11-22
+    changes:
+      -  文档优化：放弃React选择Vue.js作为文档前端框架
+      -  打包流程优化：由原本的零碎node.js通过cuf命令串起来，增加可读性和维护性
+      -  单元测试修改：放弃Karmal测试，选择Qunit
+      -  删除Github打赏功能配置文件
+v1.4.10:
+    date:2019-11-23
+    changes:
+      -  修复svg渐变定义标签嵌套错误问题
+      -  丰富打包过程中的提示信息
+v1.4.13:
+    date:2019-12-19
+    changes:
+      -  添加对特殊标签的支持（tr、td、th、thead和tbody），并添加不兼容标签提示，后期慢慢兼容更多特殊标签
+v1.5.0:
+    date:2019-12-21
+    changes:
+      -  修复drawImage（canvas2D画布涉及）参数错误
+      -  模板字符串标签名称提取错误（无法正确解析带属性的容器标签名称，已修复）
+v1.5.1:
+    date:2019-12-21
+    changes:
+      -  优化对特殊标签的兼容（tr、td、th、thead和tbody等系列标签有特殊结构层次）
+v1.5.2:
+    date:2020-01-10
+    changes:
+      -  animation轮询动画添加进度控制timing
+      -  文档打包中去掉了css提取插件（该插件存在严重bug并无法修复）
+v1.5.3:
+    date:2020-01-21
+    changes:
+      -  修复animation轮询动画结束回调问题
+v1.5.4:
+    date:2020-02-09
+    changes:
+      -  修复animation轮询动画结束回调问题(再次修复)
+v1.6.0:
+    date:2020-03-11
+    changes:
+      -  针对canvas2D画布隐藏或设置大小为0进行抛错
+v1.6.4:
+    date:2020-03-12
+    changes:
+      -  开发用于辅助图表组件开发的image2d-cli命令
+v1.6.5
+    date:2020-03-14
+    changes:
+      -  把图表组件相关事宜[ https://github.com/image2D/README ]剥离除了，本项目定位依旧是提供最基础的绘图接口

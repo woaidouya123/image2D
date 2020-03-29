@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="../../../docs/src/assets/image2D.png">
+    <script src="../../../build/image2D.js"></script>
+    <title>image2D - 用例测试 - path路径</title>
+</head>
+
+<body>
+    <script>
+
+        // 准备画布
+        var svg = $$('<svg></svg>').attr({
+            "width": 400,
+            "height": 200
+        }).appendTo('body');
+
+        // 获取并配置画笔
+        var painter = svg.painter().config({
+            "strokeStyle": "red",
+            "lineWidth": 1
+        });
+
+        /**
+         * 测试开始
+         * ----------------------------
+         */
+
+        painter.bind("<path>")
+            .beginPath()
+            .lineTo(200, 50).lineTo(300, 100).lineTo(150, 150).lineTo(100, 200)
+            .closePath()
+            .stroke()
+            .appendTo(svg);
+
+        // 测试arc
+        painter.bind("<path>")
+            .beginPath()
+            .config({
+                "strokeStyle": "blue",
+                "lineWidth": "10"
+            })
+            .arc(120, 120, 50, Math.PI / 3, Math.PI)
+            .stroke()
+            .appendTo(svg);
+
+    </script>
+</body>
+
+</html>

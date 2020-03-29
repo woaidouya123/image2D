@@ -1,3 +1,5 @@
+import isString from '@yelloxing/core.js/isString';
+
 /**
  * 返回渲染后的CSS样式值
  * @param {DOM} dom 目标结点
@@ -12,7 +14,5 @@ export default function (dom, name) {
         dom.currentStyle;
 
     // 如果没有指定属性名称，返回全部样式
-    return typeof name === 'string' ?
-        allStyle.getPropertyValue(name) :
-        allStyle;
+    return isString(name) ? allStyle.getPropertyValue(name) : allStyle;
 };

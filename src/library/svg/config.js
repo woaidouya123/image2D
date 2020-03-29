@@ -1,9 +1,8 @@
-import browser from '../../core/browser';
-import { isNode } from '../../core/type';
+import isElement from '@yelloxing/core.js/isElement';
 import arc from '../calculate/graphic/arc';
+import toNode from '../../core/to-node';
 
 export default function (key, value) {
-    let browser_type = browser.type();
 
     // 文字水平对齐方式
     if (key === 'textAlign') {
@@ -14,44 +13,34 @@ export default function (key, value) {
         }[value] || value;
     }
 
-    // 文字垂直对齐方式
-    else if (key === 'textBaseline') {
-        return {
-            "top": "text-before-edge",
-            "bottom": {
-                "Safari": "auto"
-            }[browser_type] || "ideographic"
-        }[value] || {
-            "Firefox": "middle"
-        }[browser_type] || "central";
-    }
-
     return value;
 };
 
 // 文字统一设置方法
-export let initText = function (painter, config, x, y) {
-    if (!isNode(painter[0])) throw new Error('Target empty!');
+export let initText = function (painter, config, x, y, deg) {
+    if (!isElement(painter[0])) throw new Error('Target empty!');
     if (painter[0].nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
 
-    let browser_type = browser.type();
+    // 垂直对齐采用dy实现
+    painter.attr('dy', {
+        "top": config['font-size'] * 0.5,
+        "middle": 0,
+        "bottom": -config['font-size'] * 0.5,
+    }[config.textBaseline])
+        .css({
 
-    // 针对IE和Edge浏览器特殊处理
-    if (browser_type === 'IE' || browser_type === 'Edge') {
-        if (config.textBaseline === 'text-before-edge') y += config['font-size'];
-        else if (config.textBaseline === 'central') y += config['font-size'] * 0.5;
-    }
+            // 文字对齐方式
+            "text-anchor": config.textAlign,
+            "dominant-baseline": "central",
 
-    return painter.css({
+            // 文字大小和字体设置
+            "font-size": config['font-size'] + "px",
+            "font-family": config['font-family']
+        }).attr({ "x": x, "y": y });
 
-        // 文字对齐方式
-        "text-anchor": config.textAlign,
-        "dominant-baseline": config.textBaseline,
-
-        // 文字大小和字体设置
-        "font-size": config['font-size'] + "px",
-        "font-family": config['font-family']
-    }).attr({ "x": x, "y": y });
+    return {
+        "transform": "rotate(" + deg * 180 / Math.PI + "," + x + "," + y + ")"
+    };
 };
 
 // 画弧统一设置方法
@@ -96,4 +85,32 @@ export let initCircle = function (painter, cx, cy, r) {
         "r": r
     });
     return painter;
+};
+
+// 路径统一设置方法
+export let initPath = function (painter, path) {
+    if (painter[0].nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
+    painter.attr('d', path);
+    return painter;
+};
+
+// 画矩形统一设置方法
+export let initRect = function (painter, x, y, width, height) {
+    if (painter[0].nodeName.toLowerCase() !== 'rect') throw new Error('Need a <rect> !');
+    painter.attr({
+        "x": x,
+        "y": y,
+        "width": width,
+        "height": height
+    });
+    return painter;
+};
+
+export let initDefs = function (target) {
+    let defs = target.getElementsByTagName('defs');
+    if (defs.length <= 0) {
+        defs = [toNode("<defs>", "SVG")];
+        target.appendChild(defs[0]);
+    }
+    return defs[0];
 };

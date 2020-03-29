@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>不同绘制方法导致的模糊问题</title>
+    <script src="../build/image2D.js"></script>
+</head>
+
+<body>
+
+    <script>
+
+        var painter = $$('<canvas>非常抱歉，您的浏览器不支持canvas!</canvas>')
+            .appendTo('body')
+            .attr({
+                width: 400,
+                height: 400
+            }).painter();
+
+        // 获取插值方法
+        var interFun = $$.cardinal().setP([
+            [0, 300], [100, 300], [200, 200], [300, 160], [400, 300]
+        ]);
+
+        /**
+         * 实验开始
+         * -----------------
+        */
+
+        // 绘制方法一
+        painter
+            .config('strokeStyle', 'red')
+            .beginPath()
+        for (var deep = 0; deep < 400; deep += 0.5) {
+            painter.lineTo(deep, interFun(deep) - 10)
+                .stroke();
+        }
+
+        // 绘制方法二
+        painter
+            .config('strokeStyle', 'blue')
+            .beginPath()
+        for (var deep = 0; deep < 400; deep += 0.5) {
+            painter.lineTo(deep, interFun(deep) + 10);
+        }
+        painter.stroke();
+
+    </script>
+
+</body>
+
+</html>
